@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta content="yes" name="apple-mobile-web-app-capable" />
+  <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+  <meta name="referrer" content="never">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <meta name="author" content="kveln">
+  <title>使用jQuery Validation插件来验证表单 | 三木的技术博客</title>
+  <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <!-- <link href="https://sanmuny.github.io/media/css/bootstrap.min.css" rel="stylesheet"> -->
+  <!--  <link href="https://sanmuny.github.io/media/css/all.min.css" rel="stylesheet" type="text/css"> -->
+  <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  <link rel="alternate" type="application/rss+xml" title="使用jQuery Validation插件来验证表单 | 三木的技术博客 » Feed" href="https://sanmuny.github.io/atom.xml">
+  <link rel="stylesheet"href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/styles/androidstudio.min.css">
+  <link href="https://sanmuny.github.io/styles/main.css" rel="stylesheet">
+  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/highlight.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/jquery.min.js"></script> -->
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    <meta property="og:description" content="使用jQuery Validation插件来验证表单"/>
+    <meta property="og:url" content="https://sanmuny.github.io/post/e4-bd-bf-e7-94-a8jqueryvalidation-e6-8f-92-e4-bb-b6-e6-9d-a5-e9-aa-8c-e8-af-81-e8-a1-a8-e5-8d-95/"/>
+    <meta property="og:locale" content="zh-CN"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:site_name" content="三木的技术博客"/>
+  </head>
+  <body>
+  	<!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="https://sanmuny.github.io">三木的技术博客</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/">首页</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/archives">归档</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/tags">标签</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/post/about">关于</a>
+              
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('https://sanmuny.github.io/media/images/home-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+          	<span class="tags">
+          	 
+            <a href="https://sanmuny.github.io/tag/pIsC17YL91X/" class="tag">jQuery</a>
+            
+            <a href="https://sanmuny.github.io/tag/47wSd3LnPeW/" class="tag">Validation</a>
+            
+        </span>
+            <h1>使用jQuery Validation插件来验证表单</h1>
+            <span class="meta">
+            	Posted on
+              2016-04-01，6 min read
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Post Content -->
+  <article>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <p><a href="http://jqueryvalidation.org/">jQuery Validation</a>是一个用于验证表单的jQuery插件，简单易用，已经包含了16种内置的验证规则．<a href="https://github.com/jzaefferer/jquery-validation/tree/master/src/additional">Github</a>上也有更多的验证规则可以使用．这都不是重点，重点是你可以轻松的定制自己的规则．</p>
+<p>内置规则：</p>
+<ul>
+<li>required – Makes the element required.</li>
+<li>remote – Requests a resource to check the element for validity.</li>
+<li>minlength – Makes the element require a given minimum length.</li>
+<li>maxlength – Makes the element require a given maximum length.</li>
+<li>rangelength – Makes the element require a given value range.</li>
+<li>min – Makes the element require a given minimum.</li>
+<li>max – Makes the element require a given maximum.</li>
+<li>range – Makes the element require a given value range.</li>
+<li>step – Makes the element require a given step.</li>
+<li>email – Makes the element require a valid email</li>
+<li>url – Makes the element require a valid url</li>
+<li>date – Makes the element require a date.</li>
+<li>dateISO – Makes the element require an ISO date.</li>
+<li>number – Makes the element require a decimal number.</li>
+<li>digits – Makes the element require digits only.</li>
+<li>equalTo – Requires the element to be the same as another one</li>
+</ul>
+<p><strong><em>内置规则的使用</em></strong></p>
+<p>内置规则的使用非常简单：</p>
+<p>首先将该插件的js文件包含进html文件：</p>
+<pre><code>    &lt;script src=&quot;/static/js/jquery.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;/static/js/jquery.validate.min.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>然后用jQuery选择需要验证的表单，执行validate()函数即可：</p>
+<pre><code>    &lt;script&gt;
+    $(&quot;#form_id&quot;).validate();
+    &lt;/script&gt;
+</code></pre>
+<p>jQuery Validation官网上的例子：</p>
+<pre><code>        &lt;!DOCTYPE HTML&gt;
+        &lt;html&gt;
+        &lt;head&gt;
+        &lt;script src=&quot;jquery.min.js&quot;&gt;&lt;/script&gt;
+        &lt;/head&gt;
+        &lt;body&gt;
+        &lt;form class=&quot;cmxform&quot; id=&quot;commentForm&quot; method=&quot;get&quot; action=&quot;&quot;&gt;
+        &lt;fieldset&gt;
+        &lt;legend&gt;Please provide your name, email address (won't be published) and a comment&lt;/legend&gt;
+        &lt;p&gt;
+        &lt;label for=&quot;cname&quot;&gt;Name (required, at least 2 characters)&lt;/label&gt;
+        &lt;input id=&quot;cname&quot; name=&quot;name&quot; minlength=&quot;2&quot; type=&quot;text&quot; required&gt;
+        &lt;/p&gt;
+        &lt;p&gt;
+        &lt;label for=&quot;cemail&quot;&gt;E-Mail (required)&lt;/label&gt;
+        &lt;input id=&quot;cemail&quot; type=&quot;email&quot; name=&quot;email&quot; required&gt;
+        &lt;/p&gt;
+        &lt;p&gt;
+        &lt;label for=&quot;curl&quot;&gt;URL (optional)&lt;/label&gt;
+        &lt;input id=&quot;curl&quot; type=&quot;url&quot; name=&quot;url&quot;&gt;
+        &lt;/p&gt;
+        &lt;p&gt;
+        &lt;label for=&quot;ccomment&quot;&gt;Your comment (required)&lt;/label&gt;
+        &lt;textarea id=&quot;ccomment&quot; name=&quot;comment&quot; required&gt;&lt;/textarea&gt;
+        &lt;/p&gt;
+        &lt;p&gt;
+        &lt;input class=&quot;submit&quot; type=&quot;submit&quot; value=&quot;Submit&quot;&gt;
+        &lt;/p&gt;
+        &lt;/fieldset&gt;
+        &lt;/form&gt;
+        &lt;script&gt;
+        $(&quot;#commentForm&quot;).validate();
+        &lt;/script&gt;
+        &lt;/body&gt;
+        &lt;/html&gt;
+</code></pre>
+<p>jQuery Validation会根据表单设置的type和属性自动为他们分配内置的规则，比如email,url,required等．</p>
+<p>运行一下看看：</p>
+<p>什么都不输入，直接点提交</p>
+<p>输入错误的Email地址，改正后错误提示自动消失</p>
+<p><strong><em>添加自定义规则</em></strong></p>
+<p>jQuery Validation最吸引人的feature，它可以轻松的加入自定义的规则：</p>
+<p>第一步，在js中调用jQuery.validator.addMethod函数来添加规则，例如添加IP格式检查的规则：</p>
+<pre><code>$.validator.addMethod( &quot;ipv4&quot;, function( value, element ) {return this.optional( element ) || /^(25[0-5]|2[0-4]\d|[01]?\d\d?)\.(25[0-5]|2[0-4]\d|[01]?\d\d?)\.(25[0-5]|2[0-4]\d|[01]?\d\d?)\.(25[0-5]|2[0-4]\d|[01]?\d\d?)$/i.test( value );}, &quot;Invalid IP v4 address.&quot; );　//自定义其他规则只需要替换规则名&quot;ipv4&quot;,正则表达式//之间的内容,以及出错后显示的字符串&quot;Invalid IP v4 address.&quot;即可．
+</code></pre>
+<p>第二步，把规则应用到指定的表单项，即在执行$(&quot;#form_id&quot;).validate()函数的时候加入rules参数：</p>
+<pre><code>        23 $(&quot;#ip_form&quot;).validate({
+        24     rules: {
+        25         ip: {
+        26             required: true,
+        27             ipv4: true,
+        28         },
+        29         netmask: {
+        30             required: true,
+        31             ipv4: true,
+        32         },
+        33         gateway: {
+        34             required: true,
+        35             ipv4: true,
+        36         },
+        37     },
+        38 }); //其中ip,netmask,gateway为表单项的name属性．required和ipv4是规则名．
+</code></pre>
+<p>生效后的样子，可以添加如下css来修改错误信息的样式：</p>
+<pre><code>        label.error {
+            margin-left: 10px;
+            padding-left: 5px;
+            padding-right: 5px;
+            color: #E2303A;
+            font-style: italic;
+            font: Helvetica Neue, 12px, #E2303A;
+            border: 1px solid #F2A9AE;
+        }
+</code></pre>
+<p><strong><em>使用json提交数据</em></strong></p>
+<p>表单验证通过后，提交动作默认是使用form本身的提交动作，即指定form的action和method属性：</p>
+<p><code>method=&quot;get&quot; action=&quot;&quot;</code></p>
+<p>可以在validate()函数中添加submitHandler参数来指定点击提交后执行的函数，我们可以在该函数中使用$.json来提交数据：</p>
+<pre><code>        23 $(&quot;#ip_form&quot;).validate({
+        24     rules: {
+        25         ip: {
+        26             required: true,
+        27             ipv4: true,
+        28         },
+        29         netmask: {
+        30             required: true,
+        31             ipv4: true,
+        32         },
+        33         gateway: {
+        34             required: true,
+        35             ipv4: true,
+        36         },
+        37         dns: {
+        38             dns: true,
+        39         }
+        40     },
+        41     submitHandler: function(form) {
+        42         ip_ok();
+        43         $(&quot;#ip-conf&quot;).modal('hide');
+        44     }
+        45 });
+</code></pre>
+
+          
+          <p class="next-post">下一篇：
+            <a href="https://sanmuny.github.io/post/e8-bf-81-e7-a7-bb-e5-ae-81-e5-bc-ba-e5-9c-a8-e7-ba-bf-e6-ad-a5-e9-aa-a4/">
+              <span class="post-title">
+                迁移宁强在线步骤&rarr;
+              </span>
+            </a>
+          </p>
+        
+        <div class="comment">
+          
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script>
+  var gitalk = new Gitalk({
+    clientID: '2876d946eb87c573ec4e',
+    clientSecret: '909799984d0e9eb3525ac5c3604e6b5fee270ccd',
+    repo: 'sanmuny.github.io',
+    owner: 'sanmuny',
+    admin: ['sanmuny'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+          
+          
+        
+        </div>
+      </div>
+    </div>
+  </article>
+ <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <ul class="list-inline text-center">
+            
+            
+            <li class="list-inline-item">
+              <a href="https://github.com/sanmuny" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            
+              
+            
+              
+            
+            <li class="list-inline-item">
+              <a href="https://weibo.com/kelvinxupt" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-weibo fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            
+              
+            
+              
+            
+              
+            
+              
+            
+              
+              <li class="list-inline-item">
+              <a href="https://sanmuny.github.io/atom.xml" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+              </li>
+          </ul>
+          <p class="copyright text-muted">Copyright &copy;<span>三木的技术博客</span><br><a href="https://github.com/getgridea/gridea" class="Themeinfo">Powered by Gridea</a></p>
+        </div>
+      </div>
+    </div>
+   </footer>
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/bootstrap.bundle.min.js"></script> -->
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.jsdelivr.net/gh/Alanrk/clean-cdn@1.0/scripts/clean-blog.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/clean-blog.min.js"></script> -->
+  <script src="//instant.page/3.0.0" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+  <style type="text/css">a.back_to_top{text-decoration:none;position:fixed;bottom:40px;right:30px;background:#f0f0f0;height:40px;width:40px;border-radius:50%;line-height:36px;font-size:18px;text-align:center;transition-duration:.5s;transition-propety:background-color;display:none}a.back_to_top span{color:#888}a.back_to_top:hover{cursor:pointer;background:#dfdfdf}a.back_to_top:hover span{color:#555}@media print,screen and(max-width:580px){.back_to_top{display:none!important}}</style>
+<a id="back_to_top" href="#" class="back_to_top">
+  <span>▲</span></a>
+<script>$(document).ready((function(_this) {
+    return function() {
+      var bt;
+      bt = $('#back_to_top');
+      if ($(document).width() > 480) {
+        $(window).scroll(function() {
+          var st;
+          st = $(window).scrollTop();
+          if (st > 30) {
+            return bt.css('display', 'block')
+          } else {
+            return bt.css('display', 'none')
+          }
+        });
+        return bt.click(function() {
+          $('body,html').animate({
+            scrollTop: 0
+          },
+          800);
+          return false
+        })
+      }
+    }
+  })(this));</script>
+  </body>
+</html>
+

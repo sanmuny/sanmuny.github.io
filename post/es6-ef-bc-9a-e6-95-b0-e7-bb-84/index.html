@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta content="yes" name="apple-mobile-web-app-capable" />
+  <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+  <meta name="referrer" content="never">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <meta name="author" content="kveln">
+  <title>ES6：数组 | 三木的技术博客</title>
+  <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <!-- <link href="https://sanmuny.github.io/media/css/bootstrap.min.css" rel="stylesheet"> -->
+  <!--  <link href="https://sanmuny.github.io/media/css/all.min.css" rel="stylesheet" type="text/css"> -->
+  <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  <link rel="alternate" type="application/rss+xml" title="ES6：数组 | 三木的技术博客 » Feed" href="https://sanmuny.github.io/atom.xml">
+  <link rel="stylesheet"href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/styles/androidstudio.min.css">
+  <link href="https://sanmuny.github.io/styles/main.css" rel="stylesheet">
+  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/highlight.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/jquery.min.js"></script> -->
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    <meta property="og:description" content="ES6：数组"/>
+    <meta property="og:url" content="https://sanmuny.github.io/post/es6-ef-bc-9a-e6-95-b0-e7-bb-84/"/>
+    <meta property="og:locale" content="zh-CN"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:site_name" content="三木的技术博客"/>
+  </head>
+  <body>
+  	<!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="https://sanmuny.github.io">三木的技术博客</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/">首页</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/archives">归档</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/tags">标签</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/post/about">关于</a>
+              
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('https://sanmuny.github.io/media/images/home-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+          	<span class="tags">
+          	 
+            <a href="https://sanmuny.github.io/tag/-kLx2poOUM/" class="tag">javascript</a>
+            
+            <a href="https://sanmuny.github.io/tag/DnGZvC3djt/" class="tag">ES6</a>
+            
+        </span>
+            <h1>ES6：数组</h1>
+            <span class="meta">
+            	Posted on
+              2019-01-03，2 min read
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Post Content -->
+  <article>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <h4 id="新增的静态方法">新增的静态方法</h4>
+<p>Array.of() ：可以将传入的参数逐个传入数组，即使只有一个数值类型的参数，也会成为新数组的成员，而不是代表数组的长度 Array.from()：可以将类数组结构转化为数组，例如: Array.from(arguments). 利用Array.from()也可以转换原来的数组，例如：</p>
+<pre><code>let trans_args = function() {
+    let args = Array.from(arguments, (value)=&gt;value + 1);
+    console.log(args);
+}
+
+trans_args(1, 2, 3);
+
+$ node test.js 
+[ 2, 3, 4 ]
+</code></pre>
+<h4 id="新增的普通方法">新增的普通方法</h4>
+<p>find() 与findIndex()：传入一个回调函数来表明查找的条件，例如：</p>
+<pre><code>&gt; let arr = [1, 2, 3, 4, 5];
+undefined
+&gt; arr.find((n)=&gt;n&gt;3);
+4
+&gt; arr.findIndex((n)=&gt;n&gt;3);
+3
+</code></pre>
+<p>fill(value, start, end)：填充value到数组的start到end位置，不包括end. 例如：</p>
+<pre><code>let arr = [1, 2, 3, 4, 5];
+arr.fill(1, 1, 4);
+[ 1, 1, 1, 1, 5 ]
+</code></pre>
+<p>copyWithin(toIndex, fromIndex, stopIndex): 从fromIndex开始复制元素到toIndex，遇到stopIndex停止，例如：</p>
+<pre><code>&gt; let arr = [1, 2, 3, 4, 5]
+undefined
+&gt; arr.copyWithin(2, 0, 1);
+[ 1, 2, 1, 4, 5 ]
+</code></pre>
+<h4 id="类型化数组">类型化数组</h4>
+<p>javascript中的数组缓冲区类似于c的malloc，例如，可以用如下方法分配一个10个字节大小的内存区域：</p>
+<pre><code>&gt; let bu = new ArrayBuffer(10);
+undefined
+&gt; bu.byteLength
+10
+</code></pre>
+<p>可以使用slice(start, end)方法来对分配的内存进行切片。 要操作新分配的内存，需要使用DataView(buf, index, length)创建一个视图，例如：</p>
+<pre><code>&gt; let buf = new ArrayBuffer(50);
+&gt; let view = new DataView(buf, 0, 50);
+</code></pre>
+<p>获取视图的信息：</p>
+<pre><code>&gt; view.buffer === buf;
+true
+&gt; view.byteOffset
+0
+&gt; view.byteLength
+50
+</code></pre>
+<p>读写数据：</p>
+<pre><code>&gt; view.setUint8(4, 233);
+undefined
+&gt; view.getUint8(4)
+233</code></pre>
+
+          
+          <p class="next-post">下一篇：
+            <a href="https://sanmuny.github.io/post/es6-e4-b8-ad-e7-9a-84-e7-b1-bb/">
+              <span class="post-title">
+                ES6中的类&rarr;
+              </span>
+            </a>
+          </p>
+        
+        <div class="comment">
+          
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script>
+  var gitalk = new Gitalk({
+    clientID: '2876d946eb87c573ec4e',
+    clientSecret: '909799984d0e9eb3525ac5c3604e6b5fee270ccd',
+    repo: 'sanmuny.github.io',
+    owner: 'sanmuny',
+    admin: ['sanmuny'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+          
+          
+        
+        </div>
+      </div>
+    </div>
+  </article>
+ <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <ul class="list-inline text-center">
+            
+            
+            <li class="list-inline-item">
+              <a href="https://github.com/sanmuny" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            
+              
+            
+              
+            
+            <li class="list-inline-item">
+              <a href="https://weibo.com/kelvinxupt" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-weibo fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            
+              
+            
+              
+            
+              
+            
+              
+            
+              
+              <li class="list-inline-item">
+              <a href="https://sanmuny.github.io/atom.xml" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+              </li>
+          </ul>
+          <p class="copyright text-muted">Copyright &copy;<span>三木的技术博客</span><br><a href="https://github.com/getgridea/gridea" class="Themeinfo">Powered by Gridea</a></p>
+        </div>
+      </div>
+    </div>
+   </footer>
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/bootstrap.bundle.min.js"></script> -->
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.jsdelivr.net/gh/Alanrk/clean-cdn@1.0/scripts/clean-blog.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/clean-blog.min.js"></script> -->
+  <script src="//instant.page/3.0.0" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+  <style type="text/css">a.back_to_top{text-decoration:none;position:fixed;bottom:40px;right:30px;background:#f0f0f0;height:40px;width:40px;border-radius:50%;line-height:36px;font-size:18px;text-align:center;transition-duration:.5s;transition-propety:background-color;display:none}a.back_to_top span{color:#888}a.back_to_top:hover{cursor:pointer;background:#dfdfdf}a.back_to_top:hover span{color:#555}@media print,screen and(max-width:580px){.back_to_top{display:none!important}}</style>
+<a id="back_to_top" href="#" class="back_to_top">
+  <span>▲</span></a>
+<script>$(document).ready((function(_this) {
+    return function() {
+      var bt;
+      bt = $('#back_to_top');
+      if ($(document).width() > 480) {
+        $(window).scroll(function() {
+          var st;
+          st = $(window).scrollTop();
+          if (st > 30) {
+            return bt.css('display', 'block')
+          } else {
+            return bt.css('display', 'none')
+          }
+        });
+        return bt.click(function() {
+          $('body,html').animate({
+            scrollTop: 0
+          },
+          800);
+          return false
+        })
+      }
+    }
+  })(this));</script>
+  </body>
+</html>
+

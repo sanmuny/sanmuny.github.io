@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta content="yes" name="apple-mobile-web-app-capable" />
+  <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+  <meta name="referrer" content="never">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <meta name="author" content="kveln">
+  <title>Openstack Trove概要 | 三木的技术博客</title>
+  <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <!-- <link href="https://sanmuny.github.io/media/css/bootstrap.min.css" rel="stylesheet"> -->
+  <!--  <link href="https://sanmuny.github.io/media/css/all.min.css" rel="stylesheet" type="text/css"> -->
+  <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  <link rel="alternate" type="application/rss+xml" title="Openstack Trove概要 | 三木的技术博客 » Feed" href="https://sanmuny.github.io/atom.xml">
+  <link rel="stylesheet"href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/styles/androidstudio.min.css">
+  <link href="https://sanmuny.github.io/styles/main.css" rel="stylesheet">
+  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/highlight.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/jquery.min.js"></script> -->
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    <meta property="og:description" content="Openstack Trove概要"/>
+    <meta property="og:url" content="https://sanmuny.github.io/post/openstacktrove-e6-a6-82-e8-a6-81/"/>
+    <meta property="og:locale" content="zh-CN"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:site_name" content="三木的技术博客"/>
+  </head>
+  <body>
+  	<!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="https://sanmuny.github.io">三木的技术博客</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/">首页</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/archives">归档</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/tags">标签</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/post/about">关于</a>
+              
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('https://sanmuny.github.io/media/images/home-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+          	<span class="tags">
+          	 
+            <a href="https://sanmuny.github.io/tag/Tzjv94Ee56/" class="tag">DBaaS</a>
+            
+            <a href="https://sanmuny.github.io/tag/9HhQZcDmRa/" class="tag">openstack</a>
+            
+            <a href="https://sanmuny.github.io/tag/qFfVSXrANw/" class="tag">trove</a>
+            
+        </span>
+            <h1>Openstack Trove概要</h1>
+            <span class="meta">
+            	Posted on
+              2017-06-12，6 min read
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Post Content -->
+  <article>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <h2 id="trove简介">Trove简介</h2>
+<p>Openstack Trove是openstack为用户提供的数据库即服务(DBaaS)。所谓DBaaS，即trove既具有数据库管理的功能，又具有云计算的优势。使用trove，用户可以：</p>
+<ul>
+<li>&quot;按需&quot;获得数据库服务器</li>
+<li>配置所获得的数据库服务器或者数据库服务器集群</li>
+<li>对数据库服务器或者数据库服务器集群进行自动化管理</li>
+<li>根据数据库的负载让数据库服务器集群动态伸缩</li>
+</ul>
+<p>与openstack的其他组件一样，trove也提供RESTful API，并通过RESTful API和其他组件进行交互。</p>
+<h2 id="trove架构">Trove架构</h2>
+<p>Trove API和用户进行交互，当Trove API接收到用户请求时，trove API首先会调用Keystone的API来对用户进行认证，认证通过后才会去执行相应的操作。Trove API会同步处理操作简单的一些请求，复杂的请求则会通过Message Queue (RabbitMQ)交给Task Manager来处理。Task Manager会监听RabbitMQ的一个topic，收到请求后就会进行处理。这些请求通常是分配数据库实例、管理数据库实例的生命周期、操作数据库等。和openstack的其他组件一样，Trove也有一个Infrastructure Database来存储自己本身的数据，如数据库实例的信息等。Trove conductor的主要功能是接收来自guest agent的状态更新信息，这些信息会被存储在Infrastructure database里面或者作为调用结果返回给其他服务。通常这些状态更新信息包括：guest agent心跳包，数据库备份状态等。Guest Agent运营于数据库服务器中(虚拟机)，给trove其他组件提供了一套内部使用的API，trove的其他组件通过Message Queue来调用这些API，guest agent收到API调用请求后，执行相应的数据库操作。</p>
+<p>Trove的安装部署请参考Openstack官方文档(多坑慎入)：</p>
+<p><a href="https://docs.openstack.org/project-install-guide/database/ocata/">https://docs.openstack.org/project-install-guide/database/ocata/</a></p>
+<h2 id="trove的基本概念">Trove的基本概念</h2>
+<ul>
+<li>数据库实例（Instance）：包含数据库程序的openstack虚拟机，如果用户创建了一个数据库实例，那么他其实就创建了一台openstack虚拟机，并在该虚拟机上启动了数据库服务。</li>
+<li>Datastore：用来表示和存储数据库的类型、版本、虚拟机镜像等信息。当用户创建一个数据库实例时需要指定Datastore.</li>
+<li>配置组(Configuration Group)：数据库参数组成的集合。用户可以将配置组应用到一个或多个数据库实例上，因而避免了大量的重复操作。</li>
+</ul>
+<h2 id="trove的用法">Trove的用法</h2>
+<h3 id="0添加datastore">０．添加Datastore</h3>
+<p>在创建数据库实例时，需要指定Datastore来告诉trove需要用到的镜像、数据库类型及版本信息。所以在创建数据库实例之前需要在系统中创建Datastore.</p>
+<p>由于版权问题，openstack官方并没有提供可供下载的镜像，需要用户自己去build。可参考文档：</p>
+<p><a href="https://docs.openstack.org/developer/trove/dev/building_guest_images.html">https://docs.openstack.org/developer/trove/dev/building_guest_images.html</a></p>
+<p>Build好镜像好需要将其上传到glance服务：</p>
+<pre><code>ad@ltczhp11:~$ glance image-create --name mysql-5.6 --disk-format=qcow2 --container-format=bare --file=./mysql-5.6.qcow2 --visibility public 
+ad@ltczhp11:~$ glance image-list
++--------------------------------------+--------------------------+
+| ID                                   | Name                     |
++--------------------------------------+--------------------------+
+| 31d60001-c2bf-496e-9f21-069bb411bd3b | CouchDB                  |
+| eaf27f1b-3a8a-4efb-827c-697fa065933b | DB2                      |
+| 60ca8bfc-28a7-418a-9422-ec6548f23d54 | DIB-Mongodb              |
+| 51103b44-2618-4c15-8ded-4371bea8973a | DIB-Postgres             |
+| 8bc1a6a2-6ec3-4f37-bb54-91134b903996 | mongodb-lsl              |
+| c4c9a58f-bbe6-4640-8488-0c05b52028df | mysql-5.6                |
+| 5d800163-3660-467a-a433-e1827924a741 | PostgreSQL               |
+| 38291f8f-5af6-4338-82b7-3f18dc355cae | ubuntu16.04-server-s390x |
++--------------------------------------+--------------------------+
+</code></pre>
+<p>使用trove-manage添加Datastore：</p>
+<pre><code>root@ltczhp11:~# trove-manage datastore_update mysql &quot;&quot;　#创建一个datastore
+
+root@ltczhp11:~# trove-manage datastore_version_update mysql 5.6 mysql c4c9a58f-bbe6-4640-8488-0c05b52028df &quot;&quot; 1 #创建一个dadastore的版本，一个dadastore可以有多个版本
+
+root@ltczhp11:~# trove-manage datastore_update mysql 5.6　＃指定默认的datastore版本
+</code></pre>
+<h3 id="1基本的数据库实例操作">１．基本的数据库实例操作</h3>
+<ul>
+<li>列出所有的数据库实例<br>
+$ trove list_</li>
+<li>创建一个数据库实例<br>
+$ trove create vm1 2 --size 3 --datastore  mysql_</li>
+<li>重启一个数据库实例<br>
+$ trove restart vm1_</li>
+<li>删除一个数据库实例<br>
+$ trove delete vm1_</li>
+<li>强制删除一个数据库实例<br>
+$ trove force-delete vm1_</li>
+<li>调整一个数据库实例的规格<br>
+$ trove resize-volume vm1 4_<br>
+$ trove resize-instance vm1 3_</li>
+</ul>
+<h3 id="2管理数据库用户">2．管理数据库用户</h3>
+<ul>
+<li>列出所有的数据库用户<br>
+$ trove user-list_</li>
+<li>创建一个用户<br>
+$ trove user-create_</li>
+<li>删除一个用户<br>
+$ trove user-delete_</li>
+<li>给一个用户授权访问某个数据库<br>
+$ trove user-grant-access_</li>
+<li>吊销用户对于某一个数据库的访问权限<br>
+$ trove user-revoke-access_</li>
+<li>显示用户信息<br>
+$ trove user-show_</li>
+<li>显示用户的权限<br>
+$ trove user-show-access_</li>
+</ul>
+<h3 id="3-数据库管理">3. 数据库管理</h3>
+<ul>
+<li>在一个数据库实例中创建一个数据库<br>
+$ trove database-create_</li>
+<li>列出一个数据库实例中的所有数据库<br>
+$ trove database-list_</li>
+<li>删除一个数据库实例中的某个数据库<br>
+$ trove database-delete_</li>
+</ul>
+<h3 id="4-副本管理">4. 副本管理</h3>
+<ul>
+<li>创建一个副本<br>
+$ trove create  --_<em>replica_of</em></li>
+<li>将一个副本从源数据库分离<br>
+$ trove detach-replica_</li>
+<li>让一个副本在副本集合中成为源数据库<br>
+$ trove promote-to-replica-source_</li>
+<li>删除挂掉的源数据库<br>
+$ trove eject-replica-source_</li>
+<li>设置副本亲和性<br>
+$ trove create  --<strong>replica_of</strong>  --locality affinity_<br>
+$ trove create  --<strong>replica_of</strong>  --locality anti-affinity_</li>
+</ul>
+
+          
+          <p class="next-post">下一篇：
+            <a href="https://sanmuny.github.io/post/atom-e5-bf-ab-e6-8d-b7-e9-94-ae-e6-93-8d-e4-bd-9c/">
+              <span class="post-title">
+                ATOM快捷键操作&rarr;
+              </span>
+            </a>
+          </p>
+        
+        <div class="comment">
+          
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script>
+  var gitalk = new Gitalk({
+    clientID: '2876d946eb87c573ec4e',
+    clientSecret: '909799984d0e9eb3525ac5c3604e6b5fee270ccd',
+    repo: 'sanmuny.github.io',
+    owner: 'sanmuny',
+    admin: ['sanmuny'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+          
+          
+        
+        </div>
+      </div>
+    </div>
+  </article>
+ <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <ul class="list-inline text-center">
+            
+            
+            <li class="list-inline-item">
+              <a href="https://github.com/sanmuny" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            
+              
+            
+              
+            
+            <li class="list-inline-item">
+              <a href="https://weibo.com/kelvinxupt" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-weibo fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            
+              
+            
+              
+            
+              
+            
+              
+            
+              
+              <li class="list-inline-item">
+              <a href="https://sanmuny.github.io/atom.xml" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+              </li>
+          </ul>
+          <p class="copyright text-muted">Copyright &copy;<span>三木的技术博客</span><br><a href="https://github.com/getgridea/gridea" class="Themeinfo">Powered by Gridea</a></p>
+        </div>
+      </div>
+    </div>
+   </footer>
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/bootstrap.bundle.min.js"></script> -->
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.jsdelivr.net/gh/Alanrk/clean-cdn@1.0/scripts/clean-blog.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/clean-blog.min.js"></script> -->
+  <script src="//instant.page/3.0.0" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+  <style type="text/css">a.back_to_top{text-decoration:none;position:fixed;bottom:40px;right:30px;background:#f0f0f0;height:40px;width:40px;border-radius:50%;line-height:36px;font-size:18px;text-align:center;transition-duration:.5s;transition-propety:background-color;display:none}a.back_to_top span{color:#888}a.back_to_top:hover{cursor:pointer;background:#dfdfdf}a.back_to_top:hover span{color:#555}@media print,screen and(max-width:580px){.back_to_top{display:none!important}}</style>
+<a id="back_to_top" href="#" class="back_to_top">
+  <span>▲</span></a>
+<script>$(document).ready((function(_this) {
+    return function() {
+      var bt;
+      bt = $('#back_to_top');
+      if ($(document).width() > 480) {
+        $(window).scroll(function() {
+          var st;
+          st = $(window).scrollTop();
+          if (st > 30) {
+            return bt.css('display', 'block')
+          } else {
+            return bt.css('display', 'none')
+          }
+        });
+        return bt.click(function() {
+          $('body,html').animate({
+            scrollTop: 0
+          },
+          800);
+          return false
+        })
+      }
+    }
+  })(this));</script>
+  </body>
+</html>
+

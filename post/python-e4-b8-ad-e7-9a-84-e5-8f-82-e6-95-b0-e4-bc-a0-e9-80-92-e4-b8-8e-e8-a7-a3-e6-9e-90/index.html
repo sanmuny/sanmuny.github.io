@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta content="yes" name="apple-mobile-web-app-capable" />
+  <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+  <meta name="referrer" content="never">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <meta name="author" content="kveln">
+  <title>Python中的参数传递与解析 | 三木的技术博客</title>
+  <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <!-- <link href="https://sanmuny.github.io/media/css/bootstrap.min.css" rel="stylesheet"> -->
+  <!--  <link href="https://sanmuny.github.io/media/css/all.min.css" rel="stylesheet" type="text/css"> -->
+  <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  <link rel="alternate" type="application/rss+xml" title="Python中的参数传递与解析 | 三木的技术博客 » Feed" href="https://sanmuny.github.io/atom.xml">
+  <link rel="stylesheet"href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/styles/androidstudio.min.css">
+  <link href="https://sanmuny.github.io/styles/main.css" rel="stylesheet">
+  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/highlight.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/jquery.min.js"></script> -->
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    <meta property="og:description" content="Python中的参数传递与解析"/>
+    <meta property="og:url" content="https://sanmuny.github.io/post/python-e4-b8-ad-e7-9a-84-e5-8f-82-e6-95-b0-e4-bc-a0-e9-80-92-e4-b8-8e-e8-a7-a3-e6-9e-90/"/>
+    <meta property="og:locale" content="zh-CN"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:site_name" content="三木的技术博客"/>
+  </head>
+  <body>
+  	<!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="https://sanmuny.github.io">三木的技术博客</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/">首页</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/archives">归档</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/tags">标签</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/post/about">关于</a>
+              
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('https://sanmuny.github.io/media/images/home-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+          	<span class="tags">
+          	 
+            <a href="https://sanmuny.github.io/tag/xVvz6Q2tcz6/" class="tag">Python</a>
+            
+            <a href="https://sanmuny.github.io/tag/m2H7oyel_4K/" class="tag">参数解析</a>
+            
+            <a href="https://sanmuny.github.io/tag/ZKuTCu199UY/" class="tag">命令行参数</a>
+            
+        </span>
+            <h1>Python中的参数传递与解析</h1>
+            <span class="meta">
+            	Posted on
+              2017-02-09，10 min read
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Post Content -->
+  <article>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <h1 id="python传递命令行参数">Python传递命令行参数</h1>
+<p>Python的命令行参数传递和C语言类似，都会把命令行参数保存到argv的变量中。对于python而言，argv是sys模块中定义的一个list。与C语言不同的是，python中并没有定义argc，要获得参数的个数，需要使用len(sys.argv)</p>
+<p>当用户使用'python -c &quot;command&quot; '来运行一条python语句时，argv中保存的是['-c']及&quot;command&quot;后面的参数，例如：</p>
+<pre><code>$ python -c 'import sys
+print sys.argv' hello world
+['-c', 'hello', 'world']
+</code></pre>
+<p>当用户使用'python -m &quot;module&quot; '来运行一个模块时，argv中保存的是模块名及&quot;module&quot;后面的参数，例如：</p>
+<pre><code>$ python -m 'show_args' hello world
+['/home/kelvin/tmp/show_args.py', 'hello', 'world']
+</code></pre>
+<p>当运行python脚本时，argv中保存的是脚本名及其后面的参数：</p>
+<pre><code>$ python show_args.py hello world
+['show_args.py', 'hello', 'world']
+length of argv: 3
+
+$ cat show_args.py 
+#!/bin/env python
+
+import sys
+
+print sys.argv
+print &quot;length of argv: &quot; + str(len(sys.argv))
+</code></pre>
+<h1 id="使用标准库getopt解析选项和参数">使用标准库getopt解析选项和参数</h1>
+<p>getopt模块和C语言中的getopt函数有着一样的API，熟悉C语言的同学可快速上手。</p>
+<pre><code># -*- coding: utf-8 -*-
+#!/bin/env python
+
+import getopt
+import sys
+
+
+def usage():
+    print(&quot;Usage:&quot;)
+    print(sys.argv[0] + ' -i input_file -o output_file')
+
+
+def main():
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], &quot;ho:i:&quot;, [&quot;help&quot;, &quot;output=&quot;, &quot;input=&quot;])
+    except getopt.GetoptError as err:
+        # print help information and exit:
+        print(&quot;[&quot; + err.opt + &quot;]&quot; + err.msg)
+        usage()
+        sys.exit(2)
+    output = None
+    input = None
+    for o, a in opts:
+        if o in (&quot;-i&quot;, &quot;--input&quot;):
+            input = a
+        elif o in (&quot;-h&quot;, &quot;--help&quot;):
+            usage()
+            sys.exit()
+        elif o in (&quot;-o&quot;, &quot;--output&quot;):
+            output = a
+        else:
+            assert False, &quot;unhandled option&quot;
+    print(&quot;Input file: %s&quot; % (input))
+    print(&quot;Output file: %s&quot; % (output))
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+<p>getopt需要传入3个参数：</p>
+<p>1.  需要解析的字符串，即sys.argv[1:]</p>
+<p>2. 短选项集合。其中跟冒号的短选项需要后接参数，如'o:'表示'-o'选项需要接参数。</p>
+<p>3. 长选项列表。其中跟等号的长选项需要后接参数。</p>
+<p>getopt返回一个元组，元组包括两个列表opts和args。opts的元素是一个元组，保存了解析好的选项和参数对。args保存了除去所有选项和选项的参数之外，剩下的所有参数。</p>
+<p>如果解析出错则会抛出GetoptError异常，该异常有一个参数err。err.opt是出错时正在解析的选项，err.msg是错误消息。</p>
+<p>出错的情况包括：</p>
+<p>1. 选项没有在传入参数中的短选项或者长选项列表定义。</p>
+<p>2. 需要带参数的选项没有跟参数。</p>
+<p>3. 不需要带参数的长选项带了参数。</p>
+<p>4. 其他。</p>
+<pre><code>kelvin@kvm:~/tmp$ python parse_args.py --help=out
+[help]option --help must not have an argument
+Usage:
+parse_args.py -i input_file -o output_file
+kelvin@kvm:~/tmp$ python parse_args.py -i input_file.txt 
+Input file: input_file.txt
+Output file: None
+kelvin@kvm:~/tmp$ python parse_args.py -i input_file.txt --output=&quot;hello_world.txt&quot;
+Input file: input_file.txt
+Output file: hello_world.txt
+kelvin@kvm:~/tmp$ python parse_args.py -i input_file.txt -o &quot;output.txt&quot;
+Input file: input_file.txt
+Output file: output.txt
+</code></pre>
+<h1 id="使用标准库argparse来解析选项和参数">使用标准库argparse来解析选项和参数</h1>
+<p>argparse模块功能更加强大，例如可以自动生成help文档等，使用起来也更加简便，只需要三个步骤即可。第一步，创建一个ArgumentParser对象：</p>
+<pre><code>parser = argparse.ArgumentParser(description='Description of the program')
+</code></pre>
+<p>第二步，添加需要解析的选线和参数：</p>
+<pre><code>parser.add_argument('integers', metavar='N', type=int, nargs='+',
+                    help='an integer for the accumulator')
+parser.add_argument('--sum', dest='accumulate', action='store_const',
+                    const=sum, default=max,
+                    help='sum the integers (default: find the max)')
+</code></pre>
+<p>第三部，开始解析：</p>
+<pre><code>args = parser.parse_args()
+</code></pre>
+<h2 id="argumentparser">ArgumentParser</h2>
+<pre><code> class argparse.ArgumentParser(prog=None, usage=None, 
+description=None, epilog=None, parents=[], 
+formatter_class=argparse.HelpFormatter, prefix_chars='-',
+ fromfile_prefix_chars=None, argument_default=None, 
+conflict_handler='error', add_help=True, allow_abbrev=True)
+</code></pre>
+<p>常用的参数解释如下：</p>
+<p>prog: 指定程序的名字，默认为sys.argv[0].</p>
+<p>usage: 描述程序该如何使用的字符串，默认会根据添加的参数和选项自动生成</p>
+<p>description: 描述程序的功能，默认为空</p>
+<p>epilog: epilog指定的字符串将会显示在帮助文档的最后</p>
+<p>parents: 一个 ArgumentParser对象的列表，这些对象的选项和参数也会被继承</p>
+<p>add_help: 添加-h/--help选项，默认为True</p>
+<p>allow_abbrev: 允许长选项的缩写，默认为True</p>
+<h2 id="add_argument">add_argument</h2>
+<pre><code> ArgumentParser.add_argument(name or flags...[, action]
+[, nargs][, const][, default][, type][, choices][, required]
+[, help][, metavar][, dest])
+</code></pre>
+<p><strong>name</strong>将会作为解析后返回的对象args的属性，存储参数的值，flags定义指定的选项，flag的名字也会作为解析后返回的对象的属性，存储该选项的参数。例如：</p>
+<pre><code>parser.add_argument('-f', '--foo')
+parser.add_argument('arg0')
+args = parser.parse_args()
+print(args.foo)
+print(args.arg0)
+</code></pre>
+<p>执行结果如下：</p>
+<pre><code>$./arg_parse.py --foo hello world
+hello
+world
+</code></pre>
+<p><strong>nargs</strong>指定选项参数或者参数本身的个数。例如：</p>
+<pre><code>parser.add_argument('-f', '--foo', nargs=2)
+args = parser.parse_args()
+print(args.foo)
+</code></pre>
+<p>执行结果如下：</p>
+<pre><code>$./arg_parse.py --foo hello world
+['hello', 'world']
+</code></pre>
+<p>argparse会将--foo选项后面的两个参数都作为--foo的参数处理。</p>
+<p><strong>action</strong>指定argparse如何处理该选项的参数，共有8个值可选。</p>
+<ol>
+<li>
+<p>'store': 默认值，表示存储参数，如上面例子中的args.foo存储hello world.</p>
+</li>
+<li>
+<p>'store_const': 存储常量，常量的值位于const参数中。如：</p>
+<pre><code>$ cat arg_parse.py 
+#!/usr/bin/env python
+
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-f', '--foo', action='store_const', const=1024)
+args = parser.parse_args()
+print(args.foo)
+
+$ ./arg_parse.py -f
+1024
+</code></pre>
+</li>
+<li>
+<p>'store_true'或者'store_false'：和'store_const'类似，存储的值为True或者False</p>
+</li>
+<li>
+<p>'append'：连个同样的选项的参数会被放到同一个list里面，例如：</p>
+<pre><code>$ cat arg_parse.py 
+#!/usr/bin/env python
+
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-f', '--foo', action='append')
+args = parser.parse_args()
+print(args.foo)
+
+$ ./arg_parse.py --foo 1 --foo 2 -f 3
+['1', '2', '3']
+</code></pre>
+</li>
+<li>
+<p>'append_const': 可将多个常量存放到一个list中，选项出现几次，list中的常量就出现几次，例如：</p>
+<pre><code>$ cat arg_parse.py 
+#!/usr/bin/env python
+
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-f', '--foo', action='append_const', const=&quot;1024&quot;)
+args = parser.parse_args()
+print(args.foo)
+
+$ ./arg_parse.py --foo --foo -f
+['1024', '1024', '1024']
+</code></pre>
+</li>
+<li>
+<p>'count':  存储选项出现的次数。例如：</p>
+<pre><code>$ cat arg_parse.py 
+#!/usr/bin/env python
+
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-v', '--verbose', action='count')
+args = parser.parse_args()
+print(args.verbose)
+
+$ ./arg_parse.py -vvv
+3
+
+$ ./arg_parse.py -v --verbose -v
+3
+</code></pre>
+</li>
+<li>
+<p>'help': 当出现这个选项时，程序打印help文档然后退出。</p>
+</li>
+<li>
+<p>'version': 当出现这个选项时，程序打印版本信息然后退出，版本信息可通过version定义，例如：</p>
+<pre><code>$cat arg_parse.py
+#!/usr/bin/env python
+
+import argparse
+
+parser = argparse.ArgumentParser(prog=&quot;wchat&quot;)
+parser.add_argument('-v', '--version', action='version', version='%(prog)s 3.8.5')
+args = parser.parse_args()
+
+$ ./arg_parse.py --version
+wchat 3.8.5
+</code></pre>
+</li>
+</ol>
+<p><strong>required</strong>指定该参数或者选项是必须提供的，否则会报错退出。</p>
+<p><strong>type</strong>指定参数的类型，可以是任何python内建的数据类型如int等，也可以是自定义的类型转换函数的函数名。例如：</p>
+<pre><code>$ cat ./arg_parse.py 
+#!/usr/bin/env python
+
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-f', '--foo', type=int)
+args = parser.parse_args()
+print(args.foo)
+
+$ ./arg_parse.py -f 12
+12
+
+$ ./arg_parse.py -f '12'
+12
+
+$ ./arg_parse.py -f hello
+usage: arg_parse.py [-h] [-f FOO]
+arg_parse.py: error: argument -f/--foo: invalid int value: 'hello'
+</code></pre>
+<p><strong>choices</strong>指定一组参数，选项的参数必须从这组参数中来选取。例如：</p>
+<pre><code>$ cat arg_parse.py 
+#!/usr/bin/env python
+
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-f', '--foo', type=int, choices=range(1, 4))
+args = parser.parse_args()
+print(args.foo)
+
+$ ./arg_parse.py -f3
+3
+
+$ ./arg_parse.py -f19
+usage: arg_parse.py [-h] [-f {1,2,3}]
+arg_parse.py: error: argument -f/--foo: invalid choice: 19 (choose from 1, 2, 3)
+</code></pre>
+<p><strong>help</strong>指定参数或者选项的帮助信息，会出现在help文档里。</p>
+<p>metavar可以改变帮助文档中选项的参数占位字符串，例如，--foo默认的占位字符串为FOO，可以通过metavar改为foo_arg：</p>
+<pre><code>$ cat arg_parse.py 
+#!/usr/bin/env python
+
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-f', '--foo')
+args = parser.parse_args()
+print(args.foo)
+
+$ ./arg_parse.py -h
+usage: arg_parse.py [-h] [-f FOO]
+
+optional arguments:
+  -h, --help         show this help message and exit
+  -f FOO, --foo FOO
+
+$ cat arg_parse.py 
+#!/usr/bin/env python
+
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-f', '--foo', metavar='foo_arg')
+args = parser.parse_args()
+print(args.foo)
+
+$ ./arg_parse.py -h
+usage: arg_parse.py [-h] [-f foo_arg]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -f foo_arg, --foo foo_arg
+</code></pre>
+<p>dest可以修改存储参数的属性名，例如：</p>
+<pre><code>$ cat arg_parse.py 
+#!/usr/bin/env python
+
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-f', '--foo', dest='bar')
+args = parser.parse_args()
+print(args.bar)
+
+$ ./arg_parse.py -f hello
+hello
+</code></pre>
+<h1 id="小结">小结</h1>
+<p>getopt虽然提供了接近Unix C的用户接口，方便了熟悉Unix C的程序猿/媛们，但argparse模块功能更为强大，使用起来也更为简洁，所以大多数的python项目都采用argparse来解析参数。</p>
+
+          
+          <p class="next-post">下一篇：
+            <a href="https://sanmuny.github.io/post/e5-9f-ba-e4-ba-8eweb-e6-8a-80-e6-9c-af-e7-9a-84-e6-93-8d-e4-bd-9c-e7-b3-bb-e7-bb-9f-e5-ae-89-e8-a3-85-e5-99-a8-e7-9a-84-e8-ae-be-e8-ae-a1/">
+              <span class="post-title">
+                基于web技术的操作系统安装器的设计&rarr;
+              </span>
+            </a>
+          </p>
+        
+        <div class="comment">
+          
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script>
+  var gitalk = new Gitalk({
+    clientID: '2876d946eb87c573ec4e',
+    clientSecret: '909799984d0e9eb3525ac5c3604e6b5fee270ccd',
+    repo: 'sanmuny.github.io',
+    owner: 'sanmuny',
+    admin: ['sanmuny'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+          
+          
+        
+        </div>
+      </div>
+    </div>
+  </article>
+ <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <ul class="list-inline text-center">
+            
+            
+            <li class="list-inline-item">
+              <a href="https://github.com/sanmuny" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            
+              
+            
+              
+            
+            <li class="list-inline-item">
+              <a href="https://weibo.com/kelvinxupt" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-weibo fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            
+              
+            
+              
+            
+              
+            
+              
+            
+              
+              <li class="list-inline-item">
+              <a href="https://sanmuny.github.io/atom.xml" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+              </li>
+          </ul>
+          <p class="copyright text-muted">Copyright &copy;<span>三木的技术博客</span><br><a href="https://github.com/getgridea/gridea" class="Themeinfo">Powered by Gridea</a></p>
+        </div>
+      </div>
+    </div>
+   </footer>
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/bootstrap.bundle.min.js"></script> -->
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.jsdelivr.net/gh/Alanrk/clean-cdn@1.0/scripts/clean-blog.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/clean-blog.min.js"></script> -->
+  <script src="//instant.page/3.0.0" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+  <style type="text/css">a.back_to_top{text-decoration:none;position:fixed;bottom:40px;right:30px;background:#f0f0f0;height:40px;width:40px;border-radius:50%;line-height:36px;font-size:18px;text-align:center;transition-duration:.5s;transition-propety:background-color;display:none}a.back_to_top span{color:#888}a.back_to_top:hover{cursor:pointer;background:#dfdfdf}a.back_to_top:hover span{color:#555}@media print,screen and(max-width:580px){.back_to_top{display:none!important}}</style>
+<a id="back_to_top" href="#" class="back_to_top">
+  <span>▲</span></a>
+<script>$(document).ready((function(_this) {
+    return function() {
+      var bt;
+      bt = $('#back_to_top');
+      if ($(document).width() > 480) {
+        $(window).scroll(function() {
+          var st;
+          st = $(window).scrollTop();
+          if (st > 30) {
+            return bt.css('display', 'block')
+          } else {
+            return bt.css('display', 'none')
+          }
+        });
+        return bt.click(function() {
+          $('body,html').animate({
+            scrollTop: 0
+          },
+          800);
+          return false
+        })
+      }
+    }
+  })(this));</script>
+  </body>
+</html>
+

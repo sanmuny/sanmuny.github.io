@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta content="yes" name="apple-mobile-web-app-capable" />
+  <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+  <meta name="referrer" content="never">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <meta name="author" content="kveln">
+  <title>NBD-网络块设备[翻译] | 三木的技术博客</title>
+  <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <!-- <link href="https://sanmuny.github.io/media/css/bootstrap.min.css" rel="stylesheet"> -->
+  <!--  <link href="https://sanmuny.github.io/media/css/all.min.css" rel="stylesheet" type="text/css"> -->
+  <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  <link rel="alternate" type="application/rss+xml" title="NBD-网络块设备[翻译] | 三木的技术博客 » Feed" href="https://sanmuny.github.io/atom.xml">
+  <link rel="stylesheet"href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/styles/androidstudio.min.css">
+  <link href="https://sanmuny.github.io/styles/main.css" rel="stylesheet">
+  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/highlight.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/jquery.min.js"></script> -->
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    <meta property="og:description" content="NBD-网络块设备[翻译]"/>
+    <meta property="og:url" content="https://sanmuny.github.io/post/nbd-e7-bd-91-e7-bb-9c-e5-9d-97-e8-ae-be-e5-a4-87-5b-e7-bf-bb-e8-af-91-5d/"/>
+    <meta property="og:locale" content="zh-CN"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:site_name" content="三木的技术博客"/>
+  </head>
+  <body>
+  	<!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="https://sanmuny.github.io">三木的技术博客</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/">首页</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/archives">归档</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/tags">标签</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/post/about">关于</a>
+              
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('https://sanmuny.github.io/media/images/home-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+          	<span class="tags">
+          	 
+        </span>
+            <h1>NBD-网络块设备[翻译]</h1>
+            <span class="meta">
+            	Posted on
+              2014-04-24，6 min read
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Post Content -->
+  <article>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <p>1997年4月，Pavel Machek 写了他的网络块设备代码，并被当时的Linux Kernel 2.1.55接受。Pavel 在随后的四个发行版（对应的内核版本为55、101、111、132）中维护并升级了他的代码。Andrzej M. Krzysztofowicz贡献了64位机上运行的版本，随后Stephen Tweedie 为其提出了许多的专业建议，尤其是引入了基于信号量的锁机制，使得代码在对称多处理器系统中能够安全的运行。作者们已将其增强以便于运用于工业环境之中。本文描述了网络块设备、驱动、以及它的开发历史。</p>
+<p>NBD的驱动程序提供了一种在这个面向网络的世界中更为普遍的访问模型。它在本地客户端模拟了一个块设备，比如一个磁盘或者是一块磁盘分区，但实际提供物理支持的却是通过网络连接的远程服务器。在本地，该设备看起来是一个磁盘分区，但那只是远程服务器的表面。远程服务器是一段轻量级的守护进程代码，它提供对远程设备的访问，而且该守护进程并不需要运行在linux平台之上。本地操作系统必须是linux，而且要支持Linux内核NBD驱动，并且能够运行本地客户端进程。安装NBD可被用来进行远程存储和备份，而且能用来在地球的任意一个角落虚拟地传送物理设备。</p>
+<p>NBD有一些UNIX系统组件的经典特征：简单、小巧、多功能。文件系统能被挂载到NBD上（图1），而且NBD设备也能够用来组成冗余磁盘阵列（RAID）。在本地Linux上挂载一个EXT2文件系统到NBD，其传输率要比在同样的远程机器上挂载一个NFS快（表1是接近Pavel最初写的驱动代码的计时）。</p>
+<pre><code>write cmd.	dd=if=/dev/zero of=/dev/nd0 bs=1024 count=32000	
+NBD bs=1K	0.04user 5.54system 0:26:67elapsed 20.9%CPU	1.23MBps
+write cmd.	dd=if=/dev/zero of=/dev/nfs bs=1024 count=32000	
+NFS r/wsize=1K	0.15user 7.46system 0:43.58elapsed 17.0%CPU	0.75MBps
+write cmd.	dd=if=/dev/zero of=/dev/nfs bs=4096 count=8000	
+NFS r/wsize=4K	0.03user 3.94system 0:35.18elapsed 11.0%CPU	0.93MBps
+</code></pre>
+<p>挂载到NBD上的Linux EXT2文件系统，缓冲区大小接近1.5KB，其性能赶得上默认条件下的NFS。也就是说，它的大小是以太网默认传输单元（MTU/MRU）的大小——1.5KB。这恰好是NFS默认缓冲区大小（1KB）的1.5倍。NBD因为使用TCP而不是UDP作为传输协议而具有很好的恢复力。TCP包含它固有的一致性以及恢复机制，因而比UDP协议庞大。但对NBD来说，TCP的开销会被它节省的重新传输和校正码所需带宽抵消。</p>
+<p>NBD能够被用作一个中型邮件服务器A的实时镜像。故障转移可以通过在另一个房间里放置一台用100BT网络连接的备份服务器B来实现。NBD设备将主服务器和备份服务器连接，并提供了主服务器RAID-1镜像的一半（Y），另一般是主服务器自己的用于存放邮件的分区（X）。组合成的设备XY将作为mail spool被挂载。</p>
+<p>当服务器A失效时，运行在B上的一个守护进程能够探测到NBD连接的断开，然后检查镜像Y的mail spool， 校验最小的不完整性，并将其在本地作为mail spool挂载，最后在B上启动A广播的邮件交换IP地址的别名。当A修复之后，会被守护进程检测到，别名将会被丢弃。NBD连接随后会被重新修复，A上的分区X将会重新和NBD镜像Y保持同步。主服务器RAID-1设备会被重新调度，NBD镜像也会重新从属于它。邮件服务将会以默认的配置恢复。使主从服务器设置对称是可能的，但不适宜在这里描述细节。</p>
+<p>与其他备选方案相比，这种方法具有许多优点。其一，比如说，维护一个空的邮件服务器，在主服务器宕机的时候将其唤醒。这会使得许多已经放到spool中的邮件在停机期间不可被使用。但重新整合是很容易的，将相关的文件连接到恢复后的服务器也很简单。但主服务器上的某些邮件可能会丢失。</p>
+<p>另一种解决办法是将邮件服务器分散到一些不同的机器上，这些机器通过NFS挂载同样的spool区域。然而，NFS的文件锁过去从未被证明是完全可靠的，NFS也从未令人满意的支持由于多个用户同时选择下载50MB的邮件目录引起的事件的激增。传输率也会随着文件尺寸成指数地变慢。在不利的网络条件下，软模式的传输率极有可能崩溃。如果NFS在服务启动的时候为了追求高的可靠性而以同步（硬）模式挂载，一旦NFS服务失效，将会导致所有客户端停机。NFS服务不得不独立地建立镜像。</p>
+
+          
+          <p class="next-post">下一篇：
+            <a href="https://sanmuny.github.io/post/e5-86-85-e6-a0-b8-e6-ba-90-e7-a0-81-e7-bc-96-e8-af-91/">
+              <span class="post-title">
+                内核源码编译&rarr;
+              </span>
+            </a>
+          </p>
+        
+        <div class="comment">
+          
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script>
+  var gitalk = new Gitalk({
+    clientID: '2876d946eb87c573ec4e',
+    clientSecret: '909799984d0e9eb3525ac5c3604e6b5fee270ccd',
+    repo: 'sanmuny.github.io',
+    owner: 'sanmuny',
+    admin: ['sanmuny'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+          
+          
+        
+        </div>
+      </div>
+    </div>
+  </article>
+ <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <ul class="list-inline text-center">
+            
+            
+            <li class="list-inline-item">
+              <a href="https://github.com/sanmuny" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            
+              
+            
+              
+            
+            <li class="list-inline-item">
+              <a href="https://weibo.com/kelvinxupt" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-weibo fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            
+              
+            
+              
+            
+              
+            
+              
+            
+              
+              <li class="list-inline-item">
+              <a href="https://sanmuny.github.io/atom.xml" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+              </li>
+          </ul>
+          <p class="copyright text-muted">Copyright &copy;<span>三木的技术博客</span><br><a href="https://github.com/getgridea/gridea" class="Themeinfo">Powered by Gridea</a></p>
+        </div>
+      </div>
+    </div>
+   </footer>
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/bootstrap.bundle.min.js"></script> -->
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.jsdelivr.net/gh/Alanrk/clean-cdn@1.0/scripts/clean-blog.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/clean-blog.min.js"></script> -->
+  <script src="//instant.page/3.0.0" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+  <style type="text/css">a.back_to_top{text-decoration:none;position:fixed;bottom:40px;right:30px;background:#f0f0f0;height:40px;width:40px;border-radius:50%;line-height:36px;font-size:18px;text-align:center;transition-duration:.5s;transition-propety:background-color;display:none}a.back_to_top span{color:#888}a.back_to_top:hover{cursor:pointer;background:#dfdfdf}a.back_to_top:hover span{color:#555}@media print,screen and(max-width:580px){.back_to_top{display:none!important}}</style>
+<a id="back_to_top" href="#" class="back_to_top">
+  <span>▲</span></a>
+<script>$(document).ready((function(_this) {
+    return function() {
+      var bt;
+      bt = $('#back_to_top');
+      if ($(document).width() > 480) {
+        $(window).scroll(function() {
+          var st;
+          st = $(window).scrollTop();
+          if (st > 30) {
+            return bt.css('display', 'block')
+          } else {
+            return bt.css('display', 'none')
+          }
+        });
+        return bt.click(function() {
+          $('body,html').animate({
+            scrollTop: 0
+          },
+          800);
+          return false
+        })
+      }
+    }
+  })(this));</script>
+  </body>
+</html>
+

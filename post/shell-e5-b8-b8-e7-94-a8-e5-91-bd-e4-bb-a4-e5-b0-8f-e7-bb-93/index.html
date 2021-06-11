@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta content="yes" name="apple-mobile-web-app-capable" />
+  <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+  <meta name="referrer" content="never">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <meta name="author" content="kveln">
+  <title>Shell常用命令小结 | 三木的技术博客</title>
+  <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <!-- <link href="https://sanmuny.github.io/media/css/bootstrap.min.css" rel="stylesheet"> -->
+  <!--  <link href="https://sanmuny.github.io/media/css/all.min.css" rel="stylesheet" type="text/css"> -->
+  <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  <link rel="alternate" type="application/rss+xml" title="Shell常用命令小结 | 三木的技术博客 » Feed" href="https://sanmuny.github.io/atom.xml">
+  <link rel="stylesheet"href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/styles/androidstudio.min.css">
+  <link href="https://sanmuny.github.io/styles/main.css" rel="stylesheet">
+  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/highlight.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/jquery.min.js"></script> -->
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    <meta property="og:description" content="Shell常用命令小结"/>
+    <meta property="og:url" content="https://sanmuny.github.io/post/shell-e5-b8-b8-e7-94-a8-e5-91-bd-e4-bb-a4-e5-b0-8f-e7-bb-93/"/>
+    <meta property="og:locale" content="zh-CN"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:site_name" content="三木的技术博客"/>
+  </head>
+  <body>
+  	<!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="https://sanmuny.github.io">三木的技术博客</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/">首页</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/archives">归档</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/tags">标签</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/post/about">关于</a>
+              
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('https://sanmuny.github.io/media/images/home-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+          	<span class="tags">
+          	 
+            <a href="https://sanmuny.github.io/tag/Iwme6rhyd-2/" class="tag">shell</a>
+            
+        </span>
+            <h1>Shell常用命令小结</h1>
+            <span class="meta">
+            	Posted on
+              2014-04-24，4 min read
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Post Content -->
+  <article>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <p>１、ls:这是linux里最常用的命令，像数学里的１一样，简单但很重要。类似于dos里的dir命令，该命令的功能是列出目录下的文件或子目录。</p>
+<pre><code>-a:显示所有文件和目录，包括以.开头的隐藏文件
+-l:以长格式的形式显示
+</code></pre>
+<p>例如：</p>
+<pre><code>kelvin@kelvin-laptop:~$ ls
+examples.desktop  公共的  模板  视频  图片  文档  下载  音乐  桌面
+
+kelvin@kelvin-laptop:~$ ls -a
+.                 .gconfd          .pulse-cookie
+..                .gksu.lock       .recently-used.xbel
+.bash_history     .gnash           .sudo_as_admin_successful
+.bash_logout      .gnome2          .themes
+.bashrc           .gnome2_private  .thumbnails
+.bogofilter       .gstreamer-0.10  .update-notifier
+.cache            .gtk-bookmarks   .xsession-errors
+.compiz           .gvfs            .xsession-errors.old
+.config           .ICEauthority    公共的
+.dbus             .icons           模板
+.dmrc             .local           视频
+.esd_auth         .mozilla         图片
+.evolution        .nautilus        文档
+examples.desktop  .openoffice.org  下载
+.fontconfig       .profile         音乐
+.gconf            .pulse           桌面
+
+kelvin@kelvin-laptop:~$ ls -l
+总用量 36
+-rw-r--r-- 1 kelvin kelvin  179 2010-09-14 09:39 examples.desktop
+drwxr-xr-x 2 kelvin kelvin 4096 2010-09-14 09:49 公共的
+drwxr-xr-x 2 kelvin kelvin 4096 2010-09-14 09:49 模板
+drwxr-xr-x 2 kelvin kelvin 4096 2010-09-14 09:49 视频
+drwxr-xr-x 2 kelvin kelvin 4096 2010-09-14 09:49 图片
+drwxr-xr-x 2 kelvin kelvin 4096 2010-09-14 15:09 文档
+drwxr-xr-x 2 kelvin kelvin 4096 2010-09-14 14:57 下载
+drwxr-xr-x 2 kelvin kelvin 4096 2010-09-14 09:49 音乐
+drwxr-xr-x 2 kelvin kelvin 4096 2010-09-14 09:49 桌面
+</code></pre>
+<p>2、cd:选择当前工作目录。例如：</p>
+<p>cd .. :回到上级目录。 cd 或 cd ~:返回家目录。 cd -:返回操作前目录</p>
+<p>cd !$ :把上个命令的参数作为输入。</p>
+<p>3、touch：创建一个或多个空文件。</p>
+<p>4、pwd:显示当前工作目录。</p>
+<p>5、cp:复制文件或目录</p>
+<p>格式：cp 源 目的</p>
+<pre><code>-r:复制目录
+-f:如遇同名文件或目录，强制覆盖目的文件或目录
+-p:保留文件或目录创建日期。
+</code></pre>
+<p>6、rm:删除文件或目录</p>
+<pre><code>-r:如果是删除目录，需要加该选项。
+-f:强制删除
+</code></pre>
+<p>7、mv:移动文件或目录，一般用于重命名。</p>
+<p>8、cat:显示全部的文件内容。</p>
+<p>9、more:也是显示文件内容，一次只显示一屏幕，按空格显示下一页，按回车显示下一行，按q键退出。</p>
+<p>10、less:显示文件内容，和more类似，区别在于less命令显示的文件可用方向键或pgup或pgdown控制。</p>
+<p>11、head:显示文件头几行。如：head -3:显示头三行，默认为10行。</p>
+<p>12、tail：显示文件后几行，与head类似。</p>
+<p>13、ln:创建文件或目录的链接。源与目的都要使用绝对路径，且硬链接不能跨越磁盘分区。-s:创建软链接</p>
+<p>14、mkdir:创建空目录。-p:可创建子目录。rmdir:删除空目录。-p:强制删除非空目录。</p>
+<p>15、whereis:查看命令以及手册的位置。如：</p>
+<pre><code>kelvin@kelvin-laptop:~$ whereis ls
+ls: /bin/ls /usr/share/man/man1/ls.1.gz
+</code></pre>
+<p>16、whatis:查看命令功能。</p>
+<p>17、man：查看命令手册</p>
+<p>18、find:查找文件或目录。例如：find /etc -name f*</p>
+<p>19、locate:查找文件或目录。无需路径。需要注意的是，对于新创建的文件或目录，用updatedb更新数据库后才能用locate命令找到。</p>
+<p>20、grep:查找文件中的内容。格式：grep 关键字 文件名</p>
+<p>21、gzip:压缩文件。</p>
+<p>-1:快速压缩 -9：最佳压缩</p>
+<p>22、gunzip:解压文件。=gzip -d</p>
+<p>23、tar:打包文件。</p>
+<pre><code>  -c:创建一个包。-v:显示详细过程。 -f：指定包名  -x:解包
+</code></pre>
+<p>可用该命令压缩打包，或解压缩解包：</p>
+<pre><code>tar -zcvf file.tar.gz filename1 filename2 ……   
+tar -zxvf file.tar.gz</code></pre>
+
+          
+          <p class="next-post">下一篇：
+            <a href="https://sanmuny.github.io/post/e6-8f-92-e5-85-a5-e6-b3-95-e6-8e-92-e5-ba-8f/">
+              <span class="post-title">
+                插入法排序&rarr;
+              </span>
+            </a>
+          </p>
+        
+        <div class="comment">
+          
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script>
+  var gitalk = new Gitalk({
+    clientID: '2876d946eb87c573ec4e',
+    clientSecret: '909799984d0e9eb3525ac5c3604e6b5fee270ccd',
+    repo: 'sanmuny.github.io',
+    owner: 'sanmuny',
+    admin: ['sanmuny'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+          
+          
+        
+        </div>
+      </div>
+    </div>
+  </article>
+ <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <ul class="list-inline text-center">
+            
+            
+            <li class="list-inline-item">
+              <a href="https://github.com/sanmuny" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            
+              
+            
+              
+            
+            <li class="list-inline-item">
+              <a href="https://weibo.com/kelvinxupt" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-weibo fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            
+              
+            
+              
+            
+              
+            
+              
+            
+              
+              <li class="list-inline-item">
+              <a href="https://sanmuny.github.io/atom.xml" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+              </li>
+          </ul>
+          <p class="copyright text-muted">Copyright &copy;<span>三木的技术博客</span><br><a href="https://github.com/getgridea/gridea" class="Themeinfo">Powered by Gridea</a></p>
+        </div>
+      </div>
+    </div>
+   </footer>
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/bootstrap.bundle.min.js"></script> -->
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.jsdelivr.net/gh/Alanrk/clean-cdn@1.0/scripts/clean-blog.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/clean-blog.min.js"></script> -->
+  <script src="//instant.page/3.0.0" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+  <style type="text/css">a.back_to_top{text-decoration:none;position:fixed;bottom:40px;right:30px;background:#f0f0f0;height:40px;width:40px;border-radius:50%;line-height:36px;font-size:18px;text-align:center;transition-duration:.5s;transition-propety:background-color;display:none}a.back_to_top span{color:#888}a.back_to_top:hover{cursor:pointer;background:#dfdfdf}a.back_to_top:hover span{color:#555}@media print,screen and(max-width:580px){.back_to_top{display:none!important}}</style>
+<a id="back_to_top" href="#" class="back_to_top">
+  <span>▲</span></a>
+<script>$(document).ready((function(_this) {
+    return function() {
+      var bt;
+      bt = $('#back_to_top');
+      if ($(document).width() > 480) {
+        $(window).scroll(function() {
+          var st;
+          st = $(window).scrollTop();
+          if (st > 30) {
+            return bt.css('display', 'block')
+          } else {
+            return bt.css('display', 'none')
+          }
+        });
+        return bt.click(function() {
+          $('body,html').animate({
+            scrollTop: 0
+          },
+          800);
+          return false
+        })
+      }
+    }
+  })(this));</script>
+  </body>
+</html>
+

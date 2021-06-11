@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta content="yes" name="apple-mobile-web-app-capable" />
+  <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+  <meta name="referrer" content="never">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <meta name="author" content="kveln">
+  <title>Linux权限管理 | 三木的技术博客</title>
+  <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <!-- <link href="https://sanmuny.github.io/media/css/bootstrap.min.css" rel="stylesheet"> -->
+  <!--  <link href="https://sanmuny.github.io/media/css/all.min.css" rel="stylesheet" type="text/css"> -->
+  <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  <link rel="alternate" type="application/rss+xml" title="Linux权限管理 | 三木的技术博客 » Feed" href="https://sanmuny.github.io/atom.xml">
+  <link rel="stylesheet"href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/styles/androidstudio.min.css">
+  <link href="https://sanmuny.github.io/styles/main.css" rel="stylesheet">
+  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/highlight.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/jquery.min.js"></script> -->
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    <meta property="og:description" content="Linux权限管理"/>
+    <meta property="og:url" content="https://sanmuny.github.io/post/linux-e6-9d-83-e9-99-90-e7-ae-a1-e7-90-86/"/>
+    <meta property="og:locale" content="zh-CN"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:site_name" content="三木的技术博客"/>
+  </head>
+  <body>
+  	<!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="https://sanmuny.github.io">三木的技术博客</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/">首页</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/archives">归档</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/tags">标签</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/post/about">关于</a>
+              
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('https://sanmuny.github.io/media/images/home-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+          	<span class="tags">
+          	 
+        </span>
+            <h1>Linux权限管理</h1>
+            <span class="meta">
+            	Posted on
+              2014-04-24，6 min read
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Post Content -->
+  <article>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <p>Linux权限管理是其一大特色，优秀的权限管理机制为Linux安全性提供了可靠的保障。</p>
+<h3 id="一-用户权限管理"><strong>一、用户权限管理：</strong></h3>
+<p>root用户是系统的超级用户，是Linux系统的CEO,它具有最高的管理权限，所以一般不用该用户登录系统进行日常的操作与维护，root可将某些权限赋予其他用户来管理系统的某些资源。</p>
+<p>su命令用来切换用户，用该命令切换用户时，用户身份和环境变量都发生改变。例如：</p>
+<pre><code>kelvin@kelvin-laptop:~$ ls
+examples.desktop  workplace  公共的  模板  视频  图片  文档  下载  音乐  桌面
+kelvin@kelvin-laptop:~$ su ws
+密码： 
+ws@kelvin-laptop:/home/kelvin$ 
+</code></pre>
+<p>在ubuntu系统中，有些动作需要管理员的权限才能执行，可用sudo来提升权限。若在/etc/目录下建立nologin文件，则只允许root用户登录。相反，删除该文件则所有用户都可以登录系统。</p>
+<h3 id="二-文件权限管理"><strong>二、文件权限管理：</strong></h3>
+<p>使用ls -l命令可以以长格式显示该目录下文件和子目录信息。如：</p>
+<pre><code>kelvin@kelvin-laptop:~$ ls -l
+总用量 40
+-rw-r--r-- 1 kelvin kelvin  179 2010-09-14 09:39 examples.desktop
+lrwxrwxrwx 1 kelvin kelvin   37 2010-09-15 21:49 linux -&gt; /home/kelvin/workplace/linux-2.6.35.4
+drwxr-xr-x 3 kelvin kelvin 4096 2010-09-15 17:13 workplace
+drwxr-xr-x 2 kelvin kelvin 4096 2010-09-14 09:49 公共的
+drwxr-xr-x 2 kelvin kelvin 4096 2010-09-14 09:49 模板
+drwxr-xr-x 2 kelvin kelvin 4096 2010-09-14 09:49 视频
+drwxr-xr-x 2 kelvin kelvin 4096 2010-09-14 09:49 图片
+drwxr-xr-x 2 kelvin kelvin 4096 2010-09-14 15:09 文档
+drwxr-xr-x 2 kelvin kelvin 4096 2010-09-14 14:57 下载
+drwxr-xr-x 2 kelvin kelvin 4096 2010-09-14 09:49 音乐
+drwxr-xr-x 2 kelvin kelvin 4096 2010-09-15 17:18 桌面
+</code></pre>
+<p>第一部分给出了文件或目录的相关权限信息：</p>
+<pre><code>drwxr-xr-x：总共有十个位。
+</code></pre>
+<p>第1位给出了该项的属性，即是文件还是目录，或者是链接文件等。</p>
+<pre><code>-：表示是文件，如上面的examples.desktop就是一个文件；
+d：表示是目录，如上面的workplace;
+l：表示是链接文件；
+</code></pre>
+<p>第2、3、4位给出了文件或目录所有者的权限，第5、6、7位给出了文件或目录所属用户组的权限，第8、9、10位给出了其他用户权限。</p>
+<pre><code>r：为读权限。
+w：为写权限。
+x：为执行权限。目录的执行权限的意思是可以用cd命令进入该目录。
+</code></pre>
+<p>chmod命令：该命令用来修改文件或目录的访问权限。一般有两种使用方式：</p>
+<p>第一种方式为：chmod a+r 文件或目录名</p>
+<p>其中a可用u、g、o替换，+可用=、-替换，r可用w、x替换。</p>
+<pre><code>a：表示修改所有用户的权限。包括u、g、r。
+u：表示只给文件或目录所有者修改权限。
+g：表示给文件所有组修改权限。
+o：表示给其他用户修改权限。
++：表示增加某种权限。
+-：表示减去某种权限。
+=：表示赋予某种权限。
+</code></pre>
+<p>第二种方式为：</p>
+<p>用数字表示权限：</p>
+<p>r：用4表示 w：用2表示 x：用1表示。</p>
+<p>则1：--x 2:-w- 3:-wx 4:r-- 5:r-x 6:rw- 7:rwx</p>
+<p>于是可用“chmod 777 文件或目录名”命令来修改权限。三个7中第一个代表所有者权限，第二个代表所有组权限，第三个代表其他用户权限。当然，也可用类似于“chmod u+2 文件目录名”的方式来修改权限。</p>
+<p>-R选项表示包括子目录的权限也改变。</p>
+<p>chown命令：改变文件或目录所有者。-R选项同样表示包含子目录。</p>
+<p>格式：chown 用户 文件或目录</p>
+<p>chgrp:改变所属组，用法类似于chown。</p>
+<p>chown group.user 文件或目录名，可同时改变所有者和所属组。</p>
+<p>umask：用于设定文件或目录刚创建是的权限。目录为755+umask值=777，文件644+umask值=777。</p>
+<p>粘着位t：对于权限值为777的目录可设置粘着位t，即：drwxrwxrwt。其含义为，任何用户的可在该目录中创建和修改自己的文件，也可以查看别人的文件，但不能删除或修改其他用户的文件。</p>
+<p>s：对于可执行文件，若将该文件用户或组权限的x用s替换，则相应用户便具有了该执行文件拥有者或拥有组的身份。设置s位的作用可用如下的例子阐明：</p>
+<p>保存用户密码的文件存放于/etc/shadow中，其权限为：</p>
+<pre><code>-rw-r----- 1 root shadow 1067 2010-09-15 21:33 /etc/shadow
+</code></pre>
+<p>即：只有该文件的所有者root用户才能具有读写该文件的权利，那么为什么普通用户可以通过passwd命令修改自己的密码呢？我们看一下passwd命令这个可执行文件的权限：</p>
+<pre><code>-rwsr-xr-x 1 root root 37140 2010-01-27 01:09 /usr/bin/passwd
+</code></pre>
+<p>该命令有s位，所以当普通用户执行该命令时，他便有了passwd所有者root的身份，自然可以修改属于 root用户的文件shadow。</p>
+
+          
+          <p class="next-post">下一篇：
+            <a href="https://sanmuny.github.io/post/make/">
+              <span class="post-title">
+                Make&rarr;
+              </span>
+            </a>
+          </p>
+        
+        <div class="comment">
+          
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script>
+  var gitalk = new Gitalk({
+    clientID: '2876d946eb87c573ec4e',
+    clientSecret: '909799984d0e9eb3525ac5c3604e6b5fee270ccd',
+    repo: 'sanmuny.github.io',
+    owner: 'sanmuny',
+    admin: ['sanmuny'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+          
+          
+        
+        </div>
+      </div>
+    </div>
+  </article>
+ <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <ul class="list-inline text-center">
+            
+            
+            <li class="list-inline-item">
+              <a href="https://github.com/sanmuny" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            
+              
+            
+              
+            
+            <li class="list-inline-item">
+              <a href="https://weibo.com/kelvinxupt" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-weibo fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            
+              
+            
+              
+            
+              
+            
+              
+            
+              
+              <li class="list-inline-item">
+              <a href="https://sanmuny.github.io/atom.xml" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+              </li>
+          </ul>
+          <p class="copyright text-muted">Copyright &copy;<span>三木的技术博客</span><br><a href="https://github.com/getgridea/gridea" class="Themeinfo">Powered by Gridea</a></p>
+        </div>
+      </div>
+    </div>
+   </footer>
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/bootstrap.bundle.min.js"></script> -->
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.jsdelivr.net/gh/Alanrk/clean-cdn@1.0/scripts/clean-blog.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/clean-blog.min.js"></script> -->
+  <script src="//instant.page/3.0.0" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+  <style type="text/css">a.back_to_top{text-decoration:none;position:fixed;bottom:40px;right:30px;background:#f0f0f0;height:40px;width:40px;border-radius:50%;line-height:36px;font-size:18px;text-align:center;transition-duration:.5s;transition-propety:background-color;display:none}a.back_to_top span{color:#888}a.back_to_top:hover{cursor:pointer;background:#dfdfdf}a.back_to_top:hover span{color:#555}@media print,screen and(max-width:580px){.back_to_top{display:none!important}}</style>
+<a id="back_to_top" href="#" class="back_to_top">
+  <span>▲</span></a>
+<script>$(document).ready((function(_this) {
+    return function() {
+      var bt;
+      bt = $('#back_to_top');
+      if ($(document).width() > 480) {
+        $(window).scroll(function() {
+          var st;
+          st = $(window).scrollTop();
+          if (st > 30) {
+            return bt.css('display', 'block')
+          } else {
+            return bt.css('display', 'none')
+          }
+        });
+        return bt.click(function() {
+          $('body,html').animate({
+            scrollTop: 0
+          },
+          800);
+          return false
+        })
+      }
+    }
+  })(this));</script>
+  </body>
+</html>
+

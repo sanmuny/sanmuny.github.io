@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta content="yes" name="apple-mobile-web-app-capable" />
+  <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+  <meta name="referrer" content="never">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <meta name="author" content="kveln">
+  <title>Linux基础知识总结 | 三木的技术博客</title>
+  <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <!-- <link href="https://sanmuny.github.io/media/css/bootstrap.min.css" rel="stylesheet"> -->
+  <!--  <link href="https://sanmuny.github.io/media/css/all.min.css" rel="stylesheet" type="text/css"> -->
+  <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  <link rel="alternate" type="application/rss+xml" title="Linux基础知识总结 | 三木的技术博客 » Feed" href="https://sanmuny.github.io/atom.xml">
+  <link rel="stylesheet"href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/styles/androidstudio.min.css">
+  <link href="https://sanmuny.github.io/styles/main.css" rel="stylesheet">
+  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/highlight.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/jquery.min.js"></script> -->
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    <meta property="og:description" content="Linux基础知识总结"/>
+    <meta property="og:url" content="https://sanmuny.github.io/post/linux-e5-9f-ba-e7-a1-80-e7-9f-a5-e8-af-86-e6-80-bb-e7-bb-93/"/>
+    <meta property="og:locale" content="zh-CN"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:site_name" content="三木的技术博客"/>
+  </head>
+  <body>
+  	<!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="https://sanmuny.github.io">三木的技术博客</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/">首页</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/archives">归档</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/tags">标签</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/post/about">关于</a>
+              
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('https://sanmuny.github.io/media/images/home-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+          	<span class="tags">
+          	 
+        </span>
+            <h1>Linux基础知识总结</h1>
+            <span class="meta">
+            	Posted on
+              2014-04-24，4 min read
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Post Content -->
+  <article>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <h3 id="一什么是linux">一：什么是Linux?</h3>
+<p>Linux被称为类Unix操作系统，遵循POSIX标准。Linux与Unix的最大不同在于源代码的开放性和自由性。</p>
+<p>Linux的发音：<a href="ftp://FTP_hllinux:123456@211.95.73.26/sp/Linux%E6%A0%87%E5%87%86%E5%8F%91%E9%9F%B3.rar">Linux发音</a></p>
+<p>Linux的发展历史：1991年9月17日，Linus Torvalds 在网上发布了Linux的0.01版本。</p>
+<ul>
+<li>1994年3月13日，在众多程序员的努力下，Linux 1.0版本正式发布。呵呵，人多力量大，要学会分享知识。</li>
+<li>1996年，Linux 2.0发布，其重要特点是开始支持对称多处理器。</li>
+<li>2004年12月18日，Linux2.6.0版本发布。</li>
+</ul>
+<h3 id="二linux所遵循的标准">二：Linux所遵循的标准</h3>
+<p>1、POSIX（Portable Oprating System Interface of Unix）：即可移植操作系统接口，由IEEE于1988年发布。其作用是使在某一Unix版本下开发的应用程序也能应用于其他Unix版本，以此保证了软件代码的可移植性。</p>
+<p>2、LSB（Linux Standard Base）：由于Linux遵循POSIX标准，不同Linux发行版之间的源代码级有很好的兼容性，但二进制文件的兼容性不足，为解决这一问题，Linux Standard Base 项目应运而生，其主要目的是开发一系列标准，保证Linux不同发行版间的兼容性。</p>
+<p>3、FHS(Filesystem Hierarchy Standard)：即文件系统分级结构标准，是LSB标准的一部分，详细规定了类Unix操作系统中各种应用软件、管理工具、脚本和帮助文件所处的位置。</p>
+<h3 id="三gnu和gpl">三：GNU和GPL</h3>
+<p>GNU（GNU is not Unix）:项目名称，该项目旨在实现一个自由并完整的类Unix操作系统，是自由软件发展的重要组成部分。</p>
+<p>GPL（General Public License）:该授权模式下的软件需满足以下条件：</p>
+<ul>
+<li>自由软件指的是软件开发者有发布软件的自由</li>
+<li>用户可获得源程序</li>
+<li>用户能修改软件或将它的一部分用于新的自由软件</li>
+<li>禁止任何人不承认软件开发者的权利。如果用户修改了自由软件，这些规定转化为该用户的责任。</li>
+</ul>
+<h3 id="四linux目录结构">四：Linux目录结构</h3>
+<ul>
+<li>/bin：存放对系统运行极为重要的二进制文件，也包括/usr/bin目录中文件的符号链接，同时还有一些用户命令。</li>
+<li>/etc：存放系统配置文件。（只能存放静态文件）</li>
+<li>/home:存放与各个用户相关的文件。</li>
+<li>/tmp：临时目录，很多程序要在该目录下创建临时文件。</li>
+<li>/var：存放经常变化的信息，如邮件、日志等。</li>
+<li>/proc:伪目录，系统将当前运行的进程映射为文件，通过修改该目录的文件值可以完成对内核运行参数的修改。</li>
+<li>/boot:存放启动所需文件。</li>
+<li>/dev：存放特殊文件和设备文件。</li>
+<li>/usr：存放与用户相关的程序和库文件。</li>
+<li>/sbin:存放与系统相关的可执行程序。</li>
+</ul>
+<h3 id="五linux系统组成">五：Linux系统组成</h3>
+<p>用户进程、系统调用接口、Linux内核、硬件</p>
+<h3 id="六内核结构">六：内核结构</h3>
+<ul>
+<li>进程调度：控制进程对cpu的访问，也就是根据一定的进程调度算法选择合适的进程运行。</li>
+<li>内存管理：用于控制多个进程安全地访问内存。Linux支持虚拟内存管理。</li>
+<li>虚拟文件系统：隐藏了各个不同文件系统实现的具体细节，为外界使用文件提供统一的接口。</li>
+<li>网络接口：提供了对各种标准协议的存取和各种网络硬件的支持。</li>
+<li>进程间通信：支持进程间各种通信机制。</li>
+</ul>
+<h3 id="七进程状态">七：进程状态</h3>
+<ul>
+<li>可运行态：运行态和就绪态。</li>
+<li>浅度睡眠：可被信号和时钟中断唤醒的状态。</li>
+<li>深度睡眠：不可被信号和时钟中断唤醒的状态。</li>
+<li>暂停状态：进程暂停，接受类似于调试程序的处理。</li>
+<li>僵死状态：进程执行结束，大部分系统资源被释放，但进程pcb并未被释放。</li>
+</ul>
+
+          
+          <p class="next-post">下一篇：
+            <a href="https://sanmuny.github.io/post/fuse/">
+              <span class="post-title">
+                FUSE&rarr;
+              </span>
+            </a>
+          </p>
+        
+        <div class="comment">
+          
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script>
+  var gitalk = new Gitalk({
+    clientID: '2876d946eb87c573ec4e',
+    clientSecret: '909799984d0e9eb3525ac5c3604e6b5fee270ccd',
+    repo: 'sanmuny.github.io',
+    owner: 'sanmuny',
+    admin: ['sanmuny'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+          
+          
+        
+        </div>
+      </div>
+    </div>
+  </article>
+ <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <ul class="list-inline text-center">
+            
+            
+            <li class="list-inline-item">
+              <a href="https://github.com/sanmuny" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            
+              
+            
+              
+            
+            <li class="list-inline-item">
+              <a href="https://weibo.com/kelvinxupt" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-weibo fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            
+              
+            
+              
+            
+              
+            
+              
+            
+              
+              <li class="list-inline-item">
+              <a href="https://sanmuny.github.io/atom.xml" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+              </li>
+          </ul>
+          <p class="copyright text-muted">Copyright &copy;<span>三木的技术博客</span><br><a href="https://github.com/getgridea/gridea" class="Themeinfo">Powered by Gridea</a></p>
+        </div>
+      </div>
+    </div>
+   </footer>
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/bootstrap.bundle.min.js"></script> -->
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.jsdelivr.net/gh/Alanrk/clean-cdn@1.0/scripts/clean-blog.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/clean-blog.min.js"></script> -->
+  <script src="//instant.page/3.0.0" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+  <style type="text/css">a.back_to_top{text-decoration:none;position:fixed;bottom:40px;right:30px;background:#f0f0f0;height:40px;width:40px;border-radius:50%;line-height:36px;font-size:18px;text-align:center;transition-duration:.5s;transition-propety:background-color;display:none}a.back_to_top span{color:#888}a.back_to_top:hover{cursor:pointer;background:#dfdfdf}a.back_to_top:hover span{color:#555}@media print,screen and(max-width:580px){.back_to_top{display:none!important}}</style>
+<a id="back_to_top" href="#" class="back_to_top">
+  <span>▲</span></a>
+<script>$(document).ready((function(_this) {
+    return function() {
+      var bt;
+      bt = $('#back_to_top');
+      if ($(document).width() > 480) {
+        $(window).scroll(function() {
+          var st;
+          st = $(window).scrollTop();
+          if (st > 30) {
+            return bt.css('display', 'block')
+          } else {
+            return bt.css('display', 'none')
+          }
+        });
+        return bt.click(function() {
+          $('body,html').animate({
+            scrollTop: 0
+          },
+          800);
+          return false
+        })
+      }
+    }
+  })(this));</script>
+  </body>
+</html>
+

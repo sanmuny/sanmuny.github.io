@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta content="yes" name="apple-mobile-web-app-capable" />
+  <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+  <meta name="referrer" content="never">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <meta name="author" content="kveln">
+  <title>QEMU3 - 使用ceph来存储QEMU镜像 | 三木的技术博客</title>
+  <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <!-- <link href="https://sanmuny.github.io/media/css/bootstrap.min.css" rel="stylesheet"> -->
+  <!--  <link href="https://sanmuny.github.io/media/css/all.min.css" rel="stylesheet" type="text/css"> -->
+  <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  <link rel="alternate" type="application/rss+xml" title="QEMU3 - 使用ceph来存储QEMU镜像 | 三木的技术博客 » Feed" href="https://sanmuny.github.io/atom.xml">
+  <link rel="stylesheet"href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/styles/androidstudio.min.css">
+  <link href="https://sanmuny.github.io/styles/main.css" rel="stylesheet">
+  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/highlight.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/jquery.min.js"></script> -->
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    <meta property="og:description" content="QEMU3 - 使用ceph来存储QEMU镜像"/>
+    <meta property="og:url" content="https://sanmuny.github.io/post/qemu3-e4-bd-bf-e7-94-a8ceph-e6-9d-a5-e5-ad-98-e5-82-a8qemu-e9-95-9c-e5-83-8f/"/>
+    <meta property="og:locale" content="zh-CN"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:site_name" content="三木的技术博客"/>
+  </head>
+  <body>
+  	<!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="https://sanmuny.github.io">三木的技术博客</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/">首页</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/archives">归档</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/tags">标签</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/post/about">关于</a>
+              
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('https://sanmuny.github.io/media/images/home-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+          	<span class="tags">
+          	 
+            <a href="https://sanmuny.github.io/tag/Gt2numo_cA5/" class="tag">虚拟化</a>
+            
+            <a href="https://sanmuny.github.io/tag/VSVTuhmoDjB/" class="tag">Ceph</a>
+            
+            <a href="https://sanmuny.github.io/tag/nZ6-Kb660sH/" class="tag">QEMU</a>
+            
+        </span>
+            <h1>QEMU3 - 使用ceph来存储QEMU镜像</h1>
+            <span class="meta">
+            	Posted on
+              2016-09-30，7 min read
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Post Content -->
+  <article>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <h1 id="ceph简介">ceph简介</h1>
+<p>Ceph是一个PB级别的分布式软件定义存储系统，为用户提供了块存储、对象存储以及符合POSIX标准的文件系统接口。目前，Ceph已经成为Openstack最受欢迎的后端存储系统。下图为ceph的架构图。</p>
+<p>RADOS本身是一个对象存储系统，实现了ceph的核心功能。Librados是ceph提供给各种编程语言的接口。RADOSGW,RBD,CEPH FS分别为用户提供了对象存储、块存储及文件系统的功能。Ceph集群及客户端的安装配置请参考<a href="http://docs.ceph.com/docs/master/install/">Ceph官方文档</a>。</p>
+<h1 id="使用ceph来存储qemu镜像">使用Ceph来存储QEMU镜像</h1>
+<p>QEMU会假定ceph配置文件存放在默认位置/etc/ceph/$cluster.conf，也会使用client.admin作为默认的ceph用户。如果要指定其他的配置文件或者用户，可以在ceph RBD的选项中添加conf=/home/ceph.conf或者id=admin选项。qemu-img使用ceph块存储RBD时，需要使用下面的格式：</p>
+<pre><code>qemu-img {command} [options] rbd:{pool-name}/{image-name}[@snapshot-name][:option1=value1][:option2=value2...] 
+</code></pre>
+<p>例如：</p>
+<pre><code>qemu-img {command} [options] rbd:glance-pool/maipo:id=glance:conf=/etc/ceph/ceph.conf 
+</code></pre>
+<h2 id="创建一个镜像">创建一个镜像</h2>
+<p>可以使用qemu-img命令在ceph集群中创建一个虚拟机镜像。需要指定rbd, pool,以及镜像名。</p>
+<pre><code>qemu-img create -f raw rbd:{pool-name}/{image-name} {size} 
+</code></pre>
+<p>例如：</p>
+<pre><code>[root@ltczhp20 ~]# qemu-img create -f raw rbd:rbd/vmdisk1 4G
+
+Formatting 'rbd:rbd/vmdisk1', fmt=raw size=4294967296
+[root@ltczhp20 ~]# rbd ls
+vmdisk1
+</code></pre>
+<p>qemu-img通常会指定RBD存储的镜像格式是RAW，这样可以减少其他格式带来的性能开销，也会防止虚拟机热迁移时缓存带来的问题。</p>
+<h2 id="调整镜像的大小"><strong>调整镜像的大小</strong></h2>
+<p>要调整镜像大小，必须指定rbd,pool name,以及镜像名。</p>
+<pre><code>qemu-img resize rbd:{pool-name}/{image-name} {size} 
+</code></pre>
+<p>例如：</p>
+<pre><code>    [root@ltczhp20 ~]# qemu-img resize -f raw rbd:rbd/vmdisk1 2G
+    
+    Image resized.
+    [root@ltczhp20 ~]# rbd ls
+    vmdisk1
+    [root@ltczhp20 ~]# rbd info vmdisk1
+    rbd image 'vmdisk1':
+        size 2048 MB in 512 objects
+        order 22 (4096 kB objects)
+        block_name_prefix: rbd_data.fa802ae8944a
+        format: 2
+        features: layering, exclusive-lock, object-map, fast-diff, deep-flatten
+        flags:
+</code></pre>
+<p>如果不指定镜像格式(-f raw)，qemu会给出警告信息：</p>
+<pre><code>    [root@ltczhp20 ~]# qemu-img resize rbd:rbd/vmdisk1 4G
+    WARNING: Image format was not specified for 'rbd:rbd/vmdisk1' and probing guessed raw.
+             Automatically detecting the format is dangerous for raw images, write operations on block 0 will be restricted.
+             Specify the 'raw' format explicitly to remove the restrictions.
+    Image resized.
+</code></pre>
+<h2 id="获取镜像信息"><strong>获取镜像信息</strong></h2>
+<p>获取镜像信息同样需要指定rbd,pool name以及镜像名：</p>
+<pre><code>qemu-img info rbd:{pool-name}/{image-name}
+</code></pre>
+<p>例如：</p>
+<pre><code>[root@ltczhp20 ~]# qemu-img info rbd:rbd/vmdisk1
+
+image: rbd:rbd/vmdisk1
+file format: raw
+virtual size: 4.0G (4294967296 bytes)
+disk size: unavailable
+cluster_size: 4194304
+</code></pre>
+<h2 id="使用qemu命令运行虚拟机"><strong>使用qemu命令运行虚拟机</strong></h2>
+<p>从QEMU0.15后，虚拟机使用ceph块设备就不需要使用rbd map命令将RBD镜像映射到本地了，QEMU可以通过librados直接访问一个虚拟块设备。这样避免了额外的上下文切换，也充分利用了RBD的缓存功能。</p>
+<p>在运行虚拟机之前，我们可以把一个已经存在的虚拟机镜像转化为ceph RBD存储，然后直接从RBD启动虚拟机。</p>
+<pre><code>qemu-img convert -c -f fmt -O out\_fmt -o options  fname out\_fname 
+</code></pre>
+<p>例如：</p>
+<pre><code>[root@ltczhp20 ~]# qemu-img convert -f qcow2 -O raw /srv/fedora24/fedora24.qcow2 rbd:rbd/fedora
+</code></pre>
+<p>然后使用qemu命令运行虚拟机。</p>
+<pre><code>[root@ltczhp20 ~]# qemu-system-s390x -nographic -enable-kvm -m 4G -drive format=raw,file=rbd:rbd/fedora
+</code></pre>
+<p>RBD缓存会极大的提高虚拟机的性能。QEMU1.2之后，cache选项可以直接控制librbd：</p>
+<pre><code>[root@ltczhp20 ~]# qemu-system-s390x -nographic -enable-kvm -m 4G -drive format=raw,file=rbd:rbd/fedora,cache=writeback
+</code></pre>
+<p>在QEMU1.2之前，如果要使用RBD缓存，需要额外添加rbd_cache=true选项：</p>
+<pre><code>[root@ltczhp20 ~]# qemu-system-s390x -nographic -enable-kvm -m 4G -drive format=raw,file=rbd:rbd/fedora,cache=writeback,rbd_cache=true
+</code></pre>
+<p>如果指定了rbd_cache=true，一定要指定cache=writeback，否则QEMU不会给librbd发送flush请求，RBD之上的文件系统可能会被破坏。</p>
+<h2 id="使用ceph-rbd的快照功能"><strong>使用ceph RBD的快照功能</strong></h2>
+<p>创建一个镜像快照sp0：</p>
+<pre><code>[root@ltczhp20 ~]# qemu-img snapshot -l rbd:rbd/fedora
+[root@ltczhp20 ~]# qemu-img snapshot -c sp0 rbd:rbd/fedora
+WARNING: Image format was not specified for 'rbd:rbd/fedora' and probing guessed raw.
+         Automatically detecting the format is dangerous for raw images, write operations on block 0 will be restricted.
+         Specify the 'raw' format explicitly to remove the restrictions.
+[root@ltczhp20 ~]# qemu-img snapshot -l rbd:rbd/fedora
+Snapshot list:
+ID        TAG                 VM SIZE                DATE       VM CLOCK
+sp0       sp0                     20G 1970-01-01 01:00:00   00:00:00.000
+</code></pre>
+<p>启动虚拟机，创建文件/root/hello.txt并写入字符串&quot;hello world&quot;，然后关闭虚拟机。</p>
+<pre><code>[root@ltczhp20 ~]# qemu-system-s390x -nographic -enable-kvm -m 4G -drive format=raw,file=rbd:rbd/fedora
+
+In VM:
+
+[root@localhost ~]# echo &quot;hello world&quot; &gt;&gt; /root/hello.txt
+[root@localhost ~]# cat /root/hello.txt
+hello world
+
+[root@localhost ~]# halt
+</code></pre>
+<p>将虚拟机回滚到快照sp0，然后检查是否存在/root/hello.txt文件，如果不存在则说明快照已经成功回滚。</p>
+<pre><code>[root@ltczhp20 ~]# qemu-img snapshot -a sp0 rbd:rbd/fedora
+
+[root@ltczhp20 ~]# qemu-system-s390x -nographic -enable-kvm -m 4G -drive format=raw,file=rbd:rbd/fedora
+
+In VM:
+
+[root@localhost ~]# ls /root/hello.txt
+ls: cannot access '/root/hello.txt': No such file or directory
+
+[root@localhost ~]# halt
+</code></pre>
+<p>删除快照：</p>
+<pre><code>[root@ltczhp20 ~]# rbd snap ls rbd/fedora
+SNAPID NAME     SIZE
+    22 sp0  20480 MB
+[root@ltczhp20 ~]# qemu-img snapshot -d sp0 rbd:rbd/fedora
+WARNING: Image format was not specified for 'rbd:rbd/fedora' and probing guessed raw.
+         Automatically detecting the format is dangerous for raw images, write operations on block 0 will be restricted.
+         Specify the 'raw' format explicitly to remove the restrictions.
+[root@ltczhp20 ~]# rbd snap ls rbd/fedora
+[root@ltczhp20 ~]# qemu-img snapshot -l rbd:rbd/fedora</code></pre>
+
+          
+          <p class="next-post">下一篇：
+            <a href="https://sanmuny.github.io/post/e9-a1-ba-e5-ba-8f-e5-ad-98-e5-82-a8-e7-ba-bf-e6-80-a7-e8-a1-a8-e7-9a-84-e5-ae-9e-e7-8e-b0/">
+              <span class="post-title">
+                顺序存储线性表的实现&rarr;
+              </span>
+            </a>
+          </p>
+        
+        <div class="comment">
+          
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script>
+  var gitalk = new Gitalk({
+    clientID: '2876d946eb87c573ec4e',
+    clientSecret: '909799984d0e9eb3525ac5c3604e6b5fee270ccd',
+    repo: 'sanmuny.github.io',
+    owner: 'sanmuny',
+    admin: ['sanmuny'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+          
+          
+        
+        </div>
+      </div>
+    </div>
+  </article>
+ <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <ul class="list-inline text-center">
+            
+            
+            <li class="list-inline-item">
+              <a href="https://github.com/sanmuny" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            
+              
+            
+              
+            
+            <li class="list-inline-item">
+              <a href="https://weibo.com/kelvinxupt" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-weibo fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            
+              
+            
+              
+            
+              
+            
+              
+            
+              
+              <li class="list-inline-item">
+              <a href="https://sanmuny.github.io/atom.xml" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+              </li>
+          </ul>
+          <p class="copyright text-muted">Copyright &copy;<span>三木的技术博客</span><br><a href="https://github.com/getgridea/gridea" class="Themeinfo">Powered by Gridea</a></p>
+        </div>
+      </div>
+    </div>
+   </footer>
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/bootstrap.bundle.min.js"></script> -->
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.jsdelivr.net/gh/Alanrk/clean-cdn@1.0/scripts/clean-blog.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/clean-blog.min.js"></script> -->
+  <script src="//instant.page/3.0.0" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+  <style type="text/css">a.back_to_top{text-decoration:none;position:fixed;bottom:40px;right:30px;background:#f0f0f0;height:40px;width:40px;border-radius:50%;line-height:36px;font-size:18px;text-align:center;transition-duration:.5s;transition-propety:background-color;display:none}a.back_to_top span{color:#888}a.back_to_top:hover{cursor:pointer;background:#dfdfdf}a.back_to_top:hover span{color:#555}@media print,screen and(max-width:580px){.back_to_top{display:none!important}}</style>
+<a id="back_to_top" href="#" class="back_to_top">
+  <span>▲</span></a>
+<script>$(document).ready((function(_this) {
+    return function() {
+      var bt;
+      bt = $('#back_to_top');
+      if ($(document).width() > 480) {
+        $(window).scroll(function() {
+          var st;
+          st = $(window).scrollTop();
+          if (st > 30) {
+            return bt.css('display', 'block')
+          } else {
+            return bt.css('display', 'none')
+          }
+        });
+        return bt.click(function() {
+          $('body,html').animate({
+            scrollTop: 0
+          },
+          800);
+          return false
+        })
+      }
+    }
+  })(this));</script>
+  </body>
+</html>
+

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta content="yes" name="apple-mobile-web-app-capable" />
+  <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+  <meta name="referrer" content="never">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <meta name="author" content="kveln">
+  <title>Linux系统中的信号量机制 | 三木的技术博客</title>
+  <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <!-- <link href="https://sanmuny.github.io/media/css/bootstrap.min.css" rel="stylesheet"> -->
+  <!--  <link href="https://sanmuny.github.io/media/css/all.min.css" rel="stylesheet" type="text/css"> -->
+  <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  <link rel="alternate" type="application/rss+xml" title="Linux系统中的信号量机制 | 三木的技术博客 » Feed" href="https://sanmuny.github.io/atom.xml">
+  <link rel="stylesheet"href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/styles/androidstudio.min.css">
+  <link href="https://sanmuny.github.io/styles/main.css" rel="stylesheet">
+  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/highlight.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/jquery.min.js"></script> -->
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    <meta property="og:description" content="Linux系统中的信号量机制"/>
+    <meta property="og:url" content="https://sanmuny.github.io/post/linux-e7-b3-bb-e7-bb-9f-e4-b8-ad-e7-9a-84-e4-bf-a1-e5-8f-b7-e9-87-8f-e6-9c-ba-e5-88-b6/"/>
+    <meta property="og:locale" content="zh-CN"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:site_name" content="三木的技术博客"/>
+  </head>
+  <body>
+  	<!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="https://sanmuny.github.io">三木的技术博客</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/">首页</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/archives">归档</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/tags">标签</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/post/about">关于</a>
+              
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('https://sanmuny.github.io/media/images/home-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+          	<span class="tags">
+          	 
+        </span>
+            <h1>Linux系统中的信号量机制</h1>
+            <span class="meta">
+            	Posted on
+              2014-04-24，6 min read
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Post Content -->
+  <article>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <p>1、信号量的定义：</p>
+<pre><code>struct semaphore {
+    spinlock_t lock;
+    unsigned int count;
+    struct list_head wait_list;
+};
+</code></pre>
+<p>在linux中，信号量用上述结构体表示，我们可以通过该结构体定义一个信号量。</p>
+<p>2、信号量的初始化：</p>
+<p>可用void sema_init(struct semaphore *sem, int val);直接创建，其中val为信号量初值。也可以用两个宏来定义和初始化信号量的值为1或0：</p>
+<pre><code>DECLARE_MUTEX(name)	:	定义信号量name并初始化为1
+DECLARE_MUTEX_LOCKED(name)	:	定义信号量name并初始化为0
+</code></pre>
+<p>还可以用下面的函数初始化：</p>
+<pre><code>void init_MUTEX(struct semaphore *sem);	 //初始化信号量的值为1
+void init_MUTEX_LOCKED(struct semaphore *sem);	//初始化信号量的值为0
+</code></pre>
+<p>3、信号量的原子操作：</p>
+<p>p操作：</p>
+<ul>
+<li>void down(struct semaphore *sem); //用来获取信号量，如果信号量值大于或等于0，获取信号量，否则进入睡眠状态，睡眠状态不可唤醒</li>
+<li>void down_interruptible(struct semephore *sem); //用来获取信号量，如果信号量大于或等于0，获取信号量，否则进入睡眠状态，等待信号量被释放后，激活该程。</li>
+<li>void down_trylock(struct semaphore *sem); //试图获取信号量，如果信号量已被其他进程获取，则立刻返回非零值，调用者不会睡眠</li>
+</ul>
+<p>v操作：</p>
+<ul>
+<li>void up(struct semaphore *sem); //释放信号量，并唤醒等待该资源进程队列的第一个进程</li>
+</ul>
+<p>4、经典同步问题的解决方案：</p>
+<ul>
+<li>生产者和消费者问题：</li>
+</ul>
+<p>a、单缓冲区问题描述：生产者向消费者提供产品，它们共享一个有界缓冲区，生产者向其中投放产品，消费者从中取得产品。同时，每个进程都互斥的占用CPU。假定生产者和消费者是互相等效的，只要缓冲区未满，生产者就可以把产品送入缓冲区，类似的，只要缓冲区未空，消费者便可以从缓冲区中取走产品并消费它。生产者—消费者的同步关系将禁止生产者向已满的缓冲区中放入产品，也禁止消费者从空的缓冲区中获取产品</p>
+<p>问题分析： 需要定义两个信号量，一个用于互斥访问缓冲区，另一个用于生产者与消费者之间的同步。s1=1; s2=0;</p>
+<p>伪代码：</p>
+<pre><code>生产者进程            
+
+while(1)                                         
+{                                       
+    printf(“I'm producing!\n”);                                        
+    down_interruptible(&amp;s1);                                         
+    printf(“I'm putting a product into the buffer\n”);          
+    up(&amp;s1);                   
+    up(&amp;s2);                
+}               
+</code></pre>
+<p>消费者进程</p>
+<pre><code>while(1)  
+{
+    down_interruptible(&amp;s2);
+    down_interruptible(&amp;s1);
+    printf(“I'm getting a product\n”);
+    up(&amp;s1);
+    printf(“I'm consuming a product\n”);
+}
+</code></pre>
+<p>b、多生产者、多消费者、n个缓冲区</p>
+<p>问题描述：有一群生产者进程在生产产品，并将这些产品提供给消费者进程去消费。为使生产者进程与消费者进程并发执行，在两者之间设置了n个缓冲区，生产者将产品放入一个缓冲区中，消费者可以从一个缓冲区中取走产品去消费。要求生产者进程与消费者进程必须保持同步，即不允许生产者进程向一个满的缓冲区放产品，也不允许消费者从一个空的缓冲区取产品。</p>
+<p>问题分析：该问题貌似比a问题复杂的多，首先我们定义一个数组buffer[n]，来表示n个缓冲区，还需要定义两个变量：in 表示要存入的缓冲区的下标，out表示要取产品的缓冲区的下标。定义三个信号量：s1用于实现对缓冲池的互斥操作，empty表示空缓冲区的个数，full表示满缓冲区的个数。初值：in=out=0; s1=1; full=0; empty=n;</p>
+<p>伪代码如下：</p>
+<pre><code>生产者进程                                                                  
+
+while(1)                                                                          
+{                                                                                      
+    printf(“I'm producing!\n”);                                                   
+    down_interruptible(&amp;empty);                                           
+    down_interruptible(&amp;s1);                                                   
+    printf(“I'm putting a product into the buffer[in]\n”);                 
+                                                                                                          
+    in = (in+1)%n;                                                                                
+    up(&amp;s1);                                                                                      
+    up(&amp;full);                                                                     
+}                                                                                       
+</code></pre>
+<p>消费者进程</p>
+<ul>
+<li>
+<p>哲学家进餐问题</p>
+<p>while(1) { down_interruptible(&amp;full); down_interruptible(&amp;s1); printf(“I'm getting a product from buffer[out]\n”); out = (out+1)%n; up(&amp;empty); printf(“I'm consuming a product\n”); }</p>
+</li>
+</ul>
+<p>问题描述：五个哲学家共用一个圆桌，分别坐在周围的五张椅子上，在圆桌上有五只碗和五只筷子，他们交替进行思考和进餐。哲学家饥饿时便试图取最靠近他的两只筷子，当同时获得两只筷子时便可用餐，用餐完毕后放下筷子。</p>
+<p>问题分析： 五只筷子为临界资源，定义包含五个元素的信号量数组来实现对筷子的互斥使用。chopstick[5]，五个信号量的初值都为1。</p>
+<p>伪代码：</p>
+<p>第i（i=0,1,2,3,4）个哲学家进程：</p>
+<pre><code>while(1)
+{
+          down_interruptible(&amp;chopstick[i]);
+          down_interruptible(&amp;chopstick[(i+1)%5]);
+          printf(“I'm eating!\n”);
+          up(&amp;chopstick[i]);
+          up(&amp;chopstick[(i+1)%5);
+}
+</code></pre>
+<ul>
+<li>读者写者问题：</li>
+</ul>
+<p>问题描述：一个文件可被多个进程共享，reader进程读取该文件，而writer进程负责写文件，允许多个reader进程同时读取文件，但不允许一个writer进程和其他reader进程或writer进程同时访问文件。</p>
+<p>问题分析：进程对文件互斥访问的实现可借助一个信号量就可以搞定，但是我们需要引入一个count变量来记录reader进程的个数，对这个变量的访问也是互斥的，所以也需要引入一个信号量。定义信号量rs实现对count的互斥访问，定义ws实现对文件的互斥访问。两信号量初值都为1</p>
+<p>伪代码：</p>
+<pre><code>reader进程                             	
+{                                                                                          
+        down_interruptible(&amp;rs);                                                                                                                                                                                                   
+        count++;
+        up(&amp;rs);  
+        printf(“I'm reading!\n”);   
+       down_interruptible(&amp;rs);
+       count--;
+       if(count == 0){
+               up(&amp;ws);
+        }
+        up(&amp;rs);
+}       
+
+ writer进程
+ {
+    down_interruptible(&amp;ws);           
+    if (count == 0){ 
+        printf(“I'm writing!\n”);
+        down_interruptible(&amp;ws);                                     
+    } 
+    up(&amp;ws);
+}</code></pre>
+
+          
+          <p class="next-post">下一篇：
+            <a href="https://sanmuny.github.io/post/e5-9f-ba-e4-ba-8elinux-e4-b8-8elpc3250-e5-bc-80-e5-8f-91-e6-9d-bf-e7-9a-84-e4-ba-a4-e5-8f-89-e5-bc-80-e5-8f-91-e7-8e-af-e5-a2-83-e6-90-ad-e5-bb-ba/">
+              <span class="post-title">
+                基于Linux与lpc3250开发板的交叉开发环境搭建&rarr;
+              </span>
+            </a>
+          </p>
+        
+        <div class="comment">
+          
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script>
+  var gitalk = new Gitalk({
+    clientID: '2876d946eb87c573ec4e',
+    clientSecret: '909799984d0e9eb3525ac5c3604e6b5fee270ccd',
+    repo: 'sanmuny.github.io',
+    owner: 'sanmuny',
+    admin: ['sanmuny'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+          
+          
+        
+        </div>
+      </div>
+    </div>
+  </article>
+ <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <ul class="list-inline text-center">
+            
+            
+            <li class="list-inline-item">
+              <a href="https://github.com/sanmuny" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            
+              
+            
+              
+            
+            <li class="list-inline-item">
+              <a href="https://weibo.com/kelvinxupt" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-weibo fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            
+              
+            
+              
+            
+              
+            
+              
+            
+              
+              <li class="list-inline-item">
+              <a href="https://sanmuny.github.io/atom.xml" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+              </li>
+          </ul>
+          <p class="copyright text-muted">Copyright &copy;<span>三木的技术博客</span><br><a href="https://github.com/getgridea/gridea" class="Themeinfo">Powered by Gridea</a></p>
+        </div>
+      </div>
+    </div>
+   </footer>
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/bootstrap.bundle.min.js"></script> -->
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.jsdelivr.net/gh/Alanrk/clean-cdn@1.0/scripts/clean-blog.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/clean-blog.min.js"></script> -->
+  <script src="//instant.page/3.0.0" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+  <style type="text/css">a.back_to_top{text-decoration:none;position:fixed;bottom:40px;right:30px;background:#f0f0f0;height:40px;width:40px;border-radius:50%;line-height:36px;font-size:18px;text-align:center;transition-duration:.5s;transition-propety:background-color;display:none}a.back_to_top span{color:#888}a.back_to_top:hover{cursor:pointer;background:#dfdfdf}a.back_to_top:hover span{color:#555}@media print,screen and(max-width:580px){.back_to_top{display:none!important}}</style>
+<a id="back_to_top" href="#" class="back_to_top">
+  <span>▲</span></a>
+<script>$(document).ready((function(_this) {
+    return function() {
+      var bt;
+      bt = $('#back_to_top');
+      if ($(document).width() > 480) {
+        $(window).scroll(function() {
+          var st;
+          st = $(window).scrollTop();
+          if (st > 30) {
+            return bt.css('display', 'block')
+          } else {
+            return bt.css('display', 'none')
+          }
+        });
+        return bt.click(function() {
+          $('body,html').animate({
+            scrollTop: 0
+          },
+          800);
+          return false
+        })
+      }
+    }
+  })(this));</script>
+  </body>
+</html>
+
