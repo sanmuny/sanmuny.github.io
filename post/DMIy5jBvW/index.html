@@ -84,7 +84,7 @@
             <h1>React hooks 概要</h1>
             <span class="meta">
             	Posted on
-              2021-08-23，10 min read
+              2021-08-23，11 min read
             </span>
           </div>
         </div>
@@ -283,7 +283,7 @@ const [todos, setTodos] = useState([{ text: 'Learn Hooks' }]);
 <pre><code>const container = useRef(initialValue)
 </code></pre>
 <h4 id="usecontext">useContext</h4>
-<p>React组件之间传递数据的方式通常是父子组件之间使用props来进行。React context API可以使得各个组件可以共享上下文数据。</p>
+<p>React组件之间传递数据的方式通常是父子组件之间使用props来进行。React context API可以使得各个组件可以共享上下文数据。主要用于language, theme 等上下文的共享。大规模的数据共享还是应该使用redux这类的状态管理框架来进行。</p>
 <figure data-type="image" tabindex="4"><img src="https://sanmuny.github.io/post-images/1631515426473.png" alt="" loading="lazy"></figure>
 <p>要使用context数据，首先需要在顶层组件中定义context.</p>
 <pre><code>const ThemeContext = React.createContext('light');
@@ -371,6 +371,75 @@ const [todos, setTodos] = useState([{ text: 'Learn Hooks' }]);
   );
 };
 </code></pre>
+<h3 id="自定义hooks">自定义Hooks</h3>
+<p>除了上述react内置的hooks之外，用户可以根据自己的需求利用上述hooks来创建自定义hooks。自定义hooks主要有如下4种使用情况：</p>
+<ol>
+<li>抽取业务逻辑，让组件之间能代码复用。</li>
+<li>封装通用逻辑，让类似的逻辑只实现一遍。</li>
+<li>监听浏览器状态，让组件能够使用浏览器的状态数据。</li>
+<li>拆分复杂组件，让组件的逻辑更加清晰明了。</li>
+</ol>
+<p>例如，定义如下的自定义hook可以让组件更简单的使用浏览器宽度。</p>
+<pre><code>import { useState, useEffect } from 'react';
+
+export const useWindowSize = () =&gt; {
+  const [width, setWidth] = useState(window.innerWidth);
+  useEffect(() =&gt; {
+    const handleWindowSize = () =&gt; { setWidth(window.innerWidth); };
+    window.addEventListener('resize', handleWindowSize);
+    return () =&gt; {
+      window.removeEventListener('resize', handleWindowSize);
+    };
+  });
+  return width;
+};
+</code></pre>
+<p>组件使用自定义hook时只需要引入即可。</p>
+<pre><code>import { useWindowSize } from '../hooks';
+...
+const width = useWindowSize();
+...
+return &lt;div&gt;window size: {width}&lt;/div&gt;
+</code></pre>
+<h3 id="小结">小结</h3>
+<table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>const [width, setWidth] = useState(window.innerWidth)</td>
+<td>定义组件的状态</td>
+</tr>
+<tr>
+<td>useEffect(fn, [deps])</td>
+<td>替代class组件中的声明周期函数</td>
+</tr>
+<tr>
+<td>useCallback(fn, [deps])</td>
+<td>避免fn函数的重复定义和组件的重新渲染，只有当deps中的变量变化时才会重新定义</td>
+</tr>
+<tr>
+<td>const result = useMemo(fn, [deps])</td>
+<td>避免数据的重复计算</td>
+</tr>
+<tr>
+<td>const container = useRef(initialValue)</td>
+<td>在函数组件的多次渲染之间共享数据</td>
+</tr>
+<tr>
+<td>useContext</td>
+<td>用于组件使用页面的上下文</td>
+</tr>
+<tr>
+<td>自定义Hook</td>
+<td>逻辑复用，监听浏览器状态， 拆分复杂组件</td>
+</tr>
+</tbody>
+</table>
 
           
           <p class="next-post">下一篇：
