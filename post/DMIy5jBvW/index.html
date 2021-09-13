@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta content="yes" name="apple-mobile-web-app-capable" />
+  <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+  <meta name="referrer" content="never">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <meta name="author" content="kveln">
+  <title>React hooks 概要 | 三木的技术博客</title>
+  <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <!-- <link href="https://sanmuny.github.io/media/css/bootstrap.min.css" rel="stylesheet"> -->
+  <!--  <link href="https://sanmuny.github.io/media/css/all.min.css" rel="stylesheet" type="text/css"> -->
+  <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  <link rel="alternate" type="application/rss+xml" title="React hooks 概要 | 三木的技术博客 » Feed" href="https://sanmuny.github.io/atom.xml">
+  <link rel="stylesheet"href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/styles/androidstudio.min.css">
+  <link href="https://sanmuny.github.io/styles/main.css" rel="stylesheet">
+  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/highlight.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/jquery.min.js"></script> -->
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    <meta property="og:description" content="React hooks 概要"/>
+    <meta property="og:url" content="https://sanmuny.github.io/post/DMIy5jBvW/"/>
+    <meta property="og:locale" content="zh-CN"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:site_name" content="三木的技术博客"/>
+  </head>
+  <body>
+  	<!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="https://sanmuny.github.io">三木的技术博客</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/">首页</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/archives">归档</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/tags">标签</a>
+              
+          </li>
+          
+          <li class="nav-item">
+              
+              <a class="nav-link" href="/post/about">关于</a>
+              
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('https://sanmuny.github.io/media/images/home-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+          	<span class="tags">
+          	 
+        </span>
+            <h1>React hooks 概要</h1>
+            <span class="meta">
+            	Posted on
+              2021-08-23，10 min read
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Post Content -->
+  <article>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <h3 id="react-基础知识回顾">React 基础知识回顾</h3>
+<p>React(响应)的设计理念是，当数据发生变化时，UI能自动把变化反映出来。它的诞生颠覆了传统的web UI开发模式，它把UI的开发从复杂的DOM操作中解脱出来，让开发者专注于数据、逻辑和UI组件本身。</p>
+<!-- more -->
+<figure data-type="image" tabindex="1"><img src="https://sanmuny.github.io/post-images/1629707806132.webp" alt="" loading="lazy"></figure>
+<h4 id="组件-component">组件 (component)</h4>
+<p>React 是通过组件的方式来组织和描述UI的。组件可以分为两种类型：</p>
+<ol>
+<li>内置组件。内置组件其实就是映射到 HTML 节点的组件，例如 div、input、table 等等，作为一种约定，它们都是小写字母。</li>
+<li>自定义组件。自定义组件其实就是自己创建的组件，使用时必须以大写字母开头，例如 TopicList、TopicDetail。</li>
+</ol>
+<figure data-type="image" tabindex="2"><img src="https://sanmuny.github.io/post-images/1629708149299.webp" alt="" loading="lazy"></figure>
+<pre><code>function CommentBox() {
+  return (
+    &lt;div&gt;
+      &lt;CommentHeader /&gt;
+      &lt;CommentList /&gt;
+      &lt;CommentForm /&gt;
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+<h4 id="状态-state和属性props">状态 (state)和属性(props)</h4>
+<p>组件的状态用于维护组件用到的数据，而属性则用于父组件向子组件传递数据。</p>
+<pre><code>import React from 'react';
+import {
+  Checkbox, Typography, List, ListItem, ListItemText, CircularProgress,
+} from '@material-ui/core';
+
+class ToDoList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: true,
+      items: [],
+    };
+    this.handleCheck = this.handleCheckEvent.bind(this);
+  }
+
+  componentDidMount() {
+    this.getToDoList();
+    let nr = 0;
+    this.state.items.forEach((item) =&gt; {
+      if (item.done === false) {
+        nr += 1;
+      }
+    });
+    document.title = `${nr} itmes left`;
+  }
+
+  componentDidUpdate() {
+    let nr = 0;
+    this.state.items.forEach((item) =&gt; {
+      if (item.done === false) {
+        nr += 1;
+      }
+    });
+    document.title = `${nr} itmes left`;
+  }
+
+  handleCheckEvent(id) {
+    const tmpState = this.state;
+    tmpState.items.forEach((task, index, array) =&gt; {
+      if (task.id === id) {
+        array[index].done = !array[index].done;
+      }
+    });
+    this.setState(tmpState);
+  }
+
+  getToDoList() {
+    setTimeout(() =&gt; {
+      this.setState({
+        loading: false,
+        items: [
+          { id: 0, text: 'Learn JavaScript', done: false },
+          { id: 1, text: 'Learn React', done: false },
+          { id: 2, text: 'Play around in JSFiddle', done: true },
+          { id: 3, text: 'Build something awesome', done: true },
+        ],
+      });
+    }, 2000);
+  }
+
+  render() {
+    return (
+      &lt;div className=&quot;todo-list-container&quot;&gt;
+        &lt;Typography variant=&quot;h6&quot;&gt;
+          Todos
+        &lt;/Typography&gt;
+        {this.state.loading ? &lt;div className=&quot;loading-container&quot;&gt;&lt;CircularProgress /&gt;&lt;/div&gt;
+          : (
+            &lt;List dense className=&quot;todo-list&quot;&gt;
+              {this.state.items.map((item) =&gt; (
+                &lt;ListItem key={item.id} className=&quot;todo-item&quot;&gt;
+                  &lt;Checkbox
+                    edge=&quot;start&quot;
+                    checked={item.done}
+                    tabIndex={-1}
+                    disableRipple
+                    inputProps={{ 'aria-labelledby': item.id }}
+                    onChange={() =&gt; { this.handleCheck(item.id); }}
+                  /&gt;
+                  &lt;ListItemText className={item.done ? 'done' : ''} id={item.id} primary={item.text} /&gt;
+                &lt;/ListItem&gt;
+              ))}
+            &lt;/List&gt;
+          )}
+      &lt;/div&gt;
+    );
+  }
+}
+
+export default ToDoList;
+</code></pre>
+<h4 id="jsx">JSX</h4>
+<p>JSX 并不是一个新的模板语言，而可以认为是一个语法糖。</p>
+<pre><code>React.createElement(
+  &quot;div&quot;,
+  null,
+  React.createElement(
+    &quot;Typography&quot;,
+    ...
+  ),
+  React.createElement(
+    &quot;List&quot;,
+    ...
+  );
+);
+</code></pre>
+<p>React.createElement API的作用就是创建一个组件的实例。此外，这个 API 会接收一组参数：第一个参数表示组件的类型；第二个参数是传给组件的属性，也就是 props；第三个以及后续所有的参数则是子组件。</p>
+<h3 id="react-引入hooks的原因">React 引入Hooks的原因</h3>
+<p>React 组件的模型其实很直观，就是从 Model 到 View 的映射，这里的 Model 对应到 React 中就是 state 和 props。</p>
+<figure data-type="image" tabindex="3"><img src="https://sanmuny.github.io/post-images/1629798317799.webp" alt="" loading="lazy"></figure>
+<p>虽然之前的react也支持函数作为组件，但因为函数组件只能是纯函数，没法使用state，所以更多的情形是用class来实现UI组件。但我们可以从上图可以看到，state/props 到view的本质就是一种函数关系。react用到的class并没有真正使用到面向对象的优势，比如说子组件和父组件并不是一种继承关系，组件之间也不会调用对方的方法。</p>
+<p>于是Hooks被引入到react中，Hooks能够把一个外部的数据绑定到函数的执行。当数据变化时，函数能够自动重新执行。这样的话，任何会影响 UI 展现的外部数据，都可以通过这个机制绑定到 React 的函数组件。</p>
+<p>前面我们说了，react 引入hooks的原因是其本质是函数映射，那么把react组件函数化最大的优势是什么？答案就是数据和逻辑复用。class组件之间是没法共享state的，父组件的state只能通过子组件的props传递给子组件。没有父子关系的组件之间要共享数据只能通过高阶组件。</p>
+<h3 id="react常用的hook">React常用的Hook</h3>
+<h4 id="usestate">useState</h4>
+<p>useState可以让函数组件具有维护状态的能力。参考前面Counter的例子，<code>const [count, setCount] = React.useState(0);</code>定义了名为count的状态，使得函数组件Counter的多次渲染可以共享它。0是状态的默认值，而setCount则是用来改变state的函数，调用setCount会让react刷新组件。useState 这个 Hook 的用法总结出来就是这样的：</p>
+<ol>
+<li>useState(initialState) 的参数 initialState 是创建 state 的初始值，它可以是任意类型，比如数字、对象、数组等等。</li>
+<li>useState() 的返回值是一个有着两个元素的数组。第一个数组元素用来读取 state 的值，第二个则是用来设置这个 state 的值。</li>
+<li>如果要创建多个 state，那么我们就需要多次调用 useState。例如</li>
+</ol>
+<pre><code>// 定义一个年龄的 state，初始值是 42
+const [age, setAge] = useState(42);
+// 定义一个水果的 state，初始值是 banana
+const [fruit, setFruit] = useState('banana');
+// 定一个一个数组 state，初始值是包含一个 todo 的数组
+const [todos, setTodos] = useState([{ text: 'Learn Hooks' }]);
+</code></pre>
+<h4 id="useeffect">useEffect</h4>
+<p>副作用(Side Effect)指的是与UI渲染没有直接关系的操作，例如从服务器端获取数据等。React使用useEffect来替代class中的生命周期函数。useEffect接受两个参数，一个是callback函数，另外一个是执行callback函数的条件。</p>
+<pre><code>useEffect(callback, dependencies)
+</code></pre>
+<ol>
+<li>当只传递callback，没有dependencies时，callback会在组件每次渲染的时候执行一次。</li>
+<li>当dependencies为空数组<code>[]</code>时，callback会在组件第一次渲染的时候执行，相当于componentDidMount</li>
+<li>当callback返回一个函数时，这个函数会在组件卸载的时候执行一次，相当于componentWillUnmount</li>
+</ol>
+<p>React hooks的使用规则：</p>
+<ol>
+<li>在useEffect回调函数中使用的变量，都必须在依赖项中声明</li>
+<li>Hooks不能出现在条件语句和循环中，也不能出现在return之后</li>
+<li>Hooks只能在函数组件或者自定义Hook中使用</li>
+</ol>
+<p>使用eslint可以检查这些规则：</p>
+<ol>
+<li>安装eslint插件：<code>npm install --save-dev eslint-plugin-react-hooks</code></li>
+<li>在eslint配置文件中添加规则：<code>react-hooks/rules-of-hooks</code> 以及<code>react-hooks/exhaustive-deps</code></li>
+</ol>
+<h4 id="usecallback">useCallback</h4>
+<p>每次state的变化都会导致组件函数重新执行一遍，事件处理函数就会被定义多遍，而且事件处理函数通常是闭包，不会被垃圾回收清理掉。事件处理函数会作为props传递给组件，重新定义事件处理函数也会导致组件的频繁更新。为了提升性能，useCallback被引入到React Hooks之中。useCallback的定义如下：</p>
+<pre><code>useCallback(fn, [deps])
+</code></pre>
+<p>fn是定义的函数，deps是依赖变量的数组。只有deps中的某个变量发生变化时，fn才会被重新声明。</p>
+<h4 id="usememo">useMemo</h4>
+<p>类似的，由于每次渲染都会重新执行组件函数，那些耗时的计算也会重复进行。useMemo则用于避免重复的耗时计算。</p>
+<pre><code>const result = useMemo(fn, [deps])
+</code></pre>
+<p>同样，只有deps中的变量发生变化时，result才会用fn重新计算。</p>
+<h4 id="useref">useRef</h4>
+<p>useRef可以使函数组件的多次渲染之间共享数据。它相当于在函数组件之外创建了一个存储对象，其current属性值可以在多次渲染之间共享。</p>
+<pre><code>const container = useRef(initialValue)
+</code></pre>
+<h4 id="usecontext">useContext</h4>
+<p>React组件之间传递数据的方式通常是父子组件之间使用props来进行。React context API可以使得各个组件可以共享上下文数据。</p>
+<figure data-type="image" tabindex="4"><img src="https://sanmuny.github.io/post-images/1631515426473.png" alt="" loading="lazy"></figure>
+<p>要使用context数据，首先需要在顶层组件中定义context.</p>
+<pre><code>const ThemeContext = React.createContext('light');
+
+&lt;ThemeContext.Provider value='light'&gt;
+    &lt;App /&gt;
+&lt;/ThemeContest.Provider&gt;
+</code></pre>
+<p>然后子组件中就可以使用useContext来获取context的值了。</p>
+<pre><code>const theme = useContext(ThemeContext);
+
+&lt;Button className={theme}&gt;Submit&lt;/Button&gt;
+</code></pre>
+<p>下面的例子展示了如何使用React Hooks将上面的ToDoList class组件改造为函数组件。</p>
+<pre><code>const ToDoItems = () =&gt; {
+  const [loading, setLoading] = useState(true);
+  const [todos, setTodos] = useState([]);
+  const theme = useContext(ThemeContext);
+  const nrTasksLeft = useMemo(() =&gt; {
+    let nr = 0;
+    todos.forEach((item) =&gt; {
+      if (item.done === false) {
+        nr += 1;
+      }
+    });
+    return nr;
+  }, [todos]);
+
+  useEffect(() =&gt; {
+    document.title = `${nrTasksLeft} itmes left`;
+  });
+
+  useEffect(() =&gt; {
+    const getToDoList = () =&gt; {
+      setTimeout(() =&gt; {
+        setLoading(false);
+        setTodos([
+          { id: 0, text: 'Learn JavaScript', done: false },
+          { id: 1, text: 'Learn React', done: false },
+          { id: 2, text: 'Play around in JSFiddle', done: true },
+          { id: 3, text: 'Build something awesome', done: true },
+        ]);
+      }, 2000);
+    };
+    getToDoList();
+  }, []);
+
+  const handleCheck = useCallback((id) =&gt; {
+    const tmpTodos = [...todos];
+    tmpTodos.forEach((todo, index) =&gt; {
+      if (todo.id === id) {
+        tmpTodos[index].done = !tmpTodos[index].done;
+      }
+    });
+    setTodos(tmpTodos);
+  }, [todos]);
+
+  return (
+    &lt;div className=&quot;todo-list-container&quot;&gt;
+      &lt;Typography variant=&quot;h6&quot;&gt;
+        Todos
+      &lt;/Typography&gt;
+      {loading ? &lt;div className=&quot;loading-container&quot;&gt;&lt;CircularProgress /&gt;&lt;/div&gt;
+        : (
+          &lt;List dense className=&quot;todo-list&quot;&gt;
+            {todos.map((item) =&gt; (
+              &lt;ListItem key={item.id} className={`todo-item ${theme}`}&gt;
+                &lt;Checkbox
+                  className={theme}
+                  edge=&quot;start&quot;
+                  checked={item.done}
+                  tabIndex={-1}
+                  disableRipple
+                  inputProps={{ 'aria-labelledby': item.id }}
+                  onChange={() =&gt; {
+                    handleCheck(item.id);
+                  }}
+                /&gt;
+                &lt;ListItemText className={item.done ? `${theme} done` : `${theme}`} id={item.id} primary={item.text} color={theme === 'light' ? 'black' : 'white'} /&gt;
+              &lt;/ListItem&gt;
+            ))}
+          &lt;/List&gt;
+        )}
+    &lt;/div&gt;
+  );
+};
+</code></pre>
+
+          
+          <p class="next-post">下一篇：
+            <a href="https://sanmuny.github.io/post/J-lgDABdS/">
+              <span class="post-title">
+                云原生概要&rarr;
+              </span>
+            </a>
+          </p>
+        
+        <div class="comment">
+          
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script>
+  var gitalk = new Gitalk({
+    clientID: '2876d946eb87c573ec4e',
+    clientSecret: '909799984d0e9eb3525ac5c3604e6b5fee270ccd',
+    repo: 'sanmuny.github.io',
+    owner: 'sanmuny',
+    admin: ['sanmuny'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+          
+          
+        
+        </div>
+      </div>
+    </div>
+  </article>
+ <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <ul class="list-inline text-center">
+            
+            
+            <li class="list-inline-item">
+              <a href="https://github.com/sanmuny" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            
+              
+            
+              
+            
+            <li class="list-inline-item">
+              <a href="https://weibo.com/kelvinxupt" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-weibo fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            
+              
+            
+              
+            
+              
+            
+              
+            
+              
+              <li class="list-inline-item">
+              <a href="https://sanmuny.github.io/atom.xml" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+              </li>
+          </ul>
+          <p class="copyright text-muted">Copyright &copy;<span>三木的技术博客</span><br><a href="https://github.com/getgridea/gridea" class="Themeinfo">Powered by Gridea</a></p>
+        </div>
+      </div>
+    </div>
+   </footer>
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/bootstrap.bundle.min.js"></script> -->
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.jsdelivr.net/gh/Alanrk/clean-cdn@1.0/scripts/clean-blog.min.js"></script>
+  <!-- <script src="https://sanmuny.github.io/media/scripts/clean-blog.min.js"></script> -->
+  <script src="//instant.page/3.0.0" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+  <style type="text/css">a.back_to_top{text-decoration:none;position:fixed;bottom:40px;right:30px;background:#f0f0f0;height:40px;width:40px;border-radius:50%;line-height:36px;font-size:18px;text-align:center;transition-duration:.5s;transition-propety:background-color;display:none}a.back_to_top span{color:#888}a.back_to_top:hover{cursor:pointer;background:#dfdfdf}a.back_to_top:hover span{color:#555}@media print,screen and(max-width:580px){.back_to_top{display:none!important}}</style>
+<a id="back_to_top" href="#" class="back_to_top">
+  <span>▲</span></a>
+<script>$(document).ready((function(_this) {
+    return function() {
+      var bt;
+      bt = $('#back_to_top');
+      if ($(document).width() > 480) {
+        $(window).scroll(function() {
+          var st;
+          st = $(window).scrollTop();
+          if (st > 30) {
+            return bt.css('display', 'block')
+          } else {
+            return bt.css('display', 'none')
+          }
+        });
+        return bt.click(function() {
+          $('body,html').animate({
+            scrollTop: 0
+          },
+          800);
+          return false
+        })
+      }
+    }
+  })(this));</script>
+  </body>
+</html>
+

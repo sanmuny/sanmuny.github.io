@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://sanmuny.github.io</id>
     <title>三木的技术博客</title>
-    <updated>2021-08-13T01:59:23.445Z</updated>
+    <updated>2021-09-13T07:04:17.749Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://sanmuny.github.io"/>
     <link rel="self" href="https://sanmuny.github.io/atom.xml"/>
@@ -11,15 +11,306 @@
     <icon>https://sanmuny.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, 三木的技术博客</rights>
     <entry>
+        <title type="html"><![CDATA[React hooks 概要]]></title>
+        <id>https://sanmuny.github.io/post/DMIy5jBvW/</id>
+        <link href="https://sanmuny.github.io/post/DMIy5jBvW/">
+        </link>
+        <updated>2021-08-23T08:21:49.000Z</updated>
+        <summary type="html"><![CDATA[<h3 id="react-基础知识回顾">React 基础知识回顾</h3>
+<p>React(响应)的设计理念是，当数据发生变化时，UI能自动把变化反映出来。它的诞生颠覆了传统的web UI开发模式，它把UI的开发从复杂的DOM操作中解脱出来，让开发者专注于数据、逻辑和UI组件本身。</p>
+]]></summary>
+        <content type="html"><![CDATA[<h3 id="react-基础知识回顾">React 基础知识回顾</h3>
+<p>React(响应)的设计理念是，当数据发生变化时，UI能自动把变化反映出来。它的诞生颠覆了传统的web UI开发模式，它把UI的开发从复杂的DOM操作中解脱出来，让开发者专注于数据、逻辑和UI组件本身。</p>
+<!-- more -->
+<figure data-type="image" tabindex="1"><img src="https://sanmuny.github.io/post-images/1629707806132.webp" alt="" loading="lazy"></figure>
+<h4 id="组件-component">组件 (component)</h4>
+<p>React 是通过组件的方式来组织和描述UI的。组件可以分为两种类型：</p>
+<ol>
+<li>内置组件。内置组件其实就是映射到 HTML 节点的组件，例如 div、input、table 等等，作为一种约定，它们都是小写字母。</li>
+<li>自定义组件。自定义组件其实就是自己创建的组件，使用时必须以大写字母开头，例如 TopicList、TopicDetail。</li>
+</ol>
+<figure data-type="image" tabindex="2"><img src="https://sanmuny.github.io/post-images/1629708149299.webp" alt="" loading="lazy"></figure>
+<pre><code>function CommentBox() {
+  return (
+    &lt;div&gt;
+      &lt;CommentHeader /&gt;
+      &lt;CommentList /&gt;
+      &lt;CommentForm /&gt;
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+<h4 id="状态-state和属性props">状态 (state)和属性(props)</h4>
+<p>组件的状态用于维护组件用到的数据，而属性则用于父组件向子组件传递数据。</p>
+<pre><code>import React from 'react';
+import {
+  Checkbox, Typography, List, ListItem, ListItemText, CircularProgress,
+} from '@material-ui/core';
+
+class ToDoList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: true,
+      items: [],
+    };
+    this.handleCheck = this.handleCheckEvent.bind(this);
+  }
+
+  componentDidMount() {
+    this.getToDoList();
+    let nr = 0;
+    this.state.items.forEach((item) =&gt; {
+      if (item.done === false) {
+        nr += 1;
+      }
+    });
+    document.title = `${nr} itmes left`;
+  }
+
+  componentDidUpdate() {
+    let nr = 0;
+    this.state.items.forEach((item) =&gt; {
+      if (item.done === false) {
+        nr += 1;
+      }
+    });
+    document.title = `${nr} itmes left`;
+  }
+
+  handleCheckEvent(id) {
+    const tmpState = this.state;
+    tmpState.items.forEach((task, index, array) =&gt; {
+      if (task.id === id) {
+        array[index].done = !array[index].done;
+      }
+    });
+    this.setState(tmpState);
+  }
+
+  getToDoList() {
+    setTimeout(() =&gt; {
+      this.setState({
+        loading: false,
+        items: [
+          { id: 0, text: 'Learn JavaScript', done: false },
+          { id: 1, text: 'Learn React', done: false },
+          { id: 2, text: 'Play around in JSFiddle', done: true },
+          { id: 3, text: 'Build something awesome', done: true },
+        ],
+      });
+    }, 2000);
+  }
+
+  render() {
+    return (
+      &lt;div className=&quot;todo-list-container&quot;&gt;
+        &lt;Typography variant=&quot;h6&quot;&gt;
+          Todos
+        &lt;/Typography&gt;
+        {this.state.loading ? &lt;div className=&quot;loading-container&quot;&gt;&lt;CircularProgress /&gt;&lt;/div&gt;
+          : (
+            &lt;List dense className=&quot;todo-list&quot;&gt;
+              {this.state.items.map((item) =&gt; (
+                &lt;ListItem key={item.id} className=&quot;todo-item&quot;&gt;
+                  &lt;Checkbox
+                    edge=&quot;start&quot;
+                    checked={item.done}
+                    tabIndex={-1}
+                    disableRipple
+                    inputProps={{ 'aria-labelledby': item.id }}
+                    onChange={() =&gt; { this.handleCheck(item.id); }}
+                  /&gt;
+                  &lt;ListItemText className={item.done ? 'done' : ''} id={item.id} primary={item.text} /&gt;
+                &lt;/ListItem&gt;
+              ))}
+            &lt;/List&gt;
+          )}
+      &lt;/div&gt;
+    );
+  }
+}
+
+export default ToDoList;
+</code></pre>
+<h4 id="jsx">JSX</h4>
+<p>JSX 并不是一个新的模板语言，而可以认为是一个语法糖。</p>
+<pre><code>React.createElement(
+  &quot;div&quot;,
+  null,
+  React.createElement(
+    &quot;Typography&quot;,
+    ...
+  ),
+  React.createElement(
+    &quot;List&quot;,
+    ...
+  );
+);
+</code></pre>
+<p>React.createElement API的作用就是创建一个组件的实例。此外，这个 API 会接收一组参数：第一个参数表示组件的类型；第二个参数是传给组件的属性，也就是 props；第三个以及后续所有的参数则是子组件。</p>
+<h3 id="react-引入hooks的原因">React 引入Hooks的原因</h3>
+<p>React 组件的模型其实很直观，就是从 Model 到 View 的映射，这里的 Model 对应到 React 中就是 state 和 props。</p>
+<figure data-type="image" tabindex="3"><img src="https://sanmuny.github.io/post-images/1629798317799.webp" alt="" loading="lazy"></figure>
+<p>虽然之前的react也支持函数作为组件，但因为函数组件只能是纯函数，没法使用state，所以更多的情形是用class来实现UI组件。但我们可以从上图可以看到，state/props 到view的本质就是一种函数关系。react用到的class并没有真正使用到面向对象的优势，比如说子组件和父组件并不是一种继承关系，组件之间也不会调用对方的方法。</p>
+<p>于是Hooks被引入到react中，Hooks能够把一个外部的数据绑定到函数的执行。当数据变化时，函数能够自动重新执行。这样的话，任何会影响 UI 展现的外部数据，都可以通过这个机制绑定到 React 的函数组件。</p>
+<p>前面我们说了，react 引入hooks的原因是其本质是函数映射，那么把react组件函数化最大的优势是什么？答案就是数据和逻辑复用。class组件之间是没法共享state的，父组件的state只能通过子组件的props传递给子组件。没有父子关系的组件之间要共享数据只能通过高阶组件。</p>
+<h3 id="react常用的hook">React常用的Hook</h3>
+<h4 id="usestate">useState</h4>
+<p>useState可以让函数组件具有维护状态的能力。参考前面Counter的例子，<code>const [count, setCount] = React.useState(0);</code>定义了名为count的状态，使得函数组件Counter的多次渲染可以共享它。0是状态的默认值，而setCount则是用来改变state的函数，调用setCount会让react刷新组件。useState 这个 Hook 的用法总结出来就是这样的：</p>
+<ol>
+<li>useState(initialState) 的参数 initialState 是创建 state 的初始值，它可以是任意类型，比如数字、对象、数组等等。</li>
+<li>useState() 的返回值是一个有着两个元素的数组。第一个数组元素用来读取 state 的值，第二个则是用来设置这个 state 的值。</li>
+<li>如果要创建多个 state，那么我们就需要多次调用 useState。例如</li>
+</ol>
+<pre><code>// 定义一个年龄的 state，初始值是 42
+const [age, setAge] = useState(42);
+// 定义一个水果的 state，初始值是 banana
+const [fruit, setFruit] = useState('banana');
+// 定一个一个数组 state，初始值是包含一个 todo 的数组
+const [todos, setTodos] = useState([{ text: 'Learn Hooks' }]);
+</code></pre>
+<h4 id="useeffect">useEffect</h4>
+<p>副作用(Side Effect)指的是与UI渲染没有直接关系的操作，例如从服务器端获取数据等。React使用useEffect来替代class中的生命周期函数。useEffect接受两个参数，一个是callback函数，另外一个是执行callback函数的条件。</p>
+<pre><code>useEffect(callback, dependencies)
+</code></pre>
+<ol>
+<li>当只传递callback，没有dependencies时，callback会在组件每次渲染的时候执行一次。</li>
+<li>当dependencies为空数组<code>[]</code>时，callback会在组件第一次渲染的时候执行，相当于componentDidMount</li>
+<li>当callback返回一个函数时，这个函数会在组件卸载的时候执行一次，相当于componentWillUnmount</li>
+</ol>
+<p>React hooks的使用规则：</p>
+<ol>
+<li>在useEffect回调函数中使用的变量，都必须在依赖项中声明</li>
+<li>Hooks不能出现在条件语句和循环中，也不能出现在return之后</li>
+<li>Hooks只能在函数组件或者自定义Hook中使用</li>
+</ol>
+<p>使用eslint可以检查这些规则：</p>
+<ol>
+<li>安装eslint插件：<code>npm install --save-dev eslint-plugin-react-hooks</code></li>
+<li>在eslint配置文件中添加规则：<code>react-hooks/rules-of-hooks</code> 以及<code>react-hooks/exhaustive-deps</code></li>
+</ol>
+<h4 id="usecallback">useCallback</h4>
+<p>每次state的变化都会导致组件函数重新执行一遍，事件处理函数就会被定义多遍，而且事件处理函数通常是闭包，不会被垃圾回收清理掉。事件处理函数会作为props传递给组件，重新定义事件处理函数也会导致组件的频繁更新。为了提升性能，useCallback被引入到React Hooks之中。useCallback的定义如下：</p>
+<pre><code>useCallback(fn, [deps])
+</code></pre>
+<p>fn是定义的函数，deps是依赖变量的数组。只有deps中的某个变量发生变化时，fn才会被重新声明。</p>
+<h4 id="usememo">useMemo</h4>
+<p>类似的，由于每次渲染都会重新执行组件函数，那些耗时的计算也会重复进行。useMemo则用于避免重复的耗时计算。</p>
+<pre><code>const result = useMemo(fn, [deps])
+</code></pre>
+<p>同样，只有deps中的变量发生变化时，result才会用fn重新计算。</p>
+<h4 id="useref">useRef</h4>
+<p>useRef可以使函数组件的多次渲染之间共享数据。它相当于在函数组件之外创建了一个存储对象，其current属性值可以在多次渲染之间共享。</p>
+<pre><code>const container = useRef(initialValue)
+</code></pre>
+<h4 id="usecontext">useContext</h4>
+<p>React组件之间传递数据的方式通常是父子组件之间使用props来进行。React context API可以使得各个组件可以共享上下文数据。</p>
+<figure data-type="image" tabindex="4"><img src="https://sanmuny.github.io/post-images/1631515426473.png" alt="" loading="lazy"></figure>
+<p>要使用context数据，首先需要在顶层组件中定义context.</p>
+<pre><code>const ThemeContext = React.createContext('light');
+
+&lt;ThemeContext.Provider value='light'&gt;
+    &lt;App /&gt;
+&lt;/ThemeContest.Provider&gt;
+</code></pre>
+<p>然后子组件中就可以使用useContext来获取context的值了。</p>
+<pre><code>const theme = useContext(ThemeContext);
+
+&lt;Button className={theme}&gt;Submit&lt;/Button&gt;
+</code></pre>
+<p>下面的例子展示了如何使用React Hooks将上面的ToDoList class组件改造为函数组件。</p>
+<pre><code>const ToDoItems = () =&gt; {
+  const [loading, setLoading] = useState(true);
+  const [todos, setTodos] = useState([]);
+  const theme = useContext(ThemeContext);
+  const nrTasksLeft = useMemo(() =&gt; {
+    let nr = 0;
+    todos.forEach((item) =&gt; {
+      if (item.done === false) {
+        nr += 1;
+      }
+    });
+    return nr;
+  }, [todos]);
+
+  useEffect(() =&gt; {
+    document.title = `${nrTasksLeft} itmes left`;
+  });
+
+  useEffect(() =&gt; {
+    const getToDoList = () =&gt; {
+      setTimeout(() =&gt; {
+        setLoading(false);
+        setTodos([
+          { id: 0, text: 'Learn JavaScript', done: false },
+          { id: 1, text: 'Learn React', done: false },
+          { id: 2, text: 'Play around in JSFiddle', done: true },
+          { id: 3, text: 'Build something awesome', done: true },
+        ]);
+      }, 2000);
+    };
+    getToDoList();
+  }, []);
+
+  const handleCheck = useCallback((id) =&gt; {
+    const tmpTodos = [...todos];
+    tmpTodos.forEach((todo, index) =&gt; {
+      if (todo.id === id) {
+        tmpTodos[index].done = !tmpTodos[index].done;
+      }
+    });
+    setTodos(tmpTodos);
+  }, [todos]);
+
+  return (
+    &lt;div className=&quot;todo-list-container&quot;&gt;
+      &lt;Typography variant=&quot;h6&quot;&gt;
+        Todos
+      &lt;/Typography&gt;
+      {loading ? &lt;div className=&quot;loading-container&quot;&gt;&lt;CircularProgress /&gt;&lt;/div&gt;
+        : (
+          &lt;List dense className=&quot;todo-list&quot;&gt;
+            {todos.map((item) =&gt; (
+              &lt;ListItem key={item.id} className={`todo-item ${theme}`}&gt;
+                &lt;Checkbox
+                  className={theme}
+                  edge=&quot;start&quot;
+                  checked={item.done}
+                  tabIndex={-1}
+                  disableRipple
+                  inputProps={{ 'aria-labelledby': item.id }}
+                  onChange={() =&gt; {
+                    handleCheck(item.id);
+                  }}
+                /&gt;
+                &lt;ListItemText className={item.done ? `${theme} done` : `${theme}`} id={item.id} primary={item.text} color={theme === 'light' ? 'black' : 'white'} /&gt;
+              &lt;/ListItem&gt;
+            ))}
+          &lt;/List&gt;
+        )}
+    &lt;/div&gt;
+  );
+};
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[云原生概要]]></title>
         <id>https://sanmuny.github.io/post/J-lgDABdS/</id>
         <link href="https://sanmuny.github.io/post/J-lgDABdS/">
         </link>
         <updated>2021-08-12T08:15:37.000Z</updated>
+        <summary type="html"><![CDATA[<h1 id="什么是云原生">什么是云原生</h1>
+<h2 id="设计目的">设计目的</h2>
+<p>云原生软件的设计目的是预测故障，并且即使当它所依赖的基础设施出现故障，或者发生其他变化时，它也依然能够保持稳定运行。</p>
+<p>将变化或者失败视为正常规律，让面向失败的设计成为它们构建、交付和管理软件过程中的一个组成部分。</p>
+]]></summary>
         <content type="html"><![CDATA[<h1 id="什么是云原生">什么是云原生</h1>
 <h2 id="设计目的">设计目的</h2>
 <p>云原生软件的设计目的是预测故障，并且即使当它所依赖的基础设施出现故障，或者发生其他变化时，它也依然能够保持稳定运行。</p>
 <p>将变化或者失败视为正常规律，让面向失败的设计成为它们构建、交付和管理软件过程中的一个组成部分。</p>
+<!-- more -->
 <h2 id="云计算时代应用需求">云计算时代应用需求</h2>
 <ol>
 <li>
@@ -1467,154 +1758,6 @@ int main(int argc, char **argv) {
     show_list(&amp;head);
     reverse_list(&amp;head);
     show_list(&amp;head);
-    return 0;
-}</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[冒泡排序、插入法排序及选择排序]]></title>
-        <id>https://sanmuny.github.io/post/e5-86-92-e6-b3-a1-e6-8e-92-e5-ba-8f-e3-80-81-e6-8f-92-e5-85-a5-e6-b3-95-e6-8e-92-e5-ba-8f-e5-8f-8a-e9-80-89-e6-8b-a9-e6-8e-92-e5-ba-8f/</id>
-        <link href="https://sanmuny.github.io/post/e5-86-92-e6-b3-a1-e6-8e-92-e5-ba-8f-e3-80-81-e6-8f-92-e5-85-a5-e6-b3-95-e6-8e-92-e5-ba-8f-e5-8f-8a-e9-80-89-e6-8b-a9-e6-8e-92-e5-ba-8f/">
-        </link>
-        <updated>2018-11-22T07:51:02.000Z</updated>
-        <content type="html"><![CDATA[<p>冒泡排序、插入法排序以及选择排序是排序算法中比较基础的三种，其平均时间复杂度都是O(n^2)。 <img src="https://static001.geekbang.org/resource/image/34/50/348604caaf0a1b1d7fee0512822f0e50.jpg" alt="" loading="lazy"></p>
-<h3 id="原理介绍">原理介绍</h3>
-<h4 id="冒泡排序">冒泡排序</h4>
-<p>冒泡排序的步骤是：比较相邻两个数，看是否满足大小关系，如果不满足则交换这两个数，使他们满足大小关系，这样可以保证最大（最小）的数始终会向后流动，循环一次之后，最大（最小）的数就会被交换到数组的最后。一次冒泡会让至少一个元素移动到它应该在的位置，重复 n 次，就完成了 n 个数据的排序工作。</p>
-<h4 id="插入法排序">插入法排序</h4>
-<p>插入法排序的思路是：把数组分成两个部分：排好序的，和未排序的。开始的时候，数组的第一个元素会被当做拍好序的部分，对其余未排好序的数值进行迭代，将其插入到排好序的部分中合适的位置。</p>
-<h4 id="选择法排序">选择法排序</h4>
-<p>选择法排序和插入法排序类似，都是将数组分为排好序的和未排序的两个部分。不同的是，选择法排序每次迭代都会选择未排序部分中的最小（最大）值，将其插入到排好序部分的队首（队尾）。</p>
-<h3 id="c语言实现">C语言实现</h3>
-<p>需要实现四个函数， 第一个是打印数组，接下来三个函数分别实现三种排序算法：</p>
-<ul>
-<li>void print_arry(int *a, int len)</li>
-<li>static inline void insertion_sort(int *a, int len)</li>
-<li>static inline void bubble_sort(int *a, int len)</li>
-<li>static inline void selection_sort(int *a, int len)</li>
-</ul>
-<p>main函数中，首先需要用户输入指定数目(#define LEN 10)的数值，如果用户输入-1则随机生成这些数值。然后需要用户输入排序算法。输入完成后打印排序前的数组，然后根据相应的排序算法进行排序，最后再打印出排序后的数组。代码如下：</p>
-<pre><code>#include &lt;stdio.h&gt;
-#include &lt;time.h&gt;
-#include &lt;stdlib.h&gt;
-
-#define LEN 10
-#define NR_METHOD 3
-#define RAND_RANGE 100
-
-void print_arry(int *a, int len) {
-    int i = 0;
-    for (int i = 0; i &lt; len; i++) {
-        printf(&quot;%d &quot;, a\[i\]);
-    }
-    printf(&quot;\\n&quot;);
-}
-
-static inline void insertion_sort(int *a, int len) {
-    int tmp = 0;
-    int i, j;
-    for (i = 1; i &lt; len; i++) {
-        tmp = a\[i\];
-        for (j = i - 1; j &gt;= 0; j--) {
-            if (a\[j\] &gt; tmp) {
-                a\[j + 1\] = a\[j\];
-            } else {
-                break;
-            }
-        }
-        a\[j + 1\] = tmp;
-    }
-}
-
-static inline void bubble_sort(int *a, int len) {
-    int i, j;
-    int tmp;
-    int swapped = 0;
-    for (i = len - 1; i &gt;= 0; i--) {
-        for (j = 0; j &lt; i; j++) {
-            if (a\[j\] &gt; a\[j + 1\]) {
-                tmp = a\[j\];
-                a\[j\] = a\[j + 1\];
-                a\[j + 1\] = tmp;
-                swapped = 1;
-            }
-        }
-        if (!swapped) {
-            break;
-        }
-    }
-}
-
-static inline void selection_sort(int *a, int len) {
-    int i, j, min, tmp;
-    for (i = 0; i &lt; len -1; i++) {
-        min = i;
-        for (j = i + 1; j &lt; len; j++) {
-            if(a\[j\] &lt; a\[min\]) {
-                min = j;
-            }
-        }
-        if (min != i) {
-            tmp = a\[min\];
-            a\[min\] = a\[i\];
-            a\[i\] = tmp;
-        }
-    }
-}
-
-int main(int argc, char **argv) {
-    srand(time(NULL));
-
-    int a\[LEN\];
-    int data;
-
-    for (int i = 0; i &lt; LEN; i++) {
-        printf(&quot;Please input a number: %d left: (-1 for random numbers)&quot;, LEN - i);
-        scanf(&quot;%d&quot;, &amp;data);
-        if(data != -1) {
-            a\[i\] = data;
-        } else {
-            for (int j = 0; j &lt; LEN; j++) {
-                a\[j\] = rand() % RAND_RANGE;
-            }
-            break;
-        }
-    }
-
-    while (1) {
-        printf(&quot;Please select a sort method:\\n&quot;);
-        printf(&quot;0: Insertion sort\\n&quot;);
-        printf(&quot;1: Bubble sort \\n&quot;);
-        printf(&quot;2: Selection sort \\n&quot;);
-        scanf(&quot;%d&quot;, &amp;data);
-        if(data &gt;= 0 &amp;&amp; data &lt; NR_METHOD) {
-            break;
-        } else {
-            printf(&quot;Please input a valid number!\\n&quot;);
-        }
-    }
-
-    printf(&quot;Original Array: \\n&quot;);
-    print_arry(a, LEN);
-
-    switch(data) {
-        case 0:
-        printf(&quot;You selected insertion sort\\n&quot;);
-        insertion_sort(a, LEN);
-        break;
-        case 1:
-        printf(&quot;You selected bubble sort\\n&quot;);
-        bubble_sort(a, LEN);
-        break;
-        case 2:
-        printf(&quot;You selected selection sort\\n&quot;);
-        selection_sort(a, LEN);
-        break;
-    }
-
-    printf(&quot;Sorted Array: \\n&quot;);
-    print_arry(a, LEN);
-
     return 0;
 }</code></pre>
 ]]></content>
