@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
   <head>
       <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -9,14 +9,14 @@
   <meta name="keywords" content="">
   <meta name="description" content="">
   <meta name="author" content="kveln">
-  <title>三木的技术博客</title>
+  <title>SQL学习笔记 - SQL概要 | 三木的技术博客</title>
   <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
   <!-- <link href="https://sanmuny.github.io/media/css/bootstrap.min.css" rel="stylesheet"> -->
   <!--  <link href="https://sanmuny.github.io/media/css/all.min.css" rel="stylesheet" type="text/css"> -->
   <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
   <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-  <link rel="alternate" type="application/rss+xml" title="三木的技术博客 » Feed" href="https://sanmuny.github.io/atom.xml">
+  <link rel="alternate" type="application/rss+xml" title="SQL学习笔记 - SQL概要 | 三木的技术博客 » Feed" href="https://sanmuny.github.io/atom.xml">
   <link rel="stylesheet"href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/styles/androidstudio.min.css">
   <link href="https://sanmuny.github.io/styles/main.css" rel="stylesheet">
   <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
@@ -25,9 +25,15 @@
   <script>hljs.initHighlightingOnLoad();</script>
   
 
+    <meta property="og:description" content="SQL学习笔记 - SQL概要"/>
+    <meta property="og:url" content="https://sanmuny.github.io/post/D9Hzm-7XX/"/>
+    <meta property="og:locale" content="zh-CN"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:site_name" content="三木的技术博客"/>
   </head>
   <body>
-     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+  	<!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
     <div class="container">
       <a class="navbar-brand" href="https://sanmuny.github.io">三木的技术博客</a>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,128 +71,105 @@
       </div>
     </div>
   </nav>
+  <!-- Page Header -->
   <header class="masthead" style="background-image: url('https://sanmuny.github.io/media/images/home-bg.jpg')">
     <div class="overlay"></div>
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-          <div class="site-heading">
-            <h1>三木的技术博客</h1>
-            <span class="subheading">Honesty and diligence should be your eternal mates.</span>
+          <div class="post-heading">
+          	<span class="tags">
+          	 
+        </span>
+            <h1>SQL学习笔记 - SQL概要</h1>
+            <span class="meta">
+            	Posted on
+              2021-09-30，4 min read
+            </span>
           </div>
         </div>
       </div>
     </div>
   </header>
-      <div class="container">
-    <div class="row">
-      <div class="col-lg-8 col-md-10 mx-auto">
-       
-        <div class="post-preview">
-          <a href="https://sanmuny.github.io/post/kobject-e6-b5-85-e6-9e-90/">
-            <h2 class="post-title">
-              Kobject浅析
-            </h2>
+
+  <!-- Post Content -->
+  <article>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <p>SQL 是为数不多的声明性语言之一，用来和数据库管理系统进行对话。SQL语句分为四种类型：</p>
+<ul>
+<li>DDL(Data Definition Language)，也就是数据定义语言，它用来定义我们的数据库对象，包括数据库、数据表和列。通过使用DDL，我们可以创建，删除和修改数据库和表结构。</li>
+<li>DML(Data Manipulation Language)，数据操作语言，我们用它操作和数据库相关的记录，比如增加、删除、修改数据表中的记录。</li>
+<li>DCL(Data Control Language)，数据控制语言，我们用它来定义访问权限和安全级别。<br>
+*DQL(Data Query Language)，数据查询语言，我们用它查询想要的记录</li>
+</ul>
+<h4 id="sql执行流程">SQL执行流程</h4>
+<p>Oracle数据库中的执行流程：<br>
+<img src="https://sanmuny.github.io/post-images/1632991445921.webp" alt="" loading="lazy"></p>
+<ol>
+<li>语法检查：检查SQL拼写是否正确，如果不正确，Oracle会报语法错误。</li>
+<li>语义检查：检查SQL中的访问对象是否存在。比如我们在写SELECT语句的时候，列名写错了，系统就会提示错误。语法检查和语义检查的作用是保证SQL语句没有错误。</li>
+<li>权限检查：看用户是否具备访问该数据的权限。</li>
+<li>共享池检查：共享池（Shared Pool）是一块内存池，最主要的作用是缓存SQL语句和该语句的执行计划。Oracle通过检查共享池是否存在SQL语句的执行计划，来判断进行软解析，还是硬解析。那软解析和硬解析又该怎么理解呢？</li>
+<li>在共享池中，Oracle首先对SQL语句进行Hash运算，然后根据Hash值在库缓存（Library Cache）中查找，如果存在SQL语句的执行计划，就直接拿来执行，直接进入“执行器”的环节，这就是软解析。</li>
+<li>如果没有找到SQL语句和执行计划，Oracle就需要创建解析树进行解析，生成执行计划，进入“优化器”这个步骤，这就是硬解析。</li>
+<li>优化器：优化器中就是要进行硬解析，也就是决定怎么做，比如创建解析树，生成执行计划。</li>
+<li>执行器：当有了解析树和执行计划之后，就知道了SQL该怎么被执行，这样就可以在执行器中执行语句了。</li>
+</ol>
+<p>MySQL数据库中的执行流程：<br>
+<img src="https://sanmuny.github.io/post-images/1632991752749.webp" alt="" loading="lazy"></p>
+<ol>
+<li>查询缓存：Server如果在查询缓存中发现了这条SQL语句，就会直接将结果返回给客户端；如果没有，就进入到解析器阶段。需要说明的是，因为查询缓存往往效率不高，所以在MySQL8.0之后就抛弃了这个功能。</li>
+<li>解析器：在解析器中对SQL语句进行语法分析、语义分析。</li>
+<li>优化器：在优化器中会确定SQL语句的执行路径，比如是根据全表检索，还是根据索引来检索等。</li>
+<li>执行器：在执行之前需要判断该用户是否具备权限，如果具备权限就执行SQL查询并返回结果。在MySQL8.0以下的版本，如果设置了查询缓存，这时会将查询结果进行缓存。</li>
+</ol>
+<p>MySQL支持的存储引擎插件：</p>
+<ol>
+<li>InnoDB存储引擎：它是MySQL 5.5版本之后默认的存储引擎，最大的特点是支持事务、行级锁定、外键约束等。</li>
+<li>MyISAM存储引擎：在MySQL 5.5版本之前是默认的存储引擎，不支持事务，也不支持外键，最大的特点是速度快，占用资源少。</li>
+<li>Memory存储引擎：使用系统内存作为存储介质，以便得到更快的响应速度。不过如果mysqld进程崩溃，则会导致所有的数据丢失，因此我们只有当数据是临时的情况下才使用Memory存储引擎.</li>
+<li>NDB存储引擎：也叫做NDB Cluster存储引擎，主要用于MySQL Cluster分布式集群环境，类似于Oracle的RAC集群。</li>
+<li>Archive存储引擎：它有很好的压缩机制，用于文件归档，在请求写入时会进行压缩，所以也经常用来做仓库。</li>
+</ol>
+
+          
+          <p class="next-post">下一篇：
+            <a href="https://sanmuny.github.io/post/DMIy5jBvW/">
+              <span class="post-title">
+                React hooks 概要&rarr;
+              </span>
             </a>
-            <h3 class="post-subtitle">
-              
-            </h3>
-          <p class="post-meta">
-             <span class="time">2014-04-24</span>
-             <span>,</span>
-             <span class="post-stats">8 min read</span>
-            </p>
-        </div>
-        <hr>
-        <div class="clearfix">
-        </div>
+          </p>
         
-        <div class="post-preview">
-          <a href="https://sanmuny.github.io/post/e4-b8-ba-e8-99-9a-e6-8b-9f-e6-9c-bavcpu-e7-bb-91-e5-ae-9a-e7-89-a9-e7-90-86cpu/">
-            <h2 class="post-title">
-              为虚拟机vCPU绑定物理CPU
-            </h2>
-            </a>
-            <h3 class="post-subtitle">
-              
-            </h3>
-          <p class="post-meta">
-             <span class="time">2014-03-24</span>
-             <span>,</span>
-             <span class="post-stats">3 min read</span>
-            </p>
-        </div>
-        <hr>
-        <div class="clearfix">
-        </div>
+        <div class="comment">
+          
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script>
+  var gitalk = new Gitalk({
+    clientID: '2876d946eb87c573ec4e',
+    clientSecret: '909799984d0e9eb3525ac5c3604e6b5fee270ccd',
+    repo: 'sanmuny.github.io',
+    owner: 'sanmuny',
+    admin: ['sanmuny'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+          
+          
         
-        <div class="post-preview">
-          <a href="https://sanmuny.github.io/post/bash-e9-85-8d-e7-bd-ae-e6-96-87-e4-bb-b6-e7-9a-84-e6-89-a7-e8-a1-8c-e9-a1-ba-e5-ba-8f/">
-            <h2 class="post-title">
-              bash配置文件的执行顺序
-            </h2>
-            </a>
-            <h3 class="post-subtitle">
-              
-            </h3>
-          <p class="post-meta">
-             <span class="time">2014-03-19</span>
-             <span>,</span>
-             <span class="post-stats">1 min read</span>
-            </p>
         </div>
-        <hr>
-        <div class="clearfix">
-        </div>
-        
-        <div class="post-preview">
-          <a href="https://sanmuny.github.io/post/e4-bd-bf-e7-94-a8mock-e6-9d-a5-e7-bc-96-e8-af-91-e5-92-8c-e7-ae-a1-e7-90-86rpm-e8-bd-af-e4-bb-b6-e5-8c-85/">
-            <h2 class="post-title">
-              使用mock来编译和管理RPM软件包
-            </h2>
-            </a>
-            <h3 class="post-subtitle">
-              
-            </h3>
-          <p class="post-meta">
-             <span class="time">2014-02-13</span>
-             <span>,</span>
-             <span class="post-stats">2 min read</span>
-            </p>
-        </div>
-        <hr>
-        <div class="clearfix">
-        </div>
-        
-        <div class="post-preview">
-          <a href="https://sanmuny.github.io/post/rpm-e8-bd-af-e4-bb-b6-e5-8c-85-e7-ae-a1-e7-90-86-e6-9c-ba-e5-88-b6-e4-b9-8b-e6-97-85/">
-            <h2 class="post-title">
-              RPM软件包管理机制之旅
-            </h2>
-            </a>
-            <h3 class="post-subtitle">
-              
-            </h3>
-          <p class="post-meta">
-             <span class="time">2013-11-04</span>
-             <span>,</span>
-             <span class="post-stats">30 min read</span>
-            </p>
-        </div>
-        <hr>
-        <div class="clearfix">
-        </div>
-        
-        
-        <a class="btn btn-primary float-left" href="https://sanmuny.github.io/page/8/">&larr; 上一页</a>
-        
-        
       </div>
     </div>
-  </div>
-
-  
-    <!-- Footer -->
+  </article>
+ <!-- Footer -->
   <footer>
     <div class="container">
       <div class="row">
@@ -275,3 +258,4 @@
   })(this));</script>
   </body>
 </html>
+
