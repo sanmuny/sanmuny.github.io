@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
   <head>
       <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -9,14 +9,14 @@
   <meta name="keywords" content="">
   <meta name="description" content="">
   <meta name="author" content="kveln">
-  <title>三木的技术博客</title>
+  <title>Go环境变量及常用命令 | 三木的技术博客</title>
   <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
   <!-- <link href="https://sanmuny.github.io/media/css/bootstrap.min.css" rel="stylesheet"> -->
   <!--  <link href="https://sanmuny.github.io/media/css/all.min.css" rel="stylesheet" type="text/css"> -->
   <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
   <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-  <link rel="alternate" type="application/rss+xml" title="三木的技术博客 » Feed" href="https://sanmuny.github.io/atom.xml">
+  <link rel="alternate" type="application/rss+xml" title="Go环境变量及常用命令 | 三木的技术博客 » Feed" href="https://sanmuny.github.io/atom.xml">
   <link rel="stylesheet"href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/styles/androidstudio.min.css">
   <link href="https://sanmuny.github.io/styles/main.css" rel="stylesheet">
   <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
@@ -25,9 +25,15 @@
   <script>hljs.initHighlightingOnLoad();</script>
   
 
+    <meta property="og:description" content="Go环境变量及常用命令"/>
+    <meta property="og:url" content="https://sanmuny.github.io/post/ViviArxkk/"/>
+    <meta property="og:locale" content="zh-CN"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:site_name" content="三木的技术博客"/>
   </head>
   <body>
-     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+  	<!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
     <div class="container">
       <a class="navbar-brand" href="https://sanmuny.github.io">三木的技术博客</a>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,147 +71,100 @@
       </div>
     </div>
   </nav>
+  <!-- Page Header -->
   <header class="masthead" style="background-image: url('https://sanmuny.github.io/media/images/home-bg.jpg')">
     <div class="overlay"></div>
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-          <div class="site-heading">
-            <h1>三木的技术博客</h1>
-            <span class="subheading">Honesty and diligence should be your eternal mates.</span>
+          <div class="post-heading">
+          	<span class="tags">
+          	 
+        </span>
+            <h1>Go环境变量及常用命令</h1>
+            <span class="meta">
+            	Posted on
+              2021-10-20，2 min read
+            </span>
           </div>
         </div>
       </div>
     </div>
   </header>
-      <div class="container">
-    <div class="row">
-      <div class="col-lg-8 col-md-10 mx-auto">
-       
-        <div class="post-preview">
-          <a href="https://sanmuny.github.io/post/e6-8f-92-e5-85-a5-e6-b3-95-e6-8e-92-e5-ba-8f/">
-            <h2 class="post-title">
-              插入法排序
-            </h2>
+
+  <!-- Post Content -->
+  <article>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <h3 id="环境变量">环境变量</h3>
+<ul>
+<li>GOROOT: Go语言的安装路径</li>
+<li>GOPATH: Go语言工作区路径，默认为<code>~/go</code>。项目中执行go install命令后，项目构建后生成的可执行程序、静态库文件以及源码文件会被安装到GOPATH相应的目录中去</li>
+<li>GOBIN: 存放Go可执行文件，一般是<code>GOPATH/bin</code>会被默认设置到操作系统的PATH环境变量中</li>
+</ul>
+<pre><code>$ tree -L 1 ~/go
+/Users/wangsen/go
+├── bin
+├── pkg
+└── src
+
+$ go env | grep GOPATH
+GOPATH=&quot;/Users/wangsen/go&quot;
+
+$ go env | grep GOBIN
+GOBIN=&quot;/Users/wangsen/go/bin&quot;
+</code></pre>
+<h3 id="常用命令">常用命令</h3>
+<ul>
+<li><code>go build</code>: 构建go程序</li>
+<li><code>go test</code>: 运行测试代码</li>
+<li><code>go install</code>: 构建并安装go程序</li>
+<li><code>go fmt</code>: 格式化go代码</li>
+<li><code>go vet</code>: 用来检查编译器发现不了的逻辑错误</li>
+<li><code>go run</code>: 运行go代码</li>
+<li><code>go mod init</code>: 创建一个新的模块并初始化go.mod文件. <code>go build</code>、<code>go test</code> 以及其它构建命令会将新的依赖添加到go.mod文件中.</li>
+<li><code>go list -m all</code> 列出模块所有的依赖.</li>
+<li><code>go get</code> 更新或者添加依赖包.</li>
+<li><code>go mod tidy</code>: 删除go.mod中未使用的依赖.</li>
+</ul>
+
+          
+          <p class="next-post">下一篇：
+            <a href="https://sanmuny.github.io/post/D9Hzm-7XX/">
+              <span class="post-title">
+                SQL学习笔记 - SQL概要&rarr;
+              </span>
             </a>
-            <h3 class="post-subtitle">
-              
-            </h3>
-          <p class="post-meta">
-             <span class="time">2014-04-24</span>
-             <span>,</span>
-             <span class="post-stats">3 min read</span>
-            </p>
-        </div>
-        <hr>
-        <div class="clearfix">
-        </div>
+          </p>
         
-        <div class="post-preview">
-          <a href="https://sanmuny.github.io/post/kobject-e6-b5-85-e6-9e-90/">
-            <h2 class="post-title">
-              Kobject浅析
-            </h2>
-            </a>
-            <h3 class="post-subtitle">
-              
-            </h3>
-          <p class="post-meta">
-             <span class="time">2014-04-24</span>
-             <span>,</span>
-             <span class="post-stats">8 min read</span>
-            </p>
-        </div>
-        <hr>
-        <div class="clearfix">
-        </div>
+        <div class="comment">
+          
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script>
+  var gitalk = new Gitalk({
+    clientID: '2876d946eb87c573ec4e',
+    clientSecret: '909799984d0e9eb3525ac5c3604e6b5fee270ccd',
+    repo: 'sanmuny.github.io',
+    owner: 'sanmuny',
+    admin: ['sanmuny'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+          
+          
         
-        <div class="post-preview">
-          <a href="https://sanmuny.github.io/post/e4-b8-ba-e8-99-9a-e6-8b-9f-e6-9c-bavcpu-e7-bb-91-e5-ae-9a-e7-89-a9-e7-90-86cpu/">
-            <h2 class="post-title">
-              为虚拟机vCPU绑定物理CPU
-            </h2>
-            </a>
-            <h3 class="post-subtitle">
-              
-            </h3>
-          <p class="post-meta">
-             <span class="time">2014-03-24</span>
-             <span>,</span>
-             <span class="post-stats">3 min read</span>
-            </p>
         </div>
-        <hr>
-        <div class="clearfix">
-        </div>
-        
-        <div class="post-preview">
-          <a href="https://sanmuny.github.io/post/bash-e9-85-8d-e7-bd-ae-e6-96-87-e4-bb-b6-e7-9a-84-e6-89-a7-e8-a1-8c-e9-a1-ba-e5-ba-8f/">
-            <h2 class="post-title">
-              bash配置文件的执行顺序
-            </h2>
-            </a>
-            <h3 class="post-subtitle">
-              
-            </h3>
-          <p class="post-meta">
-             <span class="time">2014-03-19</span>
-             <span>,</span>
-             <span class="post-stats">1 min read</span>
-            </p>
-        </div>
-        <hr>
-        <div class="clearfix">
-        </div>
-        
-        <div class="post-preview">
-          <a href="https://sanmuny.github.io/post/e4-bd-bf-e7-94-a8mock-e6-9d-a5-e7-bc-96-e8-af-91-e5-92-8c-e7-ae-a1-e7-90-86rpm-e8-bd-af-e4-bb-b6-e5-8c-85/">
-            <h2 class="post-title">
-              使用mock来编译和管理RPM软件包
-            </h2>
-            </a>
-            <h3 class="post-subtitle">
-              
-            </h3>
-          <p class="post-meta">
-             <span class="time">2014-02-13</span>
-             <span>,</span>
-             <span class="post-stats">2 min read</span>
-            </p>
-        </div>
-        <hr>
-        <div class="clearfix">
-        </div>
-        
-        <div class="post-preview">
-          <a href="https://sanmuny.github.io/post/rpm-e8-bd-af-e4-bb-b6-e5-8c-85-e7-ae-a1-e7-90-86-e6-9c-ba-e5-88-b6-e4-b9-8b-e6-97-85/">
-            <h2 class="post-title">
-              RPM软件包管理机制之旅
-            </h2>
-            </a>
-            <h3 class="post-subtitle">
-              
-            </h3>
-          <p class="post-meta">
-             <span class="time">2013-11-04</span>
-             <span>,</span>
-             <span class="post-stats">30 min read</span>
-            </p>
-        </div>
-        <hr>
-        <div class="clearfix">
-        </div>
-        
-        
-        <a class="btn btn-primary float-left" href="https://sanmuny.github.io/page/8/">&larr; 上一页</a>
-        
-        
       </div>
     </div>
-  </div>
-
-  
-    <!-- Footer -->
+  </article>
+ <!-- Footer -->
   <footer>
     <div class="container">
       <div class="row">
@@ -294,3 +253,4 @@
   })(this));</script>
   </body>
 </html>
+

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://sanmuny.github.io</id>
     <title>三木的技术博客</title>
-    <updated>2021-09-30T09:29:59.518Z</updated>
+    <updated>2021-10-20T09:13:46.082Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://sanmuny.github.io"/>
     <link rel="self" href="https://sanmuny.github.io/atom.xml"/>
@@ -10,6 +10,45 @@
     <logo>https://sanmuny.github.io/images/avatar.png</logo>
     <icon>https://sanmuny.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, 三木的技术博客</rights>
+    <entry>
+        <title type="html"><![CDATA[Go环境变量及常用命令]]></title>
+        <id>https://sanmuny.github.io/post/ViviArxkk/</id>
+        <link href="https://sanmuny.github.io/post/ViviArxkk/">
+        </link>
+        <updated>2021-10-20T07:52:56.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="环境变量">环境变量</h3>
+<ul>
+<li>GOROOT: Go语言的安装路径</li>
+<li>GOPATH: Go语言工作区路径，默认为<code>~/go</code>。项目中执行go install命令后，项目构建后生成的可执行程序、静态库文件以及源码文件会被安装到GOPATH相应的目录中去</li>
+<li>GOBIN: 存放Go可执行文件，一般是<code>GOPATH/bin</code>会被默认设置到操作系统的PATH环境变量中</li>
+</ul>
+<pre><code>$ tree -L 1 ~/go
+/Users/wangsen/go
+├── bin
+├── pkg
+└── src
+
+$ go env | grep GOPATH
+GOPATH=&quot;/Users/wangsen/go&quot;
+
+$ go env | grep GOBIN
+GOBIN=&quot;/Users/wangsen/go/bin&quot;
+</code></pre>
+<h3 id="常用命令">常用命令</h3>
+<ul>
+<li><code>go build</code>: 构建go程序</li>
+<li><code>go test</code>: 运行测试代码</li>
+<li><code>go install</code>: 构建并安装go程序</li>
+<li><code>go fmt</code>: 格式化go代码</li>
+<li><code>go vet</code>: 用来检查编译器发现不了的逻辑错误</li>
+<li><code>go run</code>: 运行go代码</li>
+<li><code>go mod init</code>: 创建一个新的模块并初始化go.mod文件. <code>go build</code>、<code>go test</code> 以及其它构建命令会将新的依赖添加到go.mod文件中.</li>
+<li><code>go list -m all</code> 列出模块所有的依赖.</li>
+<li><code>go get</code> 更新或者添加依赖包.</li>
+<li><code>go mod tidy</code>: 删除go.mod中未使用的依赖.</li>
+</ul>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[SQL学习笔记 - SQL概要]]></title>
         <id>https://sanmuny.github.io/post/D9Hzm-7XX/</id>
@@ -1625,183 +1664,6 @@ console.log(sq.getArea());
 <li>super只能用在派生类中</li>
 <li>在constructor里，super负责初始化this，所以必须在this使用之前调用</li>
 </ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[ES6: 迭代器与生成器]]></title>
-        <id>https://sanmuny.github.io/post/es6-e8-bf-ad-e4-bb-a3-e5-99-a8-e4-b8-8e-e7-94-9f-e6-88-90-e5-99-a8/</id>
-        <link href="https://sanmuny.github.io/post/es6-e8-bf-ad-e4-bb-a3-e5-99-a8-e4-b8-8e-e7-94-9f-e6-88-90-e5-99-a8/">
-        </link>
-        <updated>2018-12-07T08:23:24.000Z</updated>
-        <content type="html"><![CDATA[<h4 id="什么是迭代器">什么是迭代器？</h4>
-<p>迭代器是一个对象，它拥有一个next方法，调用next方法会返回一个对象，该对象有两个属性值，value和done。每次调用next方法，返回的value表示可迭代对象中的下一个值，done表示迭代是否完成。根据此定义，可用下面的代码实现一个迭代器:</p>
-<pre><code>let create_iter = function(items) {
-    let i = 0;
-    return {
-        next: function() {
-            let value, done;
-            if (i &gt;= items.length) {
-                value = null;
-                done = true;
-            } else {
-                value = items\[i++\];
-                done = false;
-            }
-            return {
-                value: value,
-                done: done
-            }
-        }
-    }
-}
-</code></pre>
-<h4 id="什么是生成器">什么是生成器？</h4>
-<p>用来创建迭代器的函数称之为生成器，ES6为了简化生成器，引入了新的语法：</p>
-<ul>
-<li>在生成器函数前加*</li>
-<li>使用yield关键字抛出下一个value</li>
-</ul>
-<p>引入新的语法后，生成器的代码可以简化为：</p>
-<pre><code>let gen = function*(items) {
-    for (let i = 0; i &lt; items.length; i++) {
-        yield items\[i\];
-    }
-}
-</code></pre>
-<h4 id="举个栗子">举个栗子</h4>
-<p>下面的代码比较了两种创建迭代器的方法：</p>
-<pre><code>let create_iter = function(items) {
-    let i = 0;
-    return {
-        next: function() {
-            let value, done;
-            if (i &gt;= items.length) {
-                value = null;
-                done = true;
-            } else {
-                value = items[i++];
-                done = false;
-            }
-            return {
-                value: value,
-                done: done
-            }
-        }
-    }
-}
-
-let gen = function*(items) {
-    for (let i = 0; i &lt; items.length; i++) {
-        yield items[i];
-    }
-}
-
-let items = [1, 2, 3, 4, 5];
-
-let it = gen(items);
-console.log(it.next());
-console.log(it.next());
-console.log(it.next());
-console.log(it.next());
-console.log(it.next());
-console.log(it.next());
-</code></pre>
-<p>输出结果：</p>
-<pre><code>$ node test.js 
-{ value: 1, done: false }
-{ value: 2, done: false }
-{ value: 3, done: false }
-{ value: 4, done: false }
-{ value: 5, done: false }
-{ value: undefined, done: true }
-{ value: undefined, done: true }
-</code></pre>
-<h4 id="生成器的表现形式">生成器的表现形式</h4>
-<ul>
-<li>function *my_generator(items) {}</li>
-<li>let my_generator = function *(items) {}</li>
-<li>let obj = {*my_generator(items){}};</li>
-</ul>
-<h4 id="可迭代对象">可迭代对象</h4>
-<p>可迭代对象指的是包含Symbol.iterator属性的对象，数组、Set、Map、字符串都是可迭代对象，都有默认的迭代器。 可迭代对象可以与for-of配合使用，例如：</p>
-<pre><code>let numbers = [1, 2, 3, 4, 5];
-for (let num of numbers) {
-    console.log(num);
-}
-</code></pre>
-<p>可以用一下方法自定义一个可迭代对象：</p>
-<pre><code>let colors = {
-    items: [1, 2, 3, 4, 5],
-    *[Symbol.iterator]() {
-        for (let item of this.items) {
-            yield item;
-        }
-    }
-}
-</code></pre>
-<h4 id="内置迭代器">内置迭代器</h4>
-<p>数组、Map和Set 都有一下三个内置的迭代器：</p>
-<ul>
-<li>entries(): 返回一个包含键值对(数组)的迭代器</li>
-<li>values(): 返回一个只包含值的迭代器</li>
-<li>keys(): 返回一个只包含键的迭代器</li>
-</ul>
-<p>对于数组来说，keys返回的是元素的下标，对于Set来说，返回的是元素的值，而对于Map来说，返回的是元素的key。</p>
-<h4 id="给迭代器传入参数">给迭代器传入参数</h4>
-<p>当调用next方法时，若传入参数，则该参数会替代上一次yield表达式的值，例如：</p>
-<pre><code>let gen = function *() {
-    let a = yield 1;
-    let b = yield a + 1;
-    yield b + 1;
-}
-
-let iter = gen();
-
-console.log(iter.next());
-console.log(iter.next(100));
-console.log(iter.next(200));
-console.log(iter.next());
-
-执行结果：
-
-$ node test.js 
-{ value: 1, done: false }
-{ value: 101, done: false }
-{ value: 201, done: false }
-{ value: undefined, done: true }
-
-#### 生成器委托
-
-也就是生成器的嵌套，例如：
-
-let generator0 = function *() {
-    yield 0;
-    yield 1;
-    yield 2;
-}
-
-let generator1 = function *() {
-    yield 3;
-    yield 4;
-    yield 5;
-}
-
-let generator = function *() {
-    yield *generator0();
-    yield *generator1();
-    yield 6;
-}
-
-let iter = generator();
-
-console.log(iter.next());
-console.log(iter.next());
-console.log(iter.next());
-console.log(iter.next());
-console.log(iter.next());
-console.log(iter.next());
-console.log(iter.next());
-console.log(iter.next());</code></pre>
 ]]></content>
     </entry>
 </feed>
