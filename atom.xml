@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://sanmuny.github.io</id>
     <title>三木的技术博客</title>
-    <updated>2021-10-20T09:54:56.192Z</updated>
+    <updated>2021-11-15T08:16:45.287Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://sanmuny.github.io"/>
     <link rel="self" href="https://sanmuny.github.io/atom.xml"/>
@@ -10,6 +10,47 @@
     <logo>https://sanmuny.github.io/images/avatar.png</logo>
     <icon>https://sanmuny.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, 三木的技术博客</rights>
+    <entry>
+        <title type="html"><![CDATA[Feature flags 概要]]></title>
+        <id>https://sanmuny.github.io/post/b3Fw423hf/</id>
+        <link href="https://sanmuny.github.io/post/b3Fw423hf/">
+        </link>
+        <updated>2021-11-10T08:44:57.000Z</updated>
+        <summary type="html"><![CDATA[<p>Feature flags可以让软件开发更加的安全、迭代更加迅速，而且可以更加灵活的控制软件产品。Feature flags将功能迭代从代码部署中分离出来，从而可以使产品团队（开发团队、管理团队、SRE等）在版本控制之外更加精细地控制谁、什么时候可以使用什么功能。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>Feature flags可以让软件开发更加的安全、迭代更加迅速，而且可以更加灵活的控制软件产品。Feature flags将功能迭代从代码部署中分离出来，从而可以使产品团队（开发团队、管理团队、SRE等）在版本控制之外更加精细地控制谁、什么时候可以使用什么功能。</p>
+<!-- more -->
+<h3 id="什么是feature-flags">什么是Feature flags?</h3>
+<p>Feature flags是一种软件开发方法，开发者将新的功能封装在带有标志位的<code>if/else</code>语句中，从而使得产品团队可以在版本之外通过设置标志位来控制哪些功能可以被用户使用。标志位的开关独立于软件部署，所以即使产品环境部署同样一份代码，也可以通过设置标志位来打开/关闭某种功能。因此，支持Feature  flags也是持续交付(Continous delivery)的重要一环，它可以让版本发布更加迅速、更加可靠。</p>
+<pre><code>if (flags.kms) {
+    /* with KMS feature */
+} else {
+    /* without KMS feature */
+}
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://sanmuny.github.io/post-images/1636536399408.png" alt="" loading="lazy"></figure>
+<h3 id="feature-flags最佳实践">Feature flags最佳实践</h3>
+<ol>
+<li>选择正确的级别。根据自身的需求来选择feature flags的级别。如果级别选的过低，可能会有成百上千的flags，而且还需要来维护一些用不上的flags。但如果级别定的过高，feature flags控制的粒度又不够，精细程度满足不了需求。</li>
+<li>Flag的命名一定要准确的描述是什么功能。否则的话，系统可能因为错误的flag被关闭或者打开而被破坏。另外，如果一个flag总是处于打开或者关闭的状态，那就应该被删掉。</li>
+<li>设置日志来记录是谁打开或者关闭了flag。</li>
+<li>需要给开发者之外的人操作flag的权限。</li>
+<li>控制flag的访问权限。</li>
+<li>通过flag的状态来管理feature flags的生命周期。</li>
+</ol>
+<h3 id="蓝绿部署集成feature-flags">蓝绿部署集成feature flags</h3>
+<p>蓝绿部署是一种比较成熟的用于降低风险的升级系统的方法。升级时维护两套系统，蓝系统和绿系统，分别为运行中的版本和新的版本。可以在系统升级的时候，通过负载均衡器将用户流量从旧版本系统导入到新版本的系统。蓝绿部署一方面可以缩短甚至消除升级的宕机时间，新版本部署的时候旧的系统仍在运行。另一方面可以降低风险，一旦新版本有问题，可以很容易地将用户流量切回到旧的版本。</p>
+<figure data-type="image" tabindex="2"><img src="https://sanmuny.github.io/post-images/1636948353910.png" alt="" loading="lazy"></figure>
+<p>在蓝绿部署中可以引入feature flags，新的版本可以将新的功能通过feature flags关闭，然后再逐一打开。蓝绿升级要么使用新的版本的所有功能，要么使用旧的版本。feature flags 则弥补了这个不足。</p>
+<h3 id="nodejs-中的feature-flags资源">nodejs 中的feature flags资源</h3>
+<ol>
+<li><a href="https://launchdarkly.com/feature-management/">LaunchDarkly</a> 是一个完整的feature flags解决方案，它提供了服务器端和前端的SDK。</li>
+<li><a href="https://github.com/FenrirUnbound/flipit">Flipit</a>是一个nodejs中使用feature flags的模块。它通过配置文件存取feature flags并提供了查询/更新feature flags的接口，可以让程序不需要重启便能读取到最新的配置文件更改。</li>
+<li><a href="https://github.com/FredKSchott/fflip">fflip</a>除了查询/更新feature flags之外，增加了对feature flags访问权限的控制。</li>
+<li><a href="https://github.com/Unleash/unleash">Unleash</a>和LaunchDarkly类似，是一个完整的feature flags解决方案，同样提供了nodejs和前端的SDK。</li>
+</ol>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Go环境变量及常用命令]]></title>
         <id>https://sanmuny.github.io/post/ViviArxkk/</id>
@@ -1516,163 +1557,6 @@ true
 undefined
 &gt; view.getUint8(4)
 233</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[ES6中的类]]></title>
-        <id>https://sanmuny.github.io/post/es6-e4-b8-ad-e7-9a-84-e7-b1-bb/</id>
-        <link href="https://sanmuny.github.io/post/es6-e4-b8-ad-e7-9a-84-e7-b1-bb/">
-        </link>
-        <updated>2019-01-02T09:43:54.000Z</updated>
-        <content type="html"><![CDATA[<p>ES6中添加的class关键字其实并非真正的类，而是ES5用函数来模拟类的语法糖。在ES6中可以用如下的语法创建一个类：</p>
-<pre><code>class Students {
-    constructor(name, age) {
-        this.name = name;
-        this.age = age;
-    }
-    sayName() {
-        console.log(this.name);
-    }
-    sayAge() {
-        console.log(this.age);
-    }
-}
-
-let st1 = new Students('sen', 18);
-st1.sayName();
-st1.sayAge();
-</code></pre>
-<p>使用ES6的class语法糖和ES5自定义的类还是有些区别的：</p>
-<ul>
-<li>类的声明不会被提升，类的实例化只能在类的声明之后</li>
-<li>类声明中的代码只能运行在严格模式下</li>
-<li>类中的方法是不可枚举的</li>
-<li>实例化的时候必须加new关键字</li>
-<li>在方法内部修改类名会抛出错误，但可以在外部修改类名</li>
-</ul>
-<p>下面的例子展示了如何在外部修改类名：</p>
-<pre><code>class Students {
-    constructor(name, age) {
-        this.name = name;
-        this.age = age;
-    }
-    sayName() {
-        console.log(this.name);
-    }
-    sayAge() {
-        console.log(this.age);
-    }
-}
-
-let st1 = new Students('sen', 18);
-st1.sayName();
-st1.sayAge();
-
-let Stu = Students;
-
-let st2 = new Stu('sen', 18);
-st2.sayName();
-st2.sayAge();
-
-console.log(st1 instanceof Students); //true
-console.log(st2 instanceof Students); //true
-console.log(st2 instanceof Stu); //true
-console.log(st1 instanceof Stu); //true
-</code></pre>
-<h4 id="类中的访问器属性">类中的访问器属性</h4>
-<p>可以使用get和set关键字来定义访问器属性，例如：</p>
-<pre><code>class Students {
-    constructor(name) {
-        this.name = name;
-    }
-    get n() {
-        return this.name;
-    }
-    set n(value) {
-        this.name = value;
-    }
-}
-
-let st1 = new Students('sen', 18);
-console.log(st1.n);
-st1.n = 'wang';
-console.log(st1.n);
-</code></pre>
-<h4 id="需计算的属性名">需计算的属性名</h4>
-<p>和其他需计算的名字一样，都是加上方括号，例如：</p>
-<p>let propName = &quot;sayName&quot;;</p>
-<pre><code>class Students {
-    constructor(name) {
-        this.name = name;
-    }
-    [propName]() {
-        console.log(this.name);
-    }
-}
-
-let st1 = new Students('sen');
-st1.sayName();
-</code></pre>
-<h4 id="给类添加默认的生成器">给类添加默认的生成器</h4>
-<p>可以利用Symbol来给类添加默认的生成器，如：</p>
-<pre><code>class Collection {
-    constructor() {
-        this.items = [];
-    }
-    *[Symbol.iterator]() {
-        yield *this.items.values();
-    }
-}
-
-let col = new Collection();
-col.items.push(1);
-col.items.push(2);
-col.items.push(3);
-for( let i of col) {
-    console.log(i);
-}
-</code></pre>
-<h4 id="给类添加静态属性方法">给类添加静态属性/方法</h4>
-<p>类的静态方法/属性只能通过类名来访问，而不能通过类的实例来访问，具体做法是在方法/属性定义前面加上static关键字，例如：</p>
-<pre><code>class Students {
-    constructor(name) {
-        this.name = name;
-    }
-    static sayClassName() {
-        console.log(&quot;Collection&quot;);
-    }
-}
-
-Students.sayClassName();
-let stu = new Students('sen');
-stu.sayClassName(); // error
-</code></pre>
-<h4 id="类的继承">类的继承</h4>
-<p>ES6引入了extends和super来实现类的继承，例如：</p>
-<pre><code>class Rectangle {
-    constructor(length, width) {
-        this.length = length;
-        this.width = width;
-    }
-    getArea() {
-        return this.length * this.width;
-    }
-}
-
-class Square extends Rectangle {
-    constructor(length) {
-        super(length, length);
-    }
-}
-
-let sq = new Square(5);
-console.log(sq.getArea());
-</code></pre>
-<p>使用super需要注意：</p>
-<ul>
-<li>super只能用在派生类中</li>
-<li>在constructor里，super负责初始化this，所以必须在this使用之前调用</li>
-</ul>
 ]]></content>
     </entry>
 </feed>
