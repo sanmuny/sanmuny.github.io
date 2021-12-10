@@ -1,0 +1,326 @@
+---
+title: '顺序存储线性表的实现'
+date: 2016-06-06 17:59:06
+tags: []
+published: true
+hideInList: false
+feature: 
+isTop: false
+---
+
+最近复习数据结构，写了一个顺序存储的线性表，代码粘在这里：）
+
+[代码下载：git@github.com](mailto:代码下载：git@github.com):Wang-Sen/algorithm.git
+
+    /*
+     * Simple array implementation.
+     */
+    
+    #include <stdbool.h>
+    
+    #define MAX_SIZE 50
+    #define data_t int
+    #define array_length_t int
+    
+    #define ERR_OUT_OF_RANGE -1
+    #define ERR_EMPTY_ARRAY -2
+    #define ERR_INVALID_ARGS -3
+    
+    typedef struct {
+        data_t data[MAX_SIZE];
+        array_length_t length;
+    } array;
+    
+    static inline void array_init(array *arr)
+    {
+        for (int i = 0; i < MAX_SIZE; i++) {
+            arr->data[i] = 0;
+        }
+        arr->length = 0;
+    }
+    
+    static inline void show_array(array *arr)
+    {
+        for (int i=0; i < arr->length; i++) {
+            printf("%d ", arr->data[i]);
+        }
+        printf("\n");
+    }
+    
+    static inline bool is_array_empty(array *arr)
+    {
+        if (!arr) {
+            return ERR_INVALID_ARGS;
+        }
+        return !arr->length;
+    }
+    
+    static inline array_length_t len(array *arr) {
+        if (!arr) {
+            return ERR_INVALID_ARGS;
+        }
+        return arr->length;
+    }
+    
+    static inline int locate_entry(array *arr, data_t entry) {
+        if (!arr) {
+            return ERR_INVALID_ARGS;
+        }
+        int ret = -1;
+        for (int i = 0; i < MAX_SIZE; i++) {
+            if (arr->data[i] == entry) {
+                ret = i;
+                return ret;
+            }
+        }
+        return ret;
+    }
+    
+    static inline int array_push(array *arr, data_t entry)
+    {
+        if (!arr) {
+            return ERR_INVALID_ARGS;
+        }
+        if ((arr->length + 1) > MAX_SIZE) {
+            return ERR_OUT_OF_RANGE;
+        }
+        arr->data[arr->length] = entry;
+        (arr->length)++;
+        return 0;
+    }
+    
+    static inline int array_pop(array *arr, data_t *p_entry)
+    {
+        if (arr->length <= 0) {
+            return ERR_EMPTY_ARRAY;
+        }
+        if (!p_entry || !arr) {
+            return ERR_INVALID_ARGS;
+        }
+    
+        *p_entry = arr->data[arr->length - 1];
+        (arr->length)--;
+    
+        return 0;
+    }
+    
+    static inline int array_insert(array *arr, int loc, data_t entry)
+    {
+        if (!arr) {
+            return ERR_INVALID_ARGS;
+        }
+        if ((arr->length + 1) > MAX_SIZE || loc < 0 || loc >= MAX_SIZE) {
+            return ERR_OUT_OF_RANGE;
+        }
+        for (int i = arr->length; i > loc; i--) {
+            arr->data[i] = arr->data[i - 1];
+        }
+        arr->data[loc] = entry;
+        (arr->length)++;
+        return 0;
+    }
+    
+    static inline int array_delete(array *arr, int loc, data_t *entry)
+    {
+        if (!arr || !entry) {
+            return ERR_INVALID_ARGS;
+        }
+        if (loc < 0 || loc >= arr->length) {
+            return ERR_OUT_OF_RANGE;
+        }
+    
+        *entry = arr->data[loc];
+        for (int i = loc; i < (arr->length) - 1; i++) {
+            arr->data[i] = arr->data[i + 1];
+        }
+        (arr->length)--;
+        return 0;
+    }
+    
+    static inline int array_update(array *arr, int loc, data_t entry)
+    {
+        if (!arr) {
+            return ERR_INVALID_ARGS;
+        }
+        if (!arr->length) {
+            return ERR_EMPTY_ARRAY;
+        }
+        if (loc < 0 || loc >= arr->length) {
+            return ERR_OUT_OF_RANGE;
+        }
+        arr->data[loc] = entry;
+        return 0;
+    }
+    
+    static inline int array_reverse(array *arr)
+    {
+        if (!arr) {
+            return ERR_INVALID_ARGS;
+        }
+    
+        int i, j, tmp;
+        for (i = 0, j = (arr->length - 1); j - i > 0; i++, j--) {
+            if (arr->data[i] == arr->data[j]) {
+                tmp = arr->data[i];
+                arr->data[i] = arr->data[j];
+                arr->data[j] = tmp;
+            } else {
+                arr->data[i] ^= arr->data[j];
+                arr->data[j] ^= arr->data[i];
+                arr->data[i] ^= arr->data[j];
+            }
+        }
+    
+        return 0;
+    }
+    
+
+测试代码：
+
+    #include <stdio.h>
+    #include <unistd.h>
+    #include "array.h"
+    
+    int main(int argc, char **argv) {
+        int ret = 0, i;
+        array list;
+        array_init(&list);
+    
+        /* test is_empty_array */
+        printf("Empty array: %d\n", is_array_empty(&list));
+        list.data[0] = 2400;
+        list.length += 1;
+        printf("Empty array: %d\n", is_array_empty(&list));
+        /* end test is_empty_array */
+    
+        /* test push */
+        for (i = list.length; i < MAX_SIZE; i++) {
+            if ((ret = array_push(&list, i))) {
+                printf("Err: %d\n", ret);
+                printf("length: %d\n", list.length);
+                printf("Entry: %d\n", i);
+            }
+        }
+    
+        show_array(&list);
+    
+        if ((ret = array_push(&list, 20))) {
+            printf("Err: %d\n", ret);
+            printf("length: %d\n", list.length);
+            printf("Entry: %d\n", 20);
+        }
+        /* end test push */
+    
+        /* test insert */
+        array_init(&list);
+        for (i = list.length; i < MAX_SIZE-1; i++) {
+            if ((ret = array_push(&list, i))) {
+                printf("Err: %d\n", ret);
+                printf("length: %d\n", list.length);
+                printf("Entry: %d\n", i);
+            }
+        }
+        array_insert(&list, 3, 5);
+        show_array(&list);
+    
+        array_insert(&list, 3, 6);
+        show_array(&list);
+    
+        array_init(&list);
+        for (i = list.length; i < MAX_SIZE-1; i++) {
+            if ((ret = array_push(&list, i))) {
+                printf("Err: %d\n", ret);
+                printf("length: %d\n", list.length);
+                printf("Entry: %d\n", i);
+            }
+        }
+        array_insert(&list, MAX_SIZE, 5);
+        show_array(&list);
+        /* end test insert */
+    
+        /* test locate_entry */
+        array_init(&list);
+        for (i = list.length; i < MAX_SIZE; i++) {
+            if ((ret = array_push(&list, i))) {
+                printf("Err: %d\n", ret);
+                printf("length: %d\n", list.length);
+                printf("Entry: %d\n", i);
+            }
+        }
+        printf("location of 5 is: %d\n", locate_entry(&list, 5));
+        printf("location of 10 is: %d\n", locate_entry(&list, 10));
+        printf("location of 100 is: %d\n", locate_entry(&list, 100));
+        printf("location of -100 is: %d\n", locate_entry(&list, -100));
+        /* end test locate_entry */
+    
+        /* test len*/
+        array_init(&list);
+        for (i = 0; i < 38; i++) {
+            if ((ret = array_push(&list, i))) {
+                printf("Err: %d\n", ret);
+                printf("length: %d\n", list.length);
+                printf("Entry: %d\n", i);
+            }
+        }
+        printf("len : %d\n", len(&list));
+        /* end test len */
+    
+        /* test pop */
+        array_init(&list);
+        int j = 0;
+        for (i = 0; i < 26; i++) {
+            array_push(&list, j);
+            j += 2;
+        }
+        show_array(&list);
+        for (i = 0; i < 27; i++) {
+            array_pop(&list, &j);
+            printf("Pop Entry: %d\n", j);
+            show_array(&list);
+        }
+        /* end test pop */
+    
+        /* test delete*/
+        array_init(&list);
+        for (i = 0; i < 26; i++) {
+            array_push(&list, j);
+            j += 2;
+        }
+        show_array(&list);
+        for (i = 0; i < 27; i++) {
+            if (array_delete(&list, i, &j) != 0) {
+                printf("Delete %dth entry error!\n", i);
+                break;
+            }
+            printf("Deleted Entry: %d\n", j);
+            show_array(&list);
+        }
+        /* end test delete */
+    
+        /* test update*/
+        array_init(&list);
+        for (i = 0, j = 0; i < 26; i++) {
+            array_push(&list, j);
+            j += 2;
+        }
+        show_array(&list);
+        for (i = 0; i < 28; i++) {
+            if (array_update(&list, i, 99) != 0) {
+                printf("Update %dth entry error!\n", i);
+                break;
+            }
+            printf("Updated %dth Entry: %d\n", i, j);
+            show_array(&list);
+        }
+        /* end test update */
+    
+        /* test reverse*/
+        array_init(&list);
+        for (i = 0; i < MAX_SIZE; i++) {
+            array_push(&list, i);
+        }
+        show_array(&list);
+        array_reverse(&list);
+        show_array(&list);
+        /* end test reverse */
+    }
