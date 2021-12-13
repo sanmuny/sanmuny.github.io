@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: 系统开发
 ---
 
 ### 什么是基于web技术的安装器(web-based installer)？

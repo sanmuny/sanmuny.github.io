@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: Linux
 ---
 
 1、date：显示、设置系统的日期和时间。

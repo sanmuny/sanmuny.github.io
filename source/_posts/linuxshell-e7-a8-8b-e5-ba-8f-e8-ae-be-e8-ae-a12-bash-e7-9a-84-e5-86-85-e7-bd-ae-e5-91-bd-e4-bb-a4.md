@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: Linux
 ---
 
 常用的内置命令忽略，来看看shell编程中其他一些重要的内置命令：

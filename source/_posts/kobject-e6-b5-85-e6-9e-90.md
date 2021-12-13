@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: Linux
 ---
 
 面向对象的思想的确在应用软件的开发中颇具优势，它让一个个纯逻辑的函数和数据变成了一个个有生命的个体。鉴于性能的考虑，系统软件的实现（例如linux kernel）并没有采用面向对象的语言（如C++、Java）。但这丝毫没有影响到用小c找对象。

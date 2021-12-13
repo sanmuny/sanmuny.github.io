@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: 应用开发
 ---
 Feature flags可以让软件开发更加的安全、迭代更加迅速，而且可以更加灵活的控制软件产品。Feature flags将功能迭代从代码部署中分离出来，从而可以使产品团队（开发团队、管理团队、SRE等）在版本控制之外更加精细地控制谁、什么时候可以使用什么功能。
 

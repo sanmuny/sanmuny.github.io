@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: Linux
 ---
 
 ###**一、Bootloader的安装（在windows下进行）**

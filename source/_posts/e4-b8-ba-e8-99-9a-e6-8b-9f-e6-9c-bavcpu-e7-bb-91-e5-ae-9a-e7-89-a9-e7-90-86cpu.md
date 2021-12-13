@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: 云计算
 ---
 
 为了提高缓存命中率，提高虚拟机性能，可以将vCPU绑定到指定的物理CPU去执行。具体设置步骤如下：

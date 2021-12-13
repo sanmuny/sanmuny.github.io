@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: 应用开发
 ---
 ### React 基础知识回顾
 React(响应)的设计理念是，当数据发生变化时，UI能自动把变化反映出来。它的诞生颠覆了传统的web UI开发模式，它把UI的开发从复杂的DOM操作中解脱出来，让开发者专注于数据、逻辑和UI组件本身。

@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: Linux
 ---
 
 １、ls:这是linux里最常用的命令，像数学里的１一样，简单但很重要。类似于dos里的dir命令，该命令的功能是列出目录下的文件或子目录。

@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: Linux
 ---
 
 1、shell变量没有类型，所有变量都被当作字符串来处理。

@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: 计算机基础
 ---
 
 在python中，若要遍历一个list而且需要在遍历时修改list，则需要十分注意，因为这样可能会导致死循环，例如：

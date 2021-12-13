@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: 计算机基础
 ---
 Javascript最开始是用于浏览器中的前端编程语言。Javascript是单线程的，为了能及时响应用户操作，javascript对耗时操作（如Ajax请求、本地文件读取等)的处理是异步进行的，也即是所谓的异步编程。除了快速响应用户操作之外，另外一个让javascript采用异步方式的原因是，程序无法预知用户会进行哪些操作。比如说程序无法提前知道用户是点“取消”按钮还是“确定”按钮。所以，Javascript采用了事件注册的方式来处理这个问题。在程序编写时，可以给用户点击“取消”按钮和“确认”按钮注册不同的回调函数，这样当用户点击不同的按钮时，不同的回调函数会被执行。本文从回调函数开始，介绍了Promise、async/await几种Javascript主要的异步编程方式。
 <!-- more -->

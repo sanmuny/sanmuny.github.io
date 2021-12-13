@@ -6,6 +6,7 @@ published: false
 hideInList: false
 feature: 
 isTop: false
+categories: 计算机基础
 ---
 Go支持如下内置基本类型：
 

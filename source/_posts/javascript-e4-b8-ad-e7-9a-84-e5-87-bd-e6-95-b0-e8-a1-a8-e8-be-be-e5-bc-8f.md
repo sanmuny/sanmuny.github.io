@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: 计算机基础
 ---
 
 *   函数声明 有提升 而函数表达式没有，因此不应该通过if...else来声明函数

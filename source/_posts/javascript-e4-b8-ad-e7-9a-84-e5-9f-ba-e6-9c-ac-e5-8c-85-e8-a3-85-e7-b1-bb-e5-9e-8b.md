@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: 计算机基础
 ---
 
 当读取一个基本类型(Boolean、String、Number)的值时，后台对创建一个对应的基本包装类型，从而让我们可以调用一些方法来操作这些数据。 基本包装类型与引用类型的区别：

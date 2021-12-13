@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: Linux
 ---
 
 1997年4月，Pavel Machek 写了他的网络块设备代码，并被当时的Linux Kernel 2.1.55接受。Pavel 在随后的四个发行版（对应的内核版本为55、101、111、132）中维护并升级了他的代码。Andrzej M. Krzysztofowicz贡献了64位机上运行的版本，随后Stephen Tweedie 为其提出了许多的专业建议，尤其是引入了基于信号量的锁机制，使得代码在对称多处理器系统中能够安全的运行。作者们已将其增强以便于运用于工业环境之中。本文描述了网络块设备、驱动、以及它的开发历史。

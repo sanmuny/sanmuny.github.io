@@ -4,7 +4,7 @@ date: 2017-09-05 17:06:28
 tags: []
 published: true
 hideInList: false
-categories: 分类
+categories: Linux
 feature: 
 isTop: false
 ---

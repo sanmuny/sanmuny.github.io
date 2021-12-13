@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: 计算机基础
 ---
 
 最近复习数据结构，写了一个顺序存储的线性表，代码粘在这里：）

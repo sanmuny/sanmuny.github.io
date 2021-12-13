@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: Linux
 ---
 
 Anaconda是用于Fedora, RHEL等Linux发行版的安装程序，可以实现通过LiveCD,PXE,NFS等方式安装Linux系统以及利用kickstart文件实现无人值守的无交互安装。

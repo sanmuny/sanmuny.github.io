@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: Linux
 ---
 
 Linux用户在登陆系统之后会启动shell，并按照一定顺序读取shell的配置文件。以bash为例，配置文件的读取顺序如下：

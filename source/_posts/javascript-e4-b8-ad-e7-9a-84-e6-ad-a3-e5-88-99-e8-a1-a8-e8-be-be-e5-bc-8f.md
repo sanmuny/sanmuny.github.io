@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: 计算机基础
 ---
 
 1. RegExp类型的创建 var expression = /pattern/flags; 或者 var expression = new RegExp("pattern", "flags"); 

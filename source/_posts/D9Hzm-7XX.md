@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: 数据库技术
 ---
 SQL 是为数不多的声明性语言之一，用来和数据库管理系统进行对话。SQL语句分为四种类型：
 * DDL(Data Definition Language)，也就是数据定义语言，它用来定义我们的数据库对象，包括数据库、数据表和列。通过使用DDL，我们可以创建，删除和修改数据库和表结构。

@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: 应用开发
 ---
 
 ES6中添加的class关键字其实并非真正的类，而是ES5用函数来模拟类的语法糖。在ES6中可以用如下的语法创建一个类：

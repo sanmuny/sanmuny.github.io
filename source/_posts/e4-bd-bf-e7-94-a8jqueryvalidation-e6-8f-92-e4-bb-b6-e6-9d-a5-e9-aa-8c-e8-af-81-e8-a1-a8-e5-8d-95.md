@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: 应用开发
 ---
 
 [jQuery Validation](http://jqueryvalidation.org/)是一个用于验证表单的jQuery插件，简单易用，已经包含了16种内置的验证规则．[Github](https://github.com/jzaefferer/jquery-validation/tree/master/src/additional)上也有更多的验证规则可以使用．这都不是重点，重点是你可以轻松的定制自己的规则．

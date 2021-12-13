@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: DevOps
 ---
 
 <h1>Summary</h1>

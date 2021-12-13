@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: Linux
 ---
 
     Linux下的man命令十分实用，可以查看Linux命令的手册。但这些手册只适用于忘记命令的选项时查询之用，如果用来学习Linux下类似于Git, RPM这样庞大的工具就有点吃力了，可谓事倍功半。我在学习Git的时候读过一篇文档——gittutorial，使用：

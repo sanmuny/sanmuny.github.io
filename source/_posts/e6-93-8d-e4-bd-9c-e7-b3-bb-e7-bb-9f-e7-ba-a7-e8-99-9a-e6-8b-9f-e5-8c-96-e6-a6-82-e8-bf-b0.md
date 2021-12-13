@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: 云计算
 ---
 
 操作系统级虚拟化

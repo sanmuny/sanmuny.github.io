@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: 计算机基础
 ---
 
 *   history.go(): 参数为负数表示后退，正数表示前进； 接URL表示跳到历史记录最近的URL

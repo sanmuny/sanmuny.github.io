@@ -6,6 +6,7 @@ published: true
 hideInList: false
 feature: 
 isTop: false
+categories: 开发工具
 ---
 
 Linux下的拼音输入法实在是不敢恭维，还好有人把搜狗拼音输入法制作成了RPM包．安装此rpm包就可以在Linux下面使用搜狗拼音输入法及其字库了．
