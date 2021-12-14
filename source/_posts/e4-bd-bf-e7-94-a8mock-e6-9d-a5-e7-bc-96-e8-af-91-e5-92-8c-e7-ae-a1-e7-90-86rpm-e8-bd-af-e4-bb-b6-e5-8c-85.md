@@ -1,7 +1,7 @@
 ---
 title: '使用mock来编译和管理RPM软件包'
 date: 2014-02-13 17:23:52
-tags: []
+tags: [linux]
 published: true
 hideInList: false
 feature: 

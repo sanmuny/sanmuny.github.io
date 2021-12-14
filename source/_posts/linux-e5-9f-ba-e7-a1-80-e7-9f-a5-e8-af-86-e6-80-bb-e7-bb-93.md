@@ -1,7 +1,7 @@
 ---
 title: 'Linux基础知识总结'
 date: 2014-04-24 13:40:29
-tags: []
+tags: [linux]
 published: true
 hideInList: false
 feature: 

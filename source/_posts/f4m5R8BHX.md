@@ -1,7 +1,7 @@
 ---
 title: 'Go基本数据类型及常变量声明'
 date: 2021-10-20 17:59:00
-tags: []
+tags: [Go]
 published: false
 hideInList: false
 feature: 

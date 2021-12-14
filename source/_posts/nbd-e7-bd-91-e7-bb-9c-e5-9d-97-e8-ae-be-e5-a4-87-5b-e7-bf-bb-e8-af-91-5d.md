@@ -1,7 +1,7 @@
 ---
 title: 'NBD-网络块设备[翻译]'
 date: 2014-04-24 14:01:03
-tags: []
+tags: [NBD]
 published: true
 hideInList: false
 feature: 

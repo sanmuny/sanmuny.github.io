@@ -1,7 +1,7 @@
 ---
 title: '操作系统级虚拟化概述'
 date: 2018-01-05 17:09:41
-tags: [Cgroups,Namespace,操作系统虚拟化]
+tags: [Cgroups,Namespace,操作系统虚拟化,云原生]
 published: true
 hideInList: false
 feature: 

@@ -1,7 +1,7 @@
 ---
 title: 'Kobject浅析'
 date: 2014-04-24 09:23:20
-tags: [kobject]
+tags: [kobject,linux]
 published: true
 hideInList: false
 feature: 

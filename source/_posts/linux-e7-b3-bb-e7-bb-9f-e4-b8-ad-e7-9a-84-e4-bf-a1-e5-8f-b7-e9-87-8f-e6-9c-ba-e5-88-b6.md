@@ -1,7 +1,7 @@
 ---
 title: 'Linux系统中的信号量机制'
 date: 2014-04-24 14:39:27
-tags: []
+tags: [linux]
 published: true
 hideInList: false
 feature: 

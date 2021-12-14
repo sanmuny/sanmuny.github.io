@@ -1,7 +1,7 @@
 ---
 title: '基于Linux与lpc3250开发板的交叉开发环境搭建'
 date: 2014-04-24 14:35:09
-tags: []
+tags: [linux]
 published: true
 hideInList: false
 feature: 

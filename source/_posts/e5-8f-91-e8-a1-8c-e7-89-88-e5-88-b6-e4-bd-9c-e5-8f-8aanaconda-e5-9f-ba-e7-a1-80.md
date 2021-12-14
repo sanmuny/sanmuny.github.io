@@ -1,7 +1,7 @@
 ---
 title: '发行版制作及Anaconda基础'
 date: 2014-07-30 17:08:46
-tags: []
+tags: [linux]
 published: true
 hideInList: false
 feature: 

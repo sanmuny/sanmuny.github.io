@@ -1,7 +1,7 @@
 ---
 title: 'Make'
 date: 2014-04-24 12:42:03
-tags: []
+tags: [make]
 published: true
 hideInList: false
 feature: 

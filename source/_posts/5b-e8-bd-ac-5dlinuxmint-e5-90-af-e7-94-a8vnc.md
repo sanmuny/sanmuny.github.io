@@ -1,7 +1,7 @@
 ---
 title: '[转]Linux Mint启用VNC'
 date: 2017-09-05 17:06:28
-tags: []
+tags: [linux,vnc]
 published: true
 hideInList: false
 categories: Linux

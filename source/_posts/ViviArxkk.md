@@ -1,7 +1,7 @@
 ---
 title: 'Go环境变量及常用命令'
 date: 2021-10-20 15:52:56
-tags: []
+tags: [Go]
 published: true
 hideInList: false
 feature: 

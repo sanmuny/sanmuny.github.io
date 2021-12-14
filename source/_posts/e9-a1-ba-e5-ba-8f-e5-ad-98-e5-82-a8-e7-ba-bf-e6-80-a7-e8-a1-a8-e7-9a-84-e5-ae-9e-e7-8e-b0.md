@@ -1,7 +1,7 @@
 ---
 title: '顺序存储线性表的实现'
 date: 2016-06-06 17:59:06
-tags: []
+tags: [数据结构与算法]
 published: true
 hideInList: false
 feature: 

@@ -1,7 +1,7 @@
 ---
 title: 'perf ，比较好的一个程序性能测试工具'
 date: 2014-04-24 11:06:57
-tags: []
+tags: [perf]
 published: true
 hideInList: false
 feature: 

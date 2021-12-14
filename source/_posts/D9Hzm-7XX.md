@@ -1,7 +1,7 @@
 ---
 title: 'SQL学习笔记 - SQL概要'
 date: 2021-09-30 16:32:43
-tags: []
+tags: [mysql]
 published: true
 hideInList: false
 feature: 

@@ -1,7 +1,7 @@
 ---
 title: 'FUSE'
 date: 2014-04-24 12:58:53
-tags: []
+tags: [fuse]
 published: true
 hideInList: false
 feature: 
