@@ -20,7 +20,7 @@
       
         <tags>
             
-            <tag> cicd </tag>
+            <tag> devops </tag>
             
         </tags>
       
@@ -151,8 +151,6 @@
             
             <tag> promise </tag>
             
-            <tag> async/await </tag>
-            
         </tags>
       
     </entry>
@@ -230,7 +228,7 @@
             
             <tag> javascript </tag>
             
-            <tag> ES6 </tag>
+            <tag> es6 </tag>
             
         </tags>
       
@@ -257,7 +255,7 @@
             
             <tag> javascript </tag>
             
-            <tag> ES6 </tag>
+            <tag> es6 </tag>
             
         </tags>
       
@@ -284,7 +282,7 @@
             
             <tag> javascript </tag>
             
-            <tag> ES6 </tag>
+            <tag> es6 </tag>
             
         </tags>
       
@@ -311,7 +309,7 @@
             
             <tag> javascript </tag>
             
-            <tag> ES6 </tag>
+            <tag> es6 </tag>
             
         </tags>
       
@@ -413,7 +411,7 @@
             
             <tag> javascript </tag>
             
-            <tag> ES6 </tag>
+            <tag> es6 </tag>
             
         </tags>
       
@@ -440,7 +438,7 @@
             
             <tag> javascript </tag>
             
-            <tag> ES6 </tag>
+            <tag> es6 </tag>
             
         </tags>
       
@@ -467,7 +465,7 @@
             
             <tag> javascript </tag>
             
-            <tag> ES6 </tag>
+            <tag> es6 </tag>
             
         </tags>
       
@@ -494,7 +492,7 @@
             
             <tag> javascript </tag>
             
-            <tag> ES6 </tag>
+            <tag> es6 </tag>
             
         </tags>
       
@@ -521,7 +519,7 @@
             
             <tag> javascript </tag>
             
-            <tag> ES6 </tag>
+            <tag> es6 </tag>
             
         </tags>
       
@@ -548,7 +546,7 @@
             
             <tag> javascript </tag>
             
-            <tag> ES6 </tag>
+            <tag> es6 </tag>
             
         </tags>
       
@@ -573,7 +571,7 @@
       
         <tags>
             
-            <tag> ES6 </tag>
+            <tag> es6 </tag>
             
         </tags>
       
@@ -650,7 +648,7 @@
             
             <tag> javascript </tag>
             
-            <tag> DOM </tag>
+            <tag> dom </tag>
             
         </tags>
       
@@ -677,7 +675,7 @@
             
             <tag> javascript </tag>
             
-            <tag> DOM </tag>
+            <tag> dom </tag>
             
         </tags>
       
@@ -1006,11 +1004,9 @@
       
         <tags>
             
-            <tag> Cgroups </tag>
+            <tag> cgroups </tag>
             
-            <tag> Namespace </tag>
-            
-            <tag> 操作系统虚拟化 </tag>
+            <tag> namespace </tag>
             
             <tag> 云原生 </tag>
             
@@ -1166,7 +1162,7 @@
       
         <tags>
             
-            <tag> DBaaS </tag>
+            <tag> dbaas </tag>
             
             <tag> openstack </tag>
             
@@ -1220,7 +1216,7 @@
       
         <tags>
             
-            <tag> HTML5 </tag>
+            <tag> html </tag>
             
         </tags>
       
@@ -1245,9 +1241,7 @@
       
         <tags>
             
-            <tag> Python </tag>
-            
-            <tag> 列表遍历 </tag>
+            <tag> python </tag>
             
         </tags>
       
@@ -1272,11 +1266,7 @@
       
         <tags>
             
-            <tag> Python </tag>
-            
-            <tag> 参数解析 </tag>
-            
-            <tag> 命令行参数 </tag>
+            <tag> python </tag>
             
         </tags>
       
@@ -1301,13 +1291,11 @@
       
         <tags>
             
-            <tag> KVM </tag>
+            <tag> kvm </tag>
             
-            <tag> web开发 </tag>
+            <tag> web </tag>
             
-            <tag> 操作系统安装器 </tag>
-            
-            <tag> 虚拟化 </tag>
+            <tag> virtualization </tag>
             
         </tags>
       
@@ -1332,11 +1320,11 @@
       
         <tags>
             
-            <tag> QEMU </tag>
+            <tag> qemu </tag>
             
-            <tag> 虚拟化 </tag>
+            <tag> virtualization </tag>
             
-            <tag> Ceph </tag>
+            <tag> ceph </tag>
             
         </tags>
       
@@ -1388,8 +1376,6 @@
             
             <tag> fcitx </tag>
             
-            <tag> 搜狗拼音输入法 </tag>
-            
         </tags>
       
     </entry>
@@ -1413,9 +1399,7 @@
       
         <tags>
             
-            <tag> jQuery </tag>
-            
-            <tag> Validation </tag>
+            <tag> jquery </tag>
             
         </tags>
       
@@ -1465,7 +1449,7 @@
       
         <tags>
             
-            <tag> jQuery </tag>
+            <tag> jquery </tag>
             
         </tags>
       
@@ -1490,13 +1474,9 @@
       
         <tags>
             
-            <tag> CI </tag>
-            
             <tag> devops </tag>
             
             <tag> gerrit </tag>
-            
-            <tag> 持续集成 </tag>
             
         </tags>
       
@@ -1577,7 +1557,7 @@
             
             <tag> devops </tag>
             
-            <tag> Jenkins </tag>
+            <tag> jenkins </tag>
             
             <tag> koji </tag>
             
@@ -1629,9 +1609,9 @@
       
         <tags>
             
-            <tag> 虚拟化 </tag>
+            <tag> qemu </tag>
             
-            <tag> QEMU参数解析 </tag>
+            <tag> virtualization </tag>
             
         </tags>
       
@@ -1656,9 +1636,9 @@
       
         <tags>
             
-            <tag> QEMU </tag>
+            <tag> qemu </tag>
             
-            <tag> 虚拟化 </tag>
+            <tag> virtualization </tag>
             
         </tags>
       
@@ -1783,7 +1763,7 @@
       
         <tags>
             
-            <tag> NBD </tag>
+            <tag> nbd </tag>
             
         </tags>
       
@@ -1985,8 +1965,6 @@
             
             <tag> shell </tag>
             
-            <tag> 特殊字符 </tag>
-            
         </tags>
       
     </entry>
@@ -2187,9 +2165,9 @@
       
         <tags>
             
-            <tag> KVM </tag>
+            <tag> kvm </tag>
             
-            <tag> QEMU </tag>
+            <tag> qemu </tag>
             
         </tags>
       
@@ -2264,11 +2242,7 @@
       
         <tags>
             
-            <tag> RPM </tag>
-            
-            <tag> spec </tag>
-            
-            <tag> 软件包管理 </tag>
+            <tag> rmp </tag>
             
         </tags>
       
