@@ -1,7 +1,7 @@
 ---
 title: 'ES6：数组'
 date: 2019-01-03 16:25:11
-tags: [ES6,javascript]
+tags: [es6,javascript]
 published: true
 hideInList: false
 feature: 

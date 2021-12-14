@@ -1,7 +1,7 @@
 ---
 title: 'ES6: Set 与 Map'
 date: 2018-10-15 16:35:11
-tags: [ES6,javascript]
+tags: [es6,javascript]
 published: true
 hideInList: false
 feature: 

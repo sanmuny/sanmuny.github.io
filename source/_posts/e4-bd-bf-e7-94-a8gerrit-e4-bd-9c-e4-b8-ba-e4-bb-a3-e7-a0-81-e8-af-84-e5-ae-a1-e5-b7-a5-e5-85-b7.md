@@ -1,7 +1,7 @@
 ---
 title: '使用gerrit作为代码评审工具'
 date: 2015-06-11 15:39:59
-tags: [CI,devops,gerrit,持续集成]
+tags: [devops,gerrit]
 published: true
 hideInList: false
 feature: 

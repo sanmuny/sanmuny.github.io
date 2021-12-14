@@ -1,7 +1,7 @@
 ---
 title: 'Python中list的遍历'
 date: 2017-02-09 23:07:13
-tags: [Python,列表遍历]
+tags: [python]
 published: true
 hideInList: false
 feature: 

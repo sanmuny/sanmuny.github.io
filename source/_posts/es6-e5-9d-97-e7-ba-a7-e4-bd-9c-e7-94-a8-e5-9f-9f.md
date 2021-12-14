@@ -1,7 +1,7 @@
 ---
 title: 'ES6: 块级作用域'
 date: 2018-07-18 16:44:33
-tags: [ES6]
+tags: [es6]
 published: true
 hideInList: false
 feature: 

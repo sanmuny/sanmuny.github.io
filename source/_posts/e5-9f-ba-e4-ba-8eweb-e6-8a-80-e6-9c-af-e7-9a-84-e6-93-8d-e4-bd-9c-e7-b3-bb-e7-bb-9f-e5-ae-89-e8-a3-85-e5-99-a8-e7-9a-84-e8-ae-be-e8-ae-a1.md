@@ -1,7 +1,7 @@
 ---
 title: '基于web技术的操作系统安装器的设计'
 date: 2016-11-17 17:23:56
-tags: [KVM,web开发,操作系统安装器,虚拟化]
+tags: [kvm,web,virtualization]
 published: true
 hideInList: false
 feature: 

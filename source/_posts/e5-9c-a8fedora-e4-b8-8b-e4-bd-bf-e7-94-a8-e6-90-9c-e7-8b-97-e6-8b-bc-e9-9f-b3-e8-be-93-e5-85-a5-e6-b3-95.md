@@ -1,7 +1,7 @@
 ---
 title: '在fedora下使用搜狗拼音输入法'
 date: 2016-04-07 12:14:19
-tags: [fcitx,搜狗拼音输入法]
+tags: [fcitx]
 published: true
 hideInList: false
 feature: 

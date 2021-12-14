@@ -1,7 +1,7 @@
 ---
 title: 'QEMU 1: 使用QEMU创建虚拟机'
 date: 2014-05-15 10:33:30
-tags: [QEMU,虚拟化]
+tags: [qemu,virtualization]
 published: true
 hideInList: false
 feature: 

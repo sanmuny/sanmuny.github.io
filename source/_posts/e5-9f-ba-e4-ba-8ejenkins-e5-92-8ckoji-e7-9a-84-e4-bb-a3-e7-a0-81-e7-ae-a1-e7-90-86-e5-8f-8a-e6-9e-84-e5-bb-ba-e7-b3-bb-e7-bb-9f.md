@@ -1,7 +1,7 @@
 ---
 title: '基于Jenkins和Koji的代码管理及构建系统'
 date: 2014-10-16 15:10:03
-tags: [devops,Jenkins,koji]
+tags: [devops,jenkins,koji]
 published: true
 hideInList: false
 feature: 

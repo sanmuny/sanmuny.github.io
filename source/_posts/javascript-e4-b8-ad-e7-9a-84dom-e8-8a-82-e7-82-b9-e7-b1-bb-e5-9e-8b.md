@@ -1,7 +1,7 @@
 ---
 title: 'Javascript中的DOM节点类型'
 date: 2018-07-11 13:49:39
-tags: [DOM,javascript]
+tags: [dom,javascript]
 published: true
 hideInList: false
 feature: 

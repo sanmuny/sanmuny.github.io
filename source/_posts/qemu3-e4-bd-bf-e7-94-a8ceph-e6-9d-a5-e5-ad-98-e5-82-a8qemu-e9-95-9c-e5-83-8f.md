@@ -1,7 +1,7 @@
 ---
 title: 'QEMU3 - 使用ceph来存储QEMU镜像'
 date: 2016-09-30 14:56:31
-tags: [Ceph,QEMU,虚拟化]
+tags: [ceph,qemu,virtualization]
 published: true
 hideInList: false
 feature: 

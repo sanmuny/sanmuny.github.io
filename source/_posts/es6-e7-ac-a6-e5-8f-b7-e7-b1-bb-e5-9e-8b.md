@@ -1,7 +1,7 @@
 ---
 title: 'ES6: 符号类型'
 date: 2018-10-15 16:12:58
-tags: [ES6,javascript]
+tags: [es6,javascript]
 published: true
 hideInList: false
 feature: 

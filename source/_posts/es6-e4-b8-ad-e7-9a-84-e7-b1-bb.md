@@ -1,7 +1,7 @@
 ---
 title: 'ES6中的类'
 date: 2019-01-02 17:43:54
-tags: [ES6,javascript]
+tags: [es6,javascript]
 published: true
 hideInList: false
 feature: 

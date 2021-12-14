@@ -1,7 +1,7 @@
 ---
 title: 'RPM软件包管理机制之旅'
 date: 2013-11-04 17:30:25
-tags: [RPM,spec,软件包管理]
+tags: [rmp]
 published: true
 hideInList: false
 feature: 

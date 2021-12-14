@@ -1,7 +1,7 @@
 ---
 title: 'Feature flags 概要'
 date: 2021-11-10 16:44:57
-tags: [cicd]
+tags: [devops]
 published: true
 hideInList: false
 feature: 

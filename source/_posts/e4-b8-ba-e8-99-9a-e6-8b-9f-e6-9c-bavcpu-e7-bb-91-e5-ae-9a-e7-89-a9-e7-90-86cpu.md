@@ -1,7 +1,7 @@
 ---
 title: '为虚拟机vCPU绑定物理CPU'
 date: 2014-03-24 09:55:14
-tags: [KVM,QEMU]
+tags: [kvm,qemu]
 published: true
 hideInList: false
 feature: 

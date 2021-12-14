@@ -1,7 +1,7 @@
 ---
 title: 'Javascript中的异步编程'
 date: 2020-01-15 16:15:37
-tags: [javascript,promise,async/await]
+tags: [javascript,promise]
 published: true
 hideInList: false
 feature: 

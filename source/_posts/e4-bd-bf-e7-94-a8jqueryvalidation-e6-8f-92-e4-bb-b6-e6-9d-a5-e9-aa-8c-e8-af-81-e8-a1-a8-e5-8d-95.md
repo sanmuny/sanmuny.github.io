@@ -1,7 +1,7 @@
 ---
 title: '使用jQuery Validation插件来验证表单'
 date: 2016-04-01 12:06:43
-tags: [jQuery,Validation]
+tags: [jquery]
 published: true
 hideInList: false
 feature: 

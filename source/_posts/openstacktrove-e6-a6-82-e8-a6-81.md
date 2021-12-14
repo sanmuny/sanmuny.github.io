@@ -1,7 +1,7 @@
 ---
 title: 'Openstack Trove概要'
 date: 2017-06-12 10:36:16
-tags: [DBaaS,openstack,trove]
+tags: [dbaas,openstack,trove]
 published: true
 hideInList: false
 feature: 

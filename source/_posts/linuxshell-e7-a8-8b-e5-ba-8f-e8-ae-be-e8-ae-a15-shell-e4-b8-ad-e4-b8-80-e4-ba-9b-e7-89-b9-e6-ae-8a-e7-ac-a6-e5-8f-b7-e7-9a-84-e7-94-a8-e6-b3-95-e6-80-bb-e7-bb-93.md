@@ -1,7 +1,7 @@
 ---
 title: 'Linux shell 程序设计5——shell中一些特殊符号的用法总结'
 date: 2014-04-24 10:54:04
-tags: [shell,特殊字符]
+tags: [shell]
 published: true
 hideInList: false
 feature: 
