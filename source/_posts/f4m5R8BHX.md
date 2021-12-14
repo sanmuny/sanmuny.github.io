@@ -1,12 +1,13 @@
 ---
-title: 'Go基本数据类型及常变量声明'
-date: 2021-10-20 17:59:00
+title: 'Go基本数据类型'
+date: 2021-12-14 17:59:00
 tags: [go]
-published: false
+published: true
 hideInList: false
 feature: 
 isTop: false
 categories: 计算机基础
+cover: /images/go.png
 ---
 Go支持如下内置基本类型：
 

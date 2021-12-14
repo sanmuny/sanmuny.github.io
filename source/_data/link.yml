@@ -6,6 +6,11 @@
       link: https://my.oschina.net/ibmdw
       avatar: https://cdn.freelogovectors.net/wp-content/uploads/2016/12/ibm_logo.png
       descr: IBM Developer Works
+    2:
+      name: 面向信仰编程
+      link: https://draveness.me
+      avatar: https://draveness.me/images/draven-logo.png
+      descr: 《为什么这么设计》、《Go语言设计与实现》作者的博客
 
 - class_name: 网站
   class_desc: 值得推荐的网站
