@@ -1,0 +1,706 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RPM软件包管理机制之旅 | 三木的技术博客</title><meta name="keywords" content="rmp"><meta name="author" content="三木"><meta name="copyright" content="三木"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Linux下的man命令十分实用，可以查看Linux命令的手册。但这些手册只适用于忘记命令的选项时查询之用，如果用来学习Linux下类似于Git, RPM这样庞大的工具就有点吃力了，可谓事倍功半。我在学习Git的时候读过一篇文档——gittutorial，使用： $man gittutorial  命令可以调出该文档。这篇文档并不涵盖git的方方面面，只是介绍了Git管理项目的常规用法，非">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RPM软件包管理机制之旅">
+<meta property="og:url" content="https://wangsen.site/2013/11/04/RPM%E8%BD%AF%E4%BB%B6%E5%8C%85%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6%E4%B9%8B%E6%97%85/index.html">
+<meta property="og:site_name" content="三木的技术博客">
+<meta property="og:description" content="Linux下的man命令十分实用，可以查看Linux命令的手册。但这些手册只适用于忘记命令的选项时查询之用，如果用来学习Linux下类似于Git, RPM这样庞大的工具就有点吃力了，可谓事倍功半。我在学习Git的时候读过一篇文档——gittutorial，使用： $man gittutorial  命令可以调出该文档。这篇文档并不涵盖git的方方面面，只是介绍了Git管理项目的常规用法，非">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangsen.site/images/bg1.jpg">
+<meta property="article:published_time" content="2013-11-04T09:30:25.000Z">
+<meta property="article:modified_time" content="2021-12-15T07:57:22.615Z">
+<meta property="article:author" content="三木">
+<meta property="article:tag" content="rmp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangsen.site/images/bg1.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://wangsen.site/2013/11/04/RPM%E8%BD%AF%E4%BB%B6%E5%8C%85%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6%E4%B9%8B%E6%97%85/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'RPM软件包管理机制之旅',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-12-15 15:57:22'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">89</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-tie"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">三木的技术博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-tie"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">RPM软件包管理机制之旅</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2013-11-04T09:30:25.000Z" title="发表于 2013-11-04 17:30:25">2013-11-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-12-15T07:57:22.615Z" title="更新于 2021-12-15 15:57:22">2021-12-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">6.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>27分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="RPM软件包管理机制之旅"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2013/11/04/RPM%E8%BD%AF%E4%BB%B6%E5%8C%85%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6%E4%B9%8B%E6%97%85/#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/2013/11/04/RPM%E8%BD%AF%E4%BB%B6%E5%8C%85%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6%E4%B9%8B%E6%97%85/" itemprop="commentCount"></span></a></span></div></div></div><article class="post-content" id="article-container"><p>    Linux下的man命令十分实用，可以查看Linux命令的手册。但这些手册只适用于忘记命令的选项时查询之用，如果用来学习Linux下类似于Git, RPM这样庞大的工具就有点吃力了，可谓事倍功半。我在学习Git的时候读过一篇文档——gittutorial，使用：</p>
+<pre><code>$man gittutorial
+</code></pre>
+<p>命令可以调出该文档。这篇文档并不涵盖git的方方面面，只是介绍了Git管理项目的常规用法，非常适合初学者快速入门。所以本文试图仿照该文档的写法，并不会详细地介绍RPM包的方方面面，而是介绍RPM包最常用的一些功能，这些功能将会在我们对红帽系列发行版系统的日常管理中非常重要。</p>
+<p><em>软件包管理机制与RPM</em></p>
+<p>   开源软件可以用Tarball的方式来从源代码安装软件(1)，这样的安装方式对普通用户来说很麻烦。比如要升级软件，还需要先更新源代码，再重新编译、安装。Linux采用了RPM和DPKG等软件包管理机制来管理软件，直接给用户提供二进制软件包，并且将整个系统的软件包信息建立成数据库，以便于软件的升级、验证和卸载。RedHat、Fedora、SUSE、CentOS等发行版采用RPM包管理机制，而Debian、Ubuntu等发行版采用DPKG方式来管理软件包。</p>
+<p>   所谓RPM软件包或者平时叫的RPM包指的是包含软件运行所需的二进制文件、文档、函数库等内容的RPM格式的文件，以rpm作为文件的后缀名。如：</p>
+<pre><code>qemu-img-1.4.2-3.fc19.i686.rpm
+</code></pre>
+<p>qemu-img是包的名字；1.4.2是软件版本号；3是release号，指的是同一版本第3次构建的软件包(或称为打包)；fc19指的是Linux发行版为Fedora 19；i686是软件运行的平台架构，可以是i386、i686、x86_64、ppc64、s390x、noarch(与平台无关的软件包)等，RPM要求打包的环境要与安装软件包的环境(平台架构、发行版、发行版的版本等)一致或相当。</p>
+<p><em>RPM软件包的增删改查及验证</em></p>
+<p><em>1. 安装RPM软件包到系统</em></p>
+<p>   现在的系统很少用到直接使用RPM包来安装软件，而是采用YUM(后面介绍)来安装。使用RPM包来安装软件首先需要获得适合当前系统的RPM包，各个发行版通常会提供这些包的下载，如可以在i686平台、fedora19上安装的软件包可以在这里找到：</p>
+<p><a target="_blank" rel="noopener" href="http://mirrors.ustc.edu.cn/fedora/linux/releases/19/Fedora/i386/os/Packages/">http://mirrors.ustc.edu.cn/fedora/linux/releases/19/Fedora/i386/os/Packages/</a></p>
+<p>   安装软件包可以使用rpm命令，加上-i选项即可。例如，安装qemu-img软件包可以采用如下命令：</p>
+<pre><code>#rpm -ivh qemu-img-1.4.2-3.fc19.i686.rpm
+</code></pre>
+<p>-i选项表示rpm命令将安装qemu-img软件包；-v选项可以显示更详细的安装信息；-h显示安装进度。采用rpm -i命令来安装软件包并不会去解决软件包之间的依赖问题。如果说软件包B依赖于软件包A，那么在安装B之前A必须已经在系统中安装。rpm -i如果遇到依赖关系的问题，只会提示需要依赖哪些包，而不会去自动地将这些包都安装上。qemu-img依赖于glib库，如果我们将系统上的glib包删掉，再执行rpm -i来安装qemu-img就会产生如下的提示信息：</p>
+<pre><code>[root[@localhost](https://my.oschina.net/u/570656) 下载]# rpm -e glib2-2.36.3-3.fc19.i686 --nodeps 
+[root[@localhost](https://my.oschina.net/u/570656) 下载]# rpm -q glib2-2.36.3-3.fc19.i686
+未安装软件包 glib2-2.36.3-3.fc19.i686 
+[root[@localhost](https://my.oschina.net/u/570656) 下载]# rpm -ivh qemu-img-1.4.2-3.fc19.i686.rpm 
+错误：依赖检测失败：
+libglib-2.0.so.0 被 qemu-img-2:1.4.2-3.fc19.i686 需要
+libgthread-2.0.so.0 被 qemu-img-2:1.4.2-3.fc19.i686 需要
+</code></pre>
+<p>   如果要安装qemu-img岂不是要手动地将所有依赖的包安装上去才行？而且，qemu-img所依赖的包可能又会依赖另外的包。如此一来，安装RPM包岂不是非常复杂？聪明的Linux hacker们当然不会让Linux的世界乱套。YUM就是为了解决软件包之间的依赖性而生，我们稍后会对YUM做进一步介绍，现在先抛开包的依赖性不说，看看如何在红帽系列发行版上来删除RPM软件包。</p>
+<p><em>2. 删除RPM软件包</em></p>
+<p>   删除RPM软件包的命令和安装命令同样简单，只需要在rpm命令之上使用-e选项即可，同样值得一提的是删除软件包也需要注意软件包之间的依赖性，比如说，如果软件包A依赖于软件包B，那么应该先卸载软件包A，再卸载B，否则会导致软件A不可用。再用qemu-img的软件包为例，qemu-img会被libvirt-deamon所依赖，所以在删除qemu-img的时候会提示错误：</p>
+<pre><code>[root[@localhost](https://my.oschina.net/u/570656) 下载]# rpm -e qemu-img 
+错误：依赖检测失败：
+/usr/bin/qemu-img 被 (已安裝) libvirt-daemon-1.0.5.6-3.fc19.i686 需要
+</code></pre>
+<p><em>3. 升级RPM软件包</em></p>
+<p>   如果系统上已经安装了glib2-2.36.3-2.fc19.i686这个包，现在发现在fedora的官网上提供了更新包glib2-2.36.3-3.fc19.i686，那该如何升级呢？使用rpm -Uvh或者rpm -Fvh即可。-U和-F的区别在于，-U允许系统未安装将要升级的包，在升级的时候执行安装动作，而-F则不能升级未安装的包。我们使用下面的命令可以将glib2升级：</p>
+<pre><code>[root[@localhost](https://my.oschina.net/u/570656) 下载]# rpm -q glib2-2.36.3-2.fc19.i686
+glib2-2.36.3-2.fc19.i686
+[root@localhost 下载]# rpm -Uvh http://mirrors.ustc.edu.cn/fedora/linux/updates/19/i386/glib2-2.36.3-3.fc19.i686.rpm
+[root@localhost 下载]# rpm --rebuilddb 
+[root@localhost 下载]# rpm -q glib2-2.36.3-2.fc19.i686
+未安装软件包 glib2-2.36.3-2.fc19.i686 
+[root@localhost 下载]# rpm -q glib2-2.36.3-3.fc19.i686
+glib2-2.36.3-3.fc19.i686
+</code></pre>
+<p><em>4. 查看RPM软件包信息</em></p>
+<p>   有时候，我们需要查询软件包的信息，rpm -q选项提供了查询RPM包信息的一些功能。</p>
+<p>例如：</p>
+<p>查询软件包qemu-img-1.4.2-3.fc19.i686.rpm是否安装到系统：</p>
+<pre><code>[kelvin@localhost 下载]$ rpm -qp qemu-img-1.4.2-3.fc19.i686.rpm 
+qemu-img-1.4.2-3.fc19.i686
+</code></pre>
+<p>-qp后面指定具体的包名，用于查询某具体的RPM包的信息，而不是已经安装到系统的RPM包的信息，如果想要查询已经安装到系统的包的信息，可以去掉-p选项。</p>
+<p>在安装一个RPM包之前，我们通常想知道它安装了哪些文件：</p>
+<pre><code>[kelvin@localhost 下载]$ rpm -qpl qemu-img-1.4.2-3.fc19.i686.rpm 
+/usr/bin/qemu-img
+/usr/bin/qemu-io
+/usr/bin/qemu-nbd
+/usr/share/man/man1/qemu-img.1.gz
+/usr/share/man/man8/qemu-nbd.8.gz
+</code></pre>
+<p>-q选项也可以被用来查询软件包的依赖关系：</p>
+<pre><code>[kelvin@localhost 下载]$ rpm -qpR qemu-img-1.4.2-3.fc19.i686.rpm 
+libaio.so.1
+libaio.so.1(LIBAIO_0.1)
+libaio.so.1(LIBAIO_0.4)
+libc.so.6
+......
+rtld(GNU_HASH)
+rpmlib(PayloadIsXz) &lt;= 5.2-1
+</code></pre>
+<p>如果想知道一个文件是属于哪个文件包的，可以通过下面的命令来实现：</p>
+<pre><code>[kelvin@localhost 下载]$ rpm -qf /usr/bin/qemu-img
+qemu-img-1.4.2-12.fc19.i686
+</code></pre>
+<p><em>5. 验证软件包中的文件是否被修改过</em></p>
+<p>   RPM机制提供了一种非常实用的功能，可以让我们查看到系统中哪些软件包的文件被修改过，从而可以看出是否有病毒或者是恶意软件。我们可以使用rpm -Va来查看系统中所有被更该过的文件，如果有二进制文件被改动过，我们应该特别留意这些文件。下面的例子演示了被修改过的/usr/bin/qemu-img文件通过强制重新安装来还原的过程：</p>
+<pre><code>[root@localhost 下载]# rpm -qf /usr/bin/qemu-img 
+qemu-img-1.4.2-12.fc19.i686
+[root@localhost 下载]# echo &quot;abc&quot; &gt;&gt; /usr/bin/qemu-img 
+[root@localhost 下载]# rpm -Va | grep .*qemu.*
+S.5....T.    /usr/bin/qemu-img
+[root@localhost 下载]# rpm -ivh qemu-img-1.4.2-3.fc19.i686.rpm --force
+准备中...                          ################################# [100%]
+正在升级/安装...
+   1:qemu-img-2:1.4.2-3.fc19          ################################# [100%]
+[root@localhost 下载]# rpm -Va | grep .*qemu.*
+.........    /usr/bin/qemu-img (已被替换)
+.........    /usr/bin/qemu-io (已被替换)
+.........    /usr/bin/qemu-nbd (已被替换)
+.........  d /usr/share/man/man1/qemu-img.1.gz (已被替换)
+.........  d /usr/share/man/man8/qemu-nbd.8.gz (已被替换)
+</code></pre>
+<p><em>使用YUM来解决RPM包的依赖问题</em></p>
+<p>   前面提到过，使用rpm命令来安装和卸载软件，处理RPM包之间的依赖关系非常复杂。YUM(Yellow dog Updater, Modified, YUM)很好地解决了软件包之间依赖关系地问题，在安装、升级、卸载RPM包的时候可以自动地将依赖包也一并安装或卸载。一般来说，在系统装好之后就可以直接使用yum命令了，不用进行额外地配置。如果想了解如何去创建和配置YUM，请参考YUM的文档(2)。</p>
+<p>使用YUM来安装qemu-img：</p>
+<pre><code>[root@localhost ~]# yum install qemu-img
+已加载插件：fastestmirror, ibm-repository, langpacks, refresh-packagekit
+Loading mirror speeds from cached hostfile
+ * fedora: mirrors.yun-idc.com
+ * openclient: ocfedora.hursley.ibm.com
+ * rpmfusion-free: mirror.bjtu.edu.cn
+ * rpmfusion-free-updates: mirror.bjtu.edu.cn
+ * rpmfusion-nonfree: mirror.bjtu.edu.cn
+ * rpmfusion-nonfree-updates: mirror.bjtu.edu.cn
+ * updates: mirrors.yun-idc.com
+正在解决依赖关系
+--&gt; 正在检查事务
+---&gt; 软件包 qemu-img.i686.2.1.4.2-12.fc19 将被 安装
+--&gt; 解决依赖关系完成
+
+依赖关系解决
+    
+    ========================================================================================================================================
+     Package                        架构                       版本                                     源                             大小
+    ========================================================================================================================================
+    正在安装:
+     qemu-img                       i686                       2:1.4.2-12.fc19                          updates                       454 k
+    
+    事务概要
+    ========================================================================================================================================
+    安装  1 软件包
+    
+    总下载量：454 k
+    安装大小：2.0 M
+    Is this ok [y/d/N]: y
+    Downloading packages:
+    Not downloading Presto metadata for updates
+    qemu-img-1.4.2-12.fc19.i686.rpm                                                                                  | 454 kB  00:00:00     
+    Running transaction check
+    Running transaction test
+    Transaction test succeeded
+    Running transaction
+      正在安装    : 2:qemu-img-1.4.2-12.fc19.i686                                                                                       1/1 
+      验证中      : 2:qemu-img-1.4.2-12.fc19.i686                                                                                       1/1 
+    
+    已安装:
+      qemu-img.i686 2:1.4.2-12.fc19                                                                                                         
+    
+    完毕！
+</code></pre>
+<p>可以看到，在安装qemu-img的时候，yum install 后面只需要接包名即可，无需完整的RPM文件名，而且YUM也会自动的解决安装包的依赖关系。</p>
+<p>使用YUM来删除qemu-img：</p>
+<pre><code>[root@localhost ~]# yum remove qemu-img
+已加载插件：fastestmirror, ibm-repository, langpacks, refresh-packagekit
+正在解决依赖关系
+--&gt; 正在检查事务
+---&gt; 软件包 qemu-img.i686.2.1.4.2-12.fc19 将被 删除
+--&gt; 正在处理依赖关系 /usr/bin/qemu-img，它被软件包 libvirt-daemon-1.0.5.6-3.fc19.i686 需要
+--&gt; 正在使用新的信息重新解决依赖关系
+--&gt; 正在检查事务
+---&gt; 软件包 libvirt-daemon.i686.0.1.0.5.6-3.fc19 将被 删除
+--&gt; 正在处理依赖关系 libvirt-daemon = 1.0.5.6-3.fc19，它被软件包 libvirt-daemon-driver-interface-1.0.5.6-3.fc19.i686 需要
+--&gt; 正在处理依赖关系 libvirt-daemon = 1.0.5.6-3.fc19，它被软件包 libvirt-daemon-driver-nodedev-1.0.5.6-3.fc19.i686 需要
+--&gt; 正在处理依赖关系 libvirt-daemon = 1.0.5.6-3.fc19，它被软件包 libvirt-daemon-driver-uml-1.0.5.6-3.fc19.i686 需要
+--&gt; 正在处理依赖关系 libvirt-daemon = 1.0.5.6-3.fc19，它被软件包 libvirt-daemon-driver-nwfilter-1.0.5.6-3.fc19.i686 需要
+--&gt; 正在处理依赖关系 libvirt-daemon = 1.0.5.6-3.fc19，它被软件包 libvirt-1.0.5.6-3.fc19.i686 需要
+--&gt; 正在处理依赖关系 libvirt-daemon = 1.0.5.6-3.fc19，它被软件包 libvirt-daemon-driver-secret-1.0.5.6-3.fc19.i686 需要
+--&gt; 正在处理依赖关系 libvirt-daemon = 1.0.5.6-3.fc19，它被软件包 libvirt-daemon-driver-network-1.0.5.6-3.fc19.i686 需要
+--&gt; 正在处理依赖关系 libvirt-daemon = 1.0.5.6-3.fc19，它被软件包 libvirt-daemon-driver-lxc-1.0.5.6-3.fc19.i686 需要
+--&gt; 正在处理依赖关系 libvirt-daemon = 1.0.5.6-3.fc19，它被软件包 libvirt-daemon-config-nwfilter-1.0.5.6-3.fc19.i686 需要
+--&gt; 正在处理依赖关系 libvirt-daemon = 1.0.5.6-3.fc19，它被软件包 libvirt-daemon-driver-storage-1.0.5.6-3.fc19.i686 需要
+--&gt; 正在处理依赖关系 libvirt-daemon = 1.0.5.6-3.fc19，它被软件包 libvirt-daemon-driver-libxl-1.0.5.6-3.fc19.i686 需要
+--&gt; 正在处理依赖关系 libvirt-daemon = 1.0.5.6-3.fc19，它被软件包 libvirt-daemon-config-network-1.0.5.6-3.fc19.i686 需要
+--&gt; 正在处理依赖关系 libvirt-daemon = 1.0.5.6-3.fc19，它被软件包 libvirt-daemon-driver-qemu-1.0.5.6-3.fc19.i686 需要
+--&gt; 正在处理依赖关系 libvirt-daemon = 1.0.5.6-3.fc19，它被软件包 libvirt-daemon-driver-xen-1.0.5.6-3.fc19.i686 需要
+--&gt; 正在检查事务
+---&gt; 软件包 libvirt.i686.0.1.0.5.6-3.fc19 将被 删除
+---&gt; 软件包 libvirt-daemon-config-network.i686.0.1.0.5.6-3.fc19 将被 删除
+---&gt; 软件包 libvirt-daemon-config-nwfilter.i686.0.1.0.5.6-3.fc19 将被 删除
+---&gt; 软件包 libvirt-daemon-driver-interface.i686.0.1.0.5.6-3.fc19 将被 删除
+---&gt; 软件包 libvirt-daemon-driver-libxl.i686.0.1.0.5.6-3.fc19 将被 删除
+---&gt; 软件包 libvirt-daemon-driver-lxc.i686.0.1.0.5.6-3.fc19 将被 删除
+---&gt; 软件包 libvirt-daemon-driver-network.i686.0.1.0.5.6-3.fc19 将被 删除
+---&gt; 软件包 libvirt-daemon-driver-nodedev.i686.0.1.0.5.6-3.fc19 将被 删除
+---&gt; 软件包 libvirt-daemon-driver-nwfilter.i686.0.1.0.5.6-3.fc19 将被 删除
+---&gt; 软件包 libvirt-daemon-driver-qemu.i686.0.1.0.5.6-3.fc19 将被 删除
+......
+0:1.0.5.6-3.fc19              
+      libvirt-daemon-driver-interface.i686 0:1.0.5.6-3.fc19               libvirt-daemon-driver-libxl.i686 0:1.0.5.6-3.fc19                 
+      libvirt-daemon-driver-lxc.i686 0:1.0.5.6-3.fc19                     libvirt-daemon-driver-network.i686 0:1.0.5.6-3.fc19               
+      libvirt-daemon-driver-nodedev.i686 0:1.0.5.6-3.fc19                 libvirt-daemon-driver-nwfilter.i686 0:1.0.5.6-3.fc19              
+      libvirt-daemon-driver-qemu.i686 0:1.0.5.6-3.fc19                    libvirt-daemon-driver-secret.i686 0:1.0.5.6-3.fc19                
+      libvirt-daemon-driver-storage.i686 0:1.0.5.6-3.fc19                 libvirt-daemon-driver-uml.i686 0:1.0.5.6-3.fc19                   
+      libvirt-daemon-driver-xen.i686 0:1.0.5.6-3.fc19                    
+
+完毕！
+</code></pre>
+<p>YUM在删除qemu-img的同时，也会将依赖于qemu-img的libvirt删除掉，这样便不会引起因依赖包的缺失而导致的软件无法使用的问题。</p>
+<p>使用YUM来升级qemu-img：</p>
+<pre><code>[root@localhost ~]# yum update qemu-img
+已加载插件：fastestmirror, ibm-repository, langpacks, refresh-packagekit
+Loading mirror speeds from cached hostfile
+ * fedora: mirrors.yun-idc.com
+ * openclient: ocfedora.hursley.ibm.com
+ * rpmfusion-free: mirror.bjtu.edu.cn
+ * rpmfusion-free-updates: mirror.bjtu.edu.cn
+ * rpmfusion-nonfree: mirror.bjtu.edu.cn
+ * rpmfusion-nonfree-updates: mirror.bjtu.edu.cn
+ * updates: mirrors.yun-idc.com
+No packages marked for update
+</code></pre>
+<p>qemu-img已经是最新版本。</p>
+<p>使用YUM来查看qemu-img的信息：</p>
+<pre><code>[root@localhost ~]# yum info qemu-img
+已加载插件：fastestmirror, ibm-repository, langpacks, refresh-packagekit
+Loading mirror speeds from cached hostfile
+ * fedora: mirrors.yun-idc.com
+ * openclient: ocfedora.hursley.ibm.com
+ * rpmfusion-free: mirror.bjtu.edu.cn
+ * rpmfusion-free-updates: mirror.bjtu.edu.cn
+ * rpmfusion-nonfree: mirror.bjtu.edu.cn
+ * rpmfusion-nonfree-updates: mirror.bjtu.edu.cn
+ * updates: mirrors.yun-idc.com
+可安装的软件包
+名称    ：qemu-img
+架构    ：i686
+时期       ：2
+版本    ：1.4.2
+发布    ：12.fc19
+大小    ：454 k
+源    ：updates/19/i386
+简介    ： QEMU command line tool for manipulating disk images
+网址    ：http://www.qemu.org/
+协议    ： GPLv2+ and LGPLv2+ and BSD
+描述    ： This package provides a command line tool for manipulating disk images
+</code></pre>
+<p>YUM虽然好用，但毕竟是建立在RPM机制之上的，所以rpm命令也至关重要。</p>
+<p><em>制作自己的rpm包</em></p>
+<p>   既然使用RPM包管理机制能够很便捷地安装、升级以及卸载软件，那么该如何把自己的软件制作成RPM包呢？其实步骤很简单，只需要编辑自己的spec文件，然后使用rpmbuild命令来打包即可。spec文件告诉了rpmbuild究竟要制作什么样的软件包(包名，版本，作者等)，从哪获源代码，如何编译等。rpmbuild根据spec来制作满足需求的RPM包。所以，对于RPM打包来说，编写spec文件非常重要。如果想要很全面地学习spec文件的语法，可以阅读参考文献(3)和(4)，本文只是以制作开源项目HLFS(5)的RPM包为例，来说明如何打包。读者并不需要深入的了解HLFS，只需要知道HLFS是用c语言所写，依赖于glib、log4c等函数库，编译用到cmake即可。</p>
+<p><em>1.获取HLFS源代码</em></p>
+<p>   在安装rpmbuild之后，通常会在家目录下产生rpmbuild目录：</p>
+<pre><code>[kelvin@localhost ~]$ ls -r ~/rpmbuild
+SRPMS  SPECS  SOURCES  RPMS  BUILD
+</code></pre>
+<p>   这几个子目录中，SPECS目录用来放置spec文件，SOURCES目录用来放置软件的源代码，RPMS放置打包生成的RPM包，SRPMS放置生成的SRPM包(包的内容是源代码和spec文件)，BUILD用来存放rpmbuild打包过程中临时用到的数据。</p>
+<p>   在打包之前，需要把源代码先放到SOURCES目录下：</p>
+<pre><code>[kelvin@localhost ~]$ cd ~/rpmbuild/SOURCES/
+[kelvin@localhost SOURCES]$ wget http://cloudxy.googlecode.com/files/hlfs.tar.gz
+</code></pre>
+<p>   源码拷贝之后需要在系统上安装编译HLFS所需要的工具cmake, glib等：</p>
+<pre><code>[kelvin@localhost ~]$ sudo yum install cmake glib2-devel log4c-devel snappy-devel java-1.8.0-openjdk-devel hadoop-0.20-libhdfs 
+</code></pre>
+<p><em>2.编辑hlfs.spec</em></p>
+<p>   在SPECS目录下创建hlfs.spec并写入以下内容：</p>
+<pre><code>%define version 1.0
+
+Name:     hlfs
+Version: %&#123;version&#125;
+Release:    1
+Summary:     A distribuited and log-structured file system based on HDFS.
+
+Group:     Development/Libraries    
+License: GPLv2    
+URL:     https://code.google.com/p/cloudxy        
+Source0:     hlfs-%&#123;version&#125;.tar.gz    
+
+Buildroot:     /tmp/hlfs
+Requires: glib2 &gt;= 2.0
+Requires: log4c &gt;= 1.2.3
+Requires: snappy &gt;= 1.1.0
+Requires: java-1.8.0-openjdk-devel &gt;= 1.8.0.0
+Requires: hadoop-0.20-libhdfs &gt;= 0.20.2
+BuildRequires: cmake
+BuildRequires: glib2-devel &gt;= 2.0
+BuildRequires: log4c-devel &gt;= 1.2.3
+BuildRequires: snappy-devel &gt;= 1.1.0
+BuildRequires: java-1.8.0-openjdk-devel &gt;= 1.8.0.0
+BuildRequires: hadoop-0.20-libhdfs &gt;= 0.20.2
+
+%description
+
+HLFS(actually, Block level Storage System seems more proper than File System) 
+is a distributed VM image storage system for ECMS,which provides highly availab-
+le block level storage volumes that can be attached to XEN virtual machines by 
+its tapdisk driver.Similar project related to KVM is sheepdog，but they are in 
+different architectures.
+
+Compared with sheepdog, HLFS has greater scalability and reliability than sheep-
+dog by now,as we are on the shoulder of hadoop distribute file system (HDFS).Me-
+anwhile,HLFS also supports advanced volume management features such as snapshot(
+HLFS can also support snapshot tree)、cloning、thin provisioning and cache.
+
+The main idea of HLFS is:
+
+Take advantage of Log-structured File System&#39;s ideology to build an on-line ima-
+ge storage system on HDFS which can guarantee the reliability and scalability 
+for our storage system
+The ideology of LFS makes our storage system support random access to online im-
+ages.The ideology of LFS also makes our storage system more efficient and easily
+take snapshot.
+
+%prep
+%setup -q
+
+%build
+cd ./build
+cmake ../src
+make
+
+%install
+cd build
+make install DESTDIR=%&#123;buildroot&#125;
+
+
+%files
+%dir /usr/local/hlfs/bin
+%dir /usr/local/hlfs/include
+%dir /usr/local/hlfs/lib
+%dir /usr/local/hlfs
+/usr/local/hlfs/bin/clone.hlfs
+/usr/local/hlfs/bin/log4crc
+/usr/local/hlfs/bin/mkfs.hlfs
+/usr/local/hlfs/bin/nbd_ops
+/usr/local/hlfs/bin/rmfs.hlfs
+/usr/local/hlfs/bin/segcalc.hlfs
+/usr/local/hlfs/bin/segclean.hlfs
+/usr/local/hlfs/bin/snapshot.hlfs
+/usr/local/hlfs/bin/stat.hlfs
+/usr/local/hlfs/bin/tapdisk_ops
+/usr/local/hlfs/include/address.h
+/usr/local/hlfs/include/api/hlfs.h
+/usr/local/hlfs/include/base_ops.h
+/usr/local/hlfs/include/bs_hdfs.h
+/usr/local/hlfs/include/bs_local.h
+/usr/local/hlfs/include/cache.h
+/usr/local/hlfs/include/cache_helper.h
+/usr/local/hlfs/include/clone.h
+/usr/local/hlfs/include/cmd_define.h
+/usr/local/hlfs/include/comm_define.h
+/usr/local/hlfs/include/ctrl_region.h
+/usr/local/hlfs/include/hlfs_ctrl.h
+/usr/local/hlfs/include/hlfs_log.h
+/usr/local/hlfs/include/icache.h
+/usr/local/hlfs/include/logger.h
+/usr/local/hlfs/include/misc.h
+/usr/local/hlfs/include/seg_clean.h
+/usr/local/hlfs/include/seg_clean_helper.h
+/usr/local/hlfs/include/snapshot.h
+/usr/local/hlfs/include/snapshot_helper.h
+/usr/local/hlfs/include/storage.h
+/usr/local/hlfs/include/storage_helper.h
+/usr/local/hlfs/lib/libhlfs.so
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%changelog
+* Sat Aug 10 2013 Wang Sen&lt;wangsen@linux.vnet.ibm.com&gt; 1.0-1
+- First build.
+</code></pre>
+<p>   spec文件可以使用%define来定义宏，并且用%{name}来展开宏。文件开头将HLFS的版本号用宏来定义以方便以后的升级。从结构上来看，hlfs.spec大致分为以下几个部分：</p>
+<pre><code>%description及包信息
+%prep
+%build
+%install
+%files
+%clean
+%changelog
+</code></pre>
+<p>   第一部分给出了HLFS软件包的一些基本信息，比如说包名、版本号、release号、项目的URL、源代码等信息。一般来说，对于同一版本的代码，每打包一次release号加1。Group指定了该软件的类型，rpm所有可用的类型可以在/usr/share/doc/rpm-(rpm版本)/GROUPS文件中查到。summary和description给出了软件包的介绍，这些内容可以通过rpm -qi或者yum info来查看到。Requires指定了HLFS需要依赖的包及其版本号，BuildRequires指出了打包需要的软件包及其版本号。</p>
+<p>   %prep部分的主要作用是将源代码解压缩解包以提供给编译过程，一般是通过%setup宏来实现。当然也可以不用这个宏，自己手动的实现。rpmbuild常用的宏是在以下几个文件中定义的，需要时可以查看：</p>
+<pre><code>/usr/lib/rpm/macros
+/usr/lib/rpm/redhat/macros
+/etc/rpm/macros
+~/.rpmmacros
+</code></pre>
+<p>   %build部分是将上面准备好的源代码通过shell命令来编译成二进制可执行文件。</p>
+<p>   %install将编译好的二进制文件安装到rpmbuild所用的临时表示最终安装根目录的buildroot里。</p>
+<p>   %files指定HLFS的RPM包所要包含的文件和目录，可以通过rpm -qpl来查看到这些文件列表。</p>
+<p>   %clean部分用来删除打包过程中产生的临时文件。    %changelog用来记录spec文件的改动，在vim的命令模式下可以输入\c来快速地插入作者信息及时间戳。</p>
+<p><em>3. 使用rpmbuild打包</em></p>
+<p>   编写完spec文件之后就可以使用rpmbuild命令来打包了。选项-bb用来产生二进制包；-bs用来产生SRPM包；-ba生成两种类型地包。我们使用rpmbuild -ba来生成二进制包和源码包：</p>
+<pre><code>[kelvin@localhost SPECS]$ rpmbuild -ba hlfs.spec 
+</code></pre>
+<p>   结果生成地二进制包会放到RPMS/${arch}目录下，源码包会放到SRPMS目录下。打包完成后可以通过rpm命令来检验所产生地RPM包：</p>
+<pre><code>[kelvin@localhost ~]$ cd ~/rpmbuild/RPMS/i386/
+[kelvin@localhost i386]$ ls
+hlfs-1.0-1.i386.rpm
+[kelvin@localhost i386]$ rpm -qpl hlfs-1.0-1.i386.rpm 
+/usr/local/hlfs
+/usr/local/hlfs/bin
+/usr/local/hlfs/bin/clone.hlfs
+/usr/local/hlfs/bin/log4crc
+/usr/local/hlfs/bin/mkfs.hlfs
+/usr/local/hlfs/bin/nbd_ops
+/usr/local/hlfs/bin/rmfs.hlfs
+/usr/local/hlfs/bin/segcalc.hlfs
+/usr/local/hlfs/bin/segclean.hlfs
+/usr/local/hlfs/bin/snapshot.hlfs
+/usr/local/hlfs/bin/stat.hlfs
+/usr/local/hlfs/bin/tapdisk_ops
+/usr/local/hlfs/include
+/usr/local/hlfs/include/address.h
+/usr/local/hlfs/include/api/hlfs.h
+/usr/local/hlfs/include/base_ops.h
+/usr/local/hlfs/include/bs_hdfs.h
+/usr/local/hlfs/include/bs_local.h
+/usr/local/hlfs/include/cache.h
+/usr/local/hlfs/include/cache_helper.h
+/usr/local/hlfs/include/clone.h
+/usr/local/hlfs/include/cmd_define.h
+/usr/local/hlfs/include/comm_define.h
+/usr/local/hlfs/include/ctrl_region.h
+/usr/local/hlfs/include/hlfs_ctrl.h
+/usr/local/hlfs/include/hlfs_log.h
+/usr/local/hlfs/include/icache.h
+/usr/local/hlfs/include/logger.h
+/usr/local/hlfs/include/misc.h
+/usr/local/hlfs/include/seg_clean.h
+/usr/local/hlfs/include/seg_clean_helper.h
+/usr/local/hlfs/include/snapshot.h
+/usr/local/hlfs/include/snapshot_helper.h
+/usr/local/hlfs/include/storage.h
+/usr/local/hlfs/include/storage_helper.h
+/usr/local/hlfs/lib
+/usr/local/hlfs/lib/libhlfs.so
+[kelvin@localhost i386]$ rpm -qpi hlfs-1.0-1.i386.rpm 
+Name        : hlfs
+Version     : 1.0
+Release     : 1
+Architecture: i386
+Install Date: (not installed)
+Group       : Development/Libraries
+Size        : 851341
+License     : GPLv2
+Signature   : (none)
+Source RPM  : hlfs-1.0-1.src.rpm
+Build Date  : 2013年11月04日 星期一 17时26分34秒
+Build Host  : localhost.localdomain
+Relocations : (not relocatable)
+URL         : https://code.google.com/p/cloudxy
+Summary     : A distribuited and log-structured file system based on HDFS.
+Description :
+
+HLFS(actually, Block level Storage System seems more proper than File System)
+is a distributed VM image storage system for ECMS,which provides highly availab-
+le block level storage volumes that can be attached to XEN virtual machines by
+its tapdisk driver.Similar project related to KVM is sheepdog，but they are in
+different architectures.
+
+Compared with sheepdog, HLFS has greater scalability and reliability than sheep-
+dog by now,as we are on the shoulder of hadoop distribute file system (HDFS).Me-
+anwhile,HLFS also supports advanced volume management features such as snapshot(
+HLFS can also support snapshot tree)、cloning、thin provisioning and cache.
+
+The main idea of HLFS is:
+
+Take advantage of Log-structured File System&#39;s ideology to build an on-line ima-
+ge storage system on HDFS which can guarantee the reliability and scalability
+for our storage system
+The ideology of LFS makes our storage system support random access to online im-
+ages.The ideology of LFS also makes our storage system more efficient and easily
+take snapshot.
+[kelvin@localhost i386]$ rpm -qpR hlfs-1.0-1.i386.rpm 
+glib2 &gt;= 2.0
+hadoop-0.20-libhdfs &gt;= 0.20.2
+java-1.8.0-openjdk-devel &gt;= 1.8.0.0
+libc.so.6
+libc.so.6(GLIBC_2.0)
+libc.so.6(GLIBC_2.1)
+libc.so.6(GLIBC_2.1.3)
+libglib-2.0.so.0
+libgthread-2.0.so.0
+libhdfs.so.0
+libjvm.so
+liblog4c.so.3
+librt.so.1
+libsnappy.so.1
+log4c &gt;= 1.2.3
+rpmlib(CompressedFileNames) &lt;= 3.0.4-1
+rpmlib(PayloadFilesHavePrefix) &lt;= 4.0-1
+rtld(GNU_HASH)
+snappy &gt;= 1.1.0
+</code></pre>
+<p><em>小结</em></p>
+<p>   本文通过实例介绍了RPM包的使用以及打包方法，适合初学者快速地掌握RPM软件包机制，如果需要更加详细地了解RPM软件包机制，请阅读参考文献(4)和(5)。</p>
+<p><em>参考文献</em></p>
+<p>1. 鸟哥的Linux私房菜——基础学习篇，第三版，22章。<br>2. YUM文档：<a target="_blank" rel="noopener" href="http://yum.baseurl.org/wiki/Guides">http://yum.baseurl.org/wiki/Guides</a><br>3. Fedora RPM Guide：<a target="_blank" rel="noopener" href="http://docs.fedoraproject.org/en-US/Fedora_Draft_Documentation/0.1/html/RPM_Guide/index.html">http://docs.fedoraproject.org/en-US/Fedora_Draft_Documentation/0.1/html/RPM_Guide/index.html</a><br>4. Maximum RPM：<a target="_blank" rel="noopener" href="http://ishare.iask.sina.com.cn/f/37848528.html">http://ishare.iask.sina.com.cn/f/37848528.html</a><br>5. HLFS Project Home：<a target="_blank" rel="noopener" href="http://code.google.com/p/cloudxy/">http://code.google.com/p/cloudxy/</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">三木</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://wangsen.site/2013/11/04/RPM%E8%BD%AF%E4%BB%B6%E5%8C%85%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6%E4%B9%8B%E6%97%85/">https://wangsen.site/2013/11/04/RPM%E8%BD%AF%E4%BB%B6%E5%8C%85%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6%E4%B9%8B%E6%97%85/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://wangsen.site" target="_blank">三木的技术博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/rmp/">rmp</a></div><div class="post_share"><div class="social-share" data-image="/images/bg1.jpg" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/images/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/images/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/images/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/images/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/2014/02/13/%E4%BD%BF%E7%94%A8mock%E6%9D%A5%E7%BC%96%E8%AF%91%E5%92%8C%E7%AE%A1%E7%90%86RPM%E8%BD%AF%E4%BB%B6%E5%8C%85/"><img class="prev-cover" src="/images/bg3.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">使用mock来编译和管理RPM软件包</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">三木</div><div class="author-info__description">Honesty and diligence should be your eternal mates.</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">89</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sanmuny"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/sanmuny" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:kelvin.xupt@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎访问我的技术博客，如果您觉得我的文章对您有所帮助，欢迎打赏和分享！</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/12/15/Go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B/" title="Go语言中的数值类型"><img src="/images/go.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Go语言中的数值类型"/></a><div class="content"><a class="title" href="/2021/12/15/Go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B/" title="Go语言中的数值类型">Go语言中的数值类型</a><time datetime="2021-12-15T07:29:49.000Z" title="发表于 2021-12-15 15:29:49">2021-12-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/14/Go%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" title="Go基本数据类型"><img src="/images/go.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Go基本数据类型"/></a><div class="content"><a class="title" href="/2021/12/14/Go%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" title="Go基本数据类型">Go基本数据类型</a><time datetime="2021-12-14T09:59:00.000Z" title="发表于 2021-12-14 17:59:00">2021-12-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/10/Featureflags%E6%A6%82%E8%A6%81/" title="Feature flags 概要"><img src="https://sanmuny.github.io/post-images/1636536399408.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Feature flags 概要"/></a><div class="content"><a class="title" href="/2021/11/10/Featureflags%E6%A6%82%E8%A6%81/" title="Feature flags 概要">Feature flags 概要</a><time datetime="2021-11-10T08:44:57.000Z" title="发表于 2021-11-10 16:44:57">2021-11-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/10/20/Go%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="Go环境变量及常用命令"><img src="/images/bg3.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Go环境变量及常用命令"/></a><div class="content"><a class="title" href="/2021/10/20/Go%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="Go环境变量及常用命令">Go环境变量及常用命令</a><time datetime="2021-10-20T07:52:56.000Z" title="发表于 2021-10-20 15:52:56">2021-10-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/09/30/SQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0SQL%E6%A6%82%E8%A6%81/" title="SQL学习笔记 - SQL概要"><img src="/images/bg4.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SQL学习笔记 - SQL概要"/></a><div class="content"><a class="title" href="/2021/09/30/SQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0SQL%E6%A6%82%E8%A6%81/" title="SQL学习笔记 - SQL概要">SQL学习笔记 - SQL概要</a><time datetime="2021-09-30T08:32:43.000Z" title="发表于 2021-09-30 16:32:43">2021-09-30</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2013 - 2021 By 三木</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.2
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container:not\([display]\)').forEach(node => {
+            const target = node.parentNode
+            if (target.nodeName.toLowerCase() === 'li') {
+              target.parentNode.classList.add('has-jax')
+            } else {
+              target.classList.add('has-jax')
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'Pbdwq7jL0Ag8SyVhveiTbaTA-gzGzoHsz',
+      appKey: '5z7cJ4LjydIGAt5kVlcKl6rG',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
