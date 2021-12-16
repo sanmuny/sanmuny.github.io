@@ -45,13 +45,13 @@ CSS样式可以写在哪些地方呢?从CSS 样式代码插入的形式来看基
 *   `#footer .note p{color:yellow;}` /*权值为100+10+1=111*/
 
 层叠就是在html文件中对于同一个元素可以有多个css样式存在，当有相同权重的样式存在时，会根据这些 css样式的前后顺序来决定，处于最后面的css样式会被应用。
-```
+``` css
 p{color:red;}  
 p{color:green;}  
 <p class="first">hello world</p>
 ```
 !important语句可以把样式改变为最高权值
-```
+``` css
 p{color:red !important;} p{color:green;}  
 <p class="first">hello world</p>
 ```
@@ -167,7 +167,7 @@ p{color:red !important;} p{color:green;}
 
 #### 浮动模型 float
 浮动模型，浮动(Float)如果想让两个块状元素并排显示，需要用到浮动模型。
-```
+``` css
 div {  
     width:200px;  
     height:200px;  
@@ -199,7 +199,7 @@ fixed:表示**固定定位**，与absolute定位类型类似，但它的相对�
 
 详细介绍请参考：[https://www.ibm.com/developerworks/cn/web/1409\_chengfu\_css3flexbox/](https://www.ibm.com/developerworks/cn/web/1409_chengfu_css3flexbox/)
 
-```
+``` css
 .flex-container {
 list-style: none;
 display: flex;

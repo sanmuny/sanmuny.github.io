@@ -15,7 +15,7 @@ Javascript最开始是用于浏览器中的前端编程语言。Javascript是单
 
 先来看一个异步的例子：
 
-```
+``` js
 console.log("Start...");
 setTimeout(()=>{
   console.log("in progress");
@@ -23,13 +23,13 @@ setTimeout(()=>{
 console.log("End...");
 ```
 如果是同步的话，输出的顺序应该是：
-```
+``` js
 Start...
 in progress
 End...
 ```
 然而真实的输出结果却是这样的：
-```
+``` js
 Start...
 End...
 in progress
@@ -37,7 +37,7 @@ in progress
 原因在于setTimeout中的第一个参数，箭头函数(即上文所说的回调函数)是异步执行的。setTimeout相当于注册一个回调函数，该回调函数在2000毫秒(2秒)之后运行。由于是异步的，主程序并不会等到两秒之后才跑setTimeout后面的代码，而是立即执行，所以先输出了`End...`，2秒之后，注册的回调函数运行了，输出了`in progress`。
 
 举一反三，Ajax请求、事件处理都是类似的。比如：
-```
+``` js
 $.ajax({
   url: url,
   data: data,
@@ -50,7 +50,7 @@ $('#mydiv').on('click', ()=>{})
 其中的两个箭头函数就是回调函数。
 
 当后面的异步操作依赖于前面异步操作的结果时，就需要在回调函数中嵌套回调函数，例如：
-```
+``` js
 console.log("Start...");
 setTimeout(()=>{
   console.log('A');
@@ -61,7 +61,7 @@ setTimeout(()=>{
 console.log("End...");
 ```
 嵌套回调可以保证 `AB`一定在`A`之后输出。
-```
+``` js
 Start...
 End...
 A
@@ -69,7 +69,7 @@ AB
 ```
 
 回调函数是Javascript异步编程最基本的编写方式，但是容易遇到回调地狱的问题。所谓回调地狱，其实就是回调嵌套的太多，导致了代码难以阅读和编写。这是http://callbackhell.com/ 给出的一个例子：
-```
+``` js
 fs.readdir(source, function (err, files) {
   if (err) {
     console.log('Error finding files: ' + err)
@@ -103,7 +103,7 @@ fs.readdir(source, function (err, files) {
 2. 对结果的处理可以串联
 
 有点抽象，我们来看一个具体的例子。
-```
+``` js
 console.log("Start...");
 let waitOneSecond = new Promise(function(resolve, reject) {
   setTimeout(() => {
@@ -131,7 +131,7 @@ waitOneSecond
 console.log("End...");
 ```
 输出如下：
-```
+``` js
 Start...
 Async operation registered...
 End...
@@ -143,7 +143,7 @@ second output: 10
 由此可以看到，两个异步操作的处理同样是先后执行，类似于上文例子中先打印`A`，后打印`AB`，引入Promise后就避免了嵌套回调，两个then函数调用串联起来，从而也就解决了回调地狱的问题。需要注意的是，要想将两个Promise串联起来的前提是，第一个Promise的处理函数必须返回一个Promise，如例子中的`return waitTenSeconds;`
 
 除了解决回调地狱的问题，将异步操作定义和结果处理分开之后，我们可以更加灵活地处理多个异步操作。比如说，
-```
+``` js
 const promise1 = Promise.resolve(3);
 const promise2 = 42;
 const promise3 = new Promise(function(resolve, reject) {
@@ -158,7 +158,7 @@ Promise.all([promise1, promise2, promise3]).then(function(values) {
 promise1, promise2, promise3将会一起执行，如果都成功，我们可以在then函数中对所有的结果一起进行处理。
 
 再例如：
-```
+``` js
 const promise1 = new Promise(function(resolve, reject) {
     setTimeout(resolve, 500, 'one');
 });
@@ -177,7 +177,7 @@ Promise.any([promise1, promise2]).then(function(value) {
 
 # async/await
 ES6引入了迭代器和生成器，yield可以让程序暂停，而迭代器中的next()又可以程序恢复运行，利用这一点，Javascript便可以让主程序等待异步操作的完成。这对于习惯其他不使用异步编程语言(例如C语言)的同学来说就非常亲切了。而async/await正是利用迭代器和生成器编写异步函数的语法糖。例如：
-```
+``` js
 let waitTenSeconds = new Promise(function(resolve, reject) {
   setTimeout(() => {
     let data = 10;
@@ -196,13 +196,13 @@ async function asyncFunc() {
 asyncFunc();
 ```
 如果asyncFunc不是async/await函数的话，输出结果应该是:
-```
+``` js
 Start...
 End...
 10
 ```
 因为asyncFunc是异步操作，主程序会先打印`End...`，10秒之后才会打印`10`。而把asyncFunc改造为异步函数(即加了async关键字)之后，await关键字会让主程序等待waitTenSeconds异步操作执行完成之后才继续运行，所以输出结果是：
-```
+``` js
 Start...
 10
 End...
