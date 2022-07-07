@@ -168,4 +168,32 @@ Mary|Jane|Sue
 | rx.Match(b)| 如果类型为[]byte的b满足正则表达式，则返回true |
 | rx.MatchReader(r) | 如果类型为io.RuneReader的r满足正则表达式，则返回true |
 | rx.MatchString(s) | 如果字符串s满足正则表达式，则返回true |
-| rx.
+| rx.ReplaceAllString(s, sr) | 用sr替换s中匹配的部分 |
+| rx.FindString(s) | 返回匹配到的字符串 |
+| rx.FindAllString(s, n) | 返回所有匹配到的字符串 []string类型 |
+
+#### regexp包的用法示例
+
+``` go
+package main
+
+import (
+	"fmt"
+	"regexp"
+)
+
+func main() {
+	match, _ := regexp.MatchString("p[a-z]+ch", "peach")
+	fmt.Println(match) // true
+
+	r, _ := regexp.Compile("p[a-z]+ch")
+
+	fmt.Println(r.MatchString("peach")) // true
+	fmt.Println(r.FindString("peach punch")) // peach
+	fmt.Println(r.FindStringIndex("peach punch")) // [0 5]
+	fmt.Println(r.FindStringSubmatch("peach apple punch")) // [peach]
+	fmt.Println(r.FindStringSubmatchIndex("peach apple punch")) // [0 5]
+	fmt.Println(r.FindAllString("peach apple pinch", 1)) // [peach]
+	fmt.Println(r.FindAllString("peach apple pinch", 2)) // [peach pinch]
+}
+```
