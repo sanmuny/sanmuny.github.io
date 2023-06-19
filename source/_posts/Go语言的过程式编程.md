@@ -220,3 +220,73 @@ func IntFromInt64(x int64) (i int, err error) {
 	return i, nil
 }
 ```
+
+### 自定义函数
+
+* Go语言可以在参数列表里的最后一个参数类型前面使用...实现可变参数
+
+``` go
+package main
+
+import "fmt"
+
+func main() {
+	test(3, "hello", "world")
+}
+
+func test(n int, strs ...string) {
+	fmt.Println(strs) // [hello world]
+	fmt.Println(n) // 3
+}
+```
+
+* Go语言不支持可选参数，但可以通过结构体来实现
+
+``` go
+package main
+
+import "fmt"
+
+type Options struct {
+	n   int
+	str string
+}
+
+func main() {
+	test(Options{n: 15, str: "hello world"})
+	test(Options{n: 16})
+}
+
+func test(options Options) {
+	fmt.Println(options.n)
+	fmt.Println(options.str)
+}
+```
+
+* init和main函数不接受任何参数也不返回任何值，init在main函数调用之前执行
+* 闭包是指捕获了和它在同一作用域常量或者变量的函数
+
+``` go
+package main
+
+import (
+	"fmt"
+	"strings"
+)
+
+func main() {
+	addjpg := MakeAddSuffix(".jpg")
+	addpng := MakeAddSuffix(".png")
+	fmt.Println(addjpg("hello"))  // hello.jpg
+	fmt.Println(addpng("hello.png"))  // hello.png
+}
+
+func MakeAddSuffix(suffix string) func(string) string {
+	return func(name string) string {
+		if !strings.HasSuffix(name, suffix) {
+			return name + suffix
+		}
+		return name
+	}
+}
+```
