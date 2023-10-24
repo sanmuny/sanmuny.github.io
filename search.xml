@@ -486,9 +486,9 @@
       
         <tags>
             
-            <tag> javascript </tag>
-            
             <tag> es6 </tag>
+            
+            <tag> javascript </tag>
             
         </tags>
       
@@ -513,9 +513,9 @@
       
         <tags>
             
-            <tag> javascript </tag>
-            
             <tag> es6 </tag>
+            
+            <tag> javascript </tag>
             
         </tags>
       
@@ -540,9 +540,9 @@
       
         <tags>
             
-            <tag> javascript </tag>
-            
             <tag> es6 </tag>
+            
+            <tag> javascript </tag>
             
         </tags>
       
@@ -567,9 +567,9 @@
       
         <tags>
             
-            <tag> javascript </tag>
-            
             <tag> es6 </tag>
+            
+            <tag> javascript </tag>
             
         </tags>
       
@@ -669,9 +669,9 @@
       
         <tags>
             
-            <tag> javascript </tag>
-            
             <tag> es6 </tag>
+            
+            <tag> javascript </tag>
             
         </tags>
       
@@ -696,9 +696,9 @@
       
         <tags>
             
-            <tag> javascript </tag>
-            
             <tag> es6 </tag>
+            
+            <tag> javascript </tag>
             
         </tags>
       
@@ -723,9 +723,9 @@
       
         <tags>
             
-            <tag> javascript </tag>
-            
             <tag> es6 </tag>
+            
+            <tag> javascript </tag>
             
         </tags>
       
@@ -750,9 +750,9 @@
       
         <tags>
             
-            <tag> javascript </tag>
-            
             <tag> es6 </tag>
+            
+            <tag> javascript </tag>
             
         </tags>
       
@@ -777,9 +777,9 @@
       
         <tags>
             
-            <tag> javascript </tag>
-            
             <tag> es6 </tag>
+            
+            <tag> javascript </tag>
             
         </tags>
       
@@ -804,9 +804,9 @@
       
         <tags>
             
-            <tag> javascript </tag>
-            
             <tag> es6 </tag>
+            
+            <tag> javascript </tag>
             
         </tags>
       
@@ -906,9 +906,9 @@
       
         <tags>
             
-            <tag> dom </tag>
-            
             <tag> javascript </tag>
+            
+            <tag> dom </tag>
             
         </tags>
       
@@ -933,9 +933,9 @@
       
         <tags>
             
-            <tag> dom </tag>
-            
             <tag> javascript </tag>
+            
+            <tag> dom </tag>
             
         </tags>
       
@@ -1264,11 +1264,11 @@
       
         <tags>
             
+            <tag> 云原生 </tag>
+            
             <tag> cgroups </tag>
             
             <tag> namespace </tag>
-            
-            <tag> 云原生 </tag>
             
         </tags>
       
@@ -2083,8 +2083,8 @@
     
     <entry>
       <title>FUSE</title>
-      <link href="/2014/04/24/FUSE/"/>
-      <url>/2014/04/24/FUSE/</url>
+      <link href="/2014/04/24/fuse/"/>
+      <url>/2014/04/24/fuse/</url>
       
         <content type="html"><![CDATA[<h3 id="一、FUSE简介"><a href="#一、FUSE简介" class="headerlink" title="一、FUSE简介"></a><strong>一、FUSE简介</strong></h3><p>FUSE（用户空间文件系统）是这样一个框架，它使得FUSE用户在用户态下编写文件系统成为可能，而不必和内核打交道。FUSE由三个部分组成，linux内核模块、FUSE库以及mount 工具。用户关心的只是FUSE库和mount工具，内核模块仅仅提供kernel的接入口，给了文件系统一个框架，而文件系统本身的主要实现代码位于用户空间中。 FUSE库给用户提供了编程的接口，而mount工具则用于挂在用户编写的文件系统。</p><p>FUSE起初是为了研究AVFS(A Virtual Filesystem)而设计的，而现在已经成为SourceForge的一个独立项目，目前适用的平台有Linux, FreeBSD, NetBSD, OpenSolaris和Mac OS X。官方的linux kernel版本到2.6.14才添加了FUSE模块，因此2.4的内核模块下，用户如果要在FUSE中创建一个文件系统，需要先安装一个FUSE内核模块，然后使用FUSE库和API来创建。</p><h3 id="二、FUSE特性"><a href="#二、FUSE特性" class="headerlink" title="二、FUSE特性"></a><strong>二、FUSE特性</strong></h3><ul><li>  库文件和 API简单，极大地方便了用户的使用</li><li>  安装简便，不需要加补丁或者重新编译 kernel</li><li>  执行安全，使用稳定</li><li>  高效，相对于其它用户态文件系统实例</li><li>  非特权用户可以使用</li><li>  基于 linux2.4.x 和 2.6.x 内核，现在可以支持JavaTM 绑定，不必限定使用C和C++来编 写文件系统</li></ul><h3 id="三、源代码目录"><a href="#三、源代码目录" class="headerlink" title="三、源代码目录"></a><strong>三、源代码目录</strong></h3><ul><li>  ./doc 包含FUSE相关文档</li><li>  ./include 包含了FUSE API头，对创建文件系统有用，主要用fuse.h</li><li>  ./lib 存放FUSE库的源代码</li><li>  ./util 包含了FUSE工具库的源代码</li><li>  ./example 参考的例子</li></ul><h3 id="四、安装"><a href="#四、安装" class="headerlink" title="四、安装"></a><strong>四、安装</strong></h3><p>FUSE的源码安装类似于其他软件，只需要在FUSE的源码目录下执行如下命令即可：</p><pre><code>./configuremakemake install（以root身份执行）</code></pre><h3 id="五、FUSE-operations"><a href="#五、FUSE-operations" class="headerlink" title="五、FUSE operations"></a><strong>五、FUSE operations</strong></h3><p>FUSE使用fuse_operations来给用户提供编程结构，让用户通过注册自己编写的函数到该结构体来实现自己的文件系统。</p><pre><code>struct fuse_operations &#123;    int (*getattr) (const char *, struct stat *);    int (*readlink) (const char *, char *, size_t);    int (*mknod) (const char *, mode_t, dev_t);    int (*mkdir) (const char *, mode_t);    int (*unlink) (const char *);    int (*rmdir) (const char *);    int (*symlink) (const char *, const char *);    int (*rename) (const char *, const char *);    int (*link) (const char *, const char *);    int (*chmod) (const char *, mode_t);    int (*chown) (const char *, uid_t, gid_t);    int (*truncate) (const char *, off_t);    int (*utime) (const char *, struct utimbuf *);    int (*open) (const char *, struct fuse_file_info *);    int (*read) (const char *, char *, size_t, off_t, struct fuse_file_info *);    int (*write) (const char *, const char *, size_t, off_t, struct fuse_file_info *);    int (*statfs) (const char *, struct statvfs *);    int (*flush) (const char *, struct fuse_file_info *);    int (*release) (const char *, struct fuse_file_info *);    int (*fsync) (const char *, int, struct fuse_file_info *);    int (*setxattr) (const char *, const char *, const char *, size_t, int);    int (*getxattr) (const char *, const char *, char *, size_t);    int (*listxattr) (const char *, char *, size_t);    int (*removexattr) (const char *, const char *);    int (*opendir) (const char *, struct fuse_file_info *);    int (*readdir) (const char *, void *, fuse_fill_dir_t, off_t, struct fuse_file_info *);    int (*releasedir) (const char *, struct fuse_file_info *);    int (*fsyncdir) (const char *, int, struct fuse_file_info *);    void *(*init) (struct fuse_conn_info *conn);    void (*destroy) (void *);    int (*access) (const char *, int);    int (*create) (const char *, mode_t, struct fuse_file_info *);    int (*ftruncate) (const char *, off_t, struct fuse_file_info *);    int (*fgetattr) (const char *, struct stat *, struct fuse_file_info *);    int (*lock) (const char *, struct fuse_file_info *, int cmd, struct flock *);    int (*utimens) (const char *, const struct timespec tv[2]);    int (*bmap) (const char *, size_t blocksize, uint64_t *idx);&#125;;</code></pre><h3 id="六、hello示例文件系统源码分析"><a href="#六、hello示例文件系统源码分析" class="headerlink" title="六、hello示例文件系统源码分析"></a><strong>六、hello示例文件系统源码分析</strong></h3><p>FUSE在源码目录example下有一些示例文件系统，通过阅读这些示例文件系统可以掌握FUSE用户态文件系统的编写规范。下面以hello.c为例分析FUSE的编写规范：</p><pre><code>#define FUSE_USE_VERSION 26#include &lt;fuse.h&gt;#include &lt;stdio.h&gt;#include &lt;string.h&gt;#include &lt;errno.h&gt;#include &lt;fcntl.h&gt;static const char *hello_str = &quot;Hello World!\n&quot;;static const char *hello_path = &quot;/hello&quot;;</code></pre><p>/<em>该函数与stat()类似，用于得到文件的属性，将其存入到结构体struct stat中</em>/</p><pre><code>static int hello_getattr(const char *path, struct stat *stbuf)&#123;    int res = 0;    memset(stbuf, 0, sizeof(struct stat));     //用于初始化结构体stat    if (strcmp(path, &quot;/&quot;) == 0) &#123;    stbuf-&gt;st_mode = S_IFDIR | 0755;     //S_IFDIR 用于说明/为目录，详见S_IFDIR定义    stbuf-&gt;st_nlink = 2;     //文件链接数&#125; else if (strcmp(path, hello_path) == 0) &#123;    stbuf-&gt;st_mode = S_IFREG | 0444;    //S_IFREG用于说明/hello为常规文件    stbuf-&gt;st_nlink = 1;    stbuf-&gt;st_size = strlen(hello_str);     //设置文件长度为hello_str的长度&#125; else    res = -ENOENT;     //返回错误信息，没有该文件或目录    return res;     //执行成功返回0&#125;</code></pre><p>/<em>该函数用于读取/目录中的内容，并在/目录下增加了. .. hello三个目录项</em>/</p><pre><code>static int hello_readdir(const char *path, void *buf, fuse_fill_dir_t filler,  off_t offset, struct fuse_file_info *fi)    &#123;        (void) offset;            (void) fi;            if (strcmp(path, &quot;/&quot;) != 0)             return -ENOENT;/*fill的定义：typedef int (*fuse_fill_dir_t) (void *buf, const char *name,const struct stat *stbuf, off_t off);其作用是在readdir函数中增加一个目录项*/    filler(buf, &quot;.&quot;, NULL, 0);    //在/目录下增加. 这个目录项    filler(buf, &quot;..&quot;, NULL, 0);    // 增加.. 目录项    filler(buf, hello_path + 1, NULL, 0);    //增加hello目录项    return 0;&#125;</code></pre><p>/<em>用于打开hello文件</em>/</p><pre><code>static int hello_open(const char *path, struct fuse_file_info *fi)&#123;    if (strcmp(path, hello_path) != 0)         return -ENOENT;    if ((fi-&gt;flags &amp; 3) != O_RDONLY)        return -EACCES;    return 0;&#125;</code></pre><p>/<em>读取hello文件时的操作，它实际上读取的是字符串hello_str的内容</em>/</p><pre><code>static int hello_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi)&#123;    size_t len;    (void) fi;    if(strcmp(path, hello_path) != 0)        return -ENOENT;    len = strlen(hello_str);    if (offset &lt; len) &#123;        if (offset + size &gt; len)            size = len - offset;        memcpy(buf, hello_str + offset, size);    &#125; else    size = 0;    return size;&#125;</code></pre><p>/<em>注册上面定义的函数</em>/</p><pre><code>static struct fuse_operations hello_oper = &#123;    .getattr = hello_getattr,    .readdir = hello_readdir,    .open = hello_open,    .read = hello_read,&#125;;</code></pre><p>/<em>用户只需要调用fuse_main()，剩下的事就交给FUSE了</em>/</p><pre><code>int main(int argc, char *argv[])&#123;    return fuse_main(argc, argv, &amp;hello_oper, NULL);&#125;</code></pre><p>终端运行：</p><pre><code>~/fuse/example$ mkdir /tmp/fuse     //在/tmp下建立fuse目录，用于挂载hello文件系统~/fuse/example$ ./hello /tmp/fuse     //挂载hello文件系统~/fuse/example$ ls -l /tmp/fuse    //执行ls时，会调用到readdir函数，该函数会添加一个hello     文件总用量 0-r--r--r-- 1 root root 13 1970-01-01 07:00 hello~/fuse/example$ cat /tmp/fuse/hello    //执行cat hello时，会调用open以及read函数，将Hello World!     字符串hello_str中的内容读出~/fuse/example$ fusermount -u /tmp/fuse //卸载hello文件系统</code></pre><p>通过上述的分析可以知道，使用FUSE必须要自己实现对文件或目录的操作，系统调用也会最终调用到用户自己实现的函数。用户实现的函数需要在结构体fuse_operations中注册。而在main()函数中，用户只需要调用fuse_main()函数就可以了，剩下的复杂工作可以交给FUSE。</p>]]></content>
       
@@ -2158,8 +2158,8 @@
     
     <entry>
       <title>Make</title>
-      <link href="/2014/04/24/Make/"/>
-      <url>/2014/04/24/Make/</url>
+      <link href="/2014/04/24/make/"/>
+      <url>/2014/04/24/make/</url>
       
         <content type="html"><![CDATA[<h3 id="一、make的功能："><a href="#一、make的功能：" class="headerlink" title="一、make的功能："></a><strong>一、make的功能：</strong></h3><p>make是一个用来维护程序模块关系和生产可执行文件的工具，他可以根据程序修改的情况重新编译链接生成的中间代码或最终的可执行文件。执行make命令需要一个Makefile文件，来定义整个项目的编译规则。makefile定义了模块间的依赖关系，指定文件的编译顺序，以及编译所使用的命令。有了make和Makefile文件，整个项目的源程序可以自动编译，极大的提高了软件开发效率。</p><h3 id="二、Make的一般使用："><a href="#二、Make的一般使用：" class="headerlink" title="二、Make的一般使用："></a><strong>二、Make的一般使用：</strong></h3><p>1、Makefile的基本构成：</p><p>Makefile由规则构成，一条规则生成一个或多个目标文件，其格式如下：</p><pre><code>目标文件列表 分隔符 依赖文件列表 [；命令]  //[]中的内容可选    [命令]    [命令]</code></pre><p>例如：</p><pre><code>main:main.o module1.o module2.o    gcc main.o module1.o module2.o -o main</code></pre><p>第二行是命令必须以Tab键开头，第一行是说明模块间的依赖关系，所以不加Tab，若加Tab,make就认为这是一条命令。以#开头的行为注释行，makefile中若用到#，可用#；同样，$应该用$$。在依赖列表后加上分号后，可直接跟上命令。</p><p>命令之间可以插入多个空行，但每行必须有Tab键，如果一行过长，可以在行末输入一个\，用反斜杠连接的行都被看成一行来处理，反斜杠和新行之间不能有空格。Makefile也可以命名为makefile,若命名为其他文件名，则需要用-f或–file选项来告知make哪一个是makefile文件。</p><p>2、Makefile文件的构成：</p><p>一个完整的makefile文件由5个部分构成：显式规则、隐含规则、变量、文件指示和注释。</p><p>显式规则：一条显式规则指名了目标文件、目标文件的依赖关系、命令。有些规则没有命令，只是说明文件之间的依赖关系。</p><p>隐含规则：由make根据目标文件而自动推导出的规则。例如：module2.o:head1.h,实际上等价于module2.o:module2.c head1.h; gcc -c module2.c -o module2.o</p><p>变量：类似于c语言中的宏。</p><p>文件指示：包括三个部分，一个类似于c语言中的include语句，可以将另一个makefile文件包含进来；二是根据情况指定makefile中的有效部分，就像c语言中的预编译#if一样；三是定义一个多行的命令。</p><p>3、makefile的基本语法：</p><ul><li>|的作用:  foo:foo.c | somelib<pre><code>  gcc -o foo foo.c somelib</code></pre></li></ul><p>当somelib文件的时间戳比foo晚时，不用重新编译foo。</p><ul><li>命令行属性：</li></ul><p>可在命令前、Tab键后加上如下符号：</p><pre><code>-：执行本命令行如果遇到错误，继续执行而不退出make。+：总是执行该命令，即使执行make时使用了-n,-q,-t选项。@：执行命令时不在屏幕上输出该命令的内容。</code></pre><ul><li>  伪目标：</li></ul><p>先看以下代码：</p><pre><code>clean:    -rm -rf *.o</code></pre><p>因为clean后没有依赖文件，所以clean被认为是最新，不会执行rm命令，若要执行rm，需要执行make clean命令。但如果当前目录下已经有一个名叫clean的文件，则make clean也不能使得rm命令执行。这时需要引入伪目标才能搞定。</p><pre><code>.PHONY:cleanclean:    -rm -rf *.o</code></pre><p>.PHONY的依赖文件为伪目标，作用是伪目标的命令即使在当前目录下存在与伪目标同名的文件时也执行该命令。</p><ul><li>  特殊目标：</li></ul><p>.PHONY：伪目标，如上</p><p>.IGNORE：对于该目标后的依赖文件，生成时如遇到错误则可跳过错误继续执行，不会中断make。</p><p>.SUFFIXES：该目标的依赖被认为是一个后缀列表，在检查后缀规则时使用。</p><p>.SILENT：生成该目标文件的依赖文件所执行的命令都不被打印，如果其后无依赖文件，则所有的命令都不会被打印。</p><p>.PRECIOUS：该目标的依赖文件将不会被删除。</p><p>.INTERMEDIATE：该目标的依赖文件被当作是中间文件对待。</p><ul><li>  多个目标：</li></ul><p>一个规则中可以有多个目标，这些目标有相同的依赖文件</p><ul><li>  搜索目录：</li></ul><p>通常在一个大的项目中，会把头文件、源文件、库文件放在不同的目录下。当目录发生改变后，只需改变依赖文件的搜索目录。 make定义了一个叫VPATH的变量，在当前目录中搜索不到依赖文件时，便到VPATH定义的目录中去寻找。也可用关键字vpath 定义搜索位置：</p><pre><code>vpath &lt;pattern&gt; &lt;directories&gt;vpath :清除所有已被设置好的文件搜索目录。</code></pre><p>如：vpath %.h ../headers表示在../headers目录下搜索所有.h结尾的头文件。</p><ul><li>  变量：</li></ul><p>makefile中通常可定义变量，make在执行时会把变量名出现的地方用变量值代替。</p><p>引用变量：$()或者${}</p><p>定义变量：</p><pre><code>= ：定义的变量在执行命令时才展开；:=：定义的变量立即展开；?=：在此之前没有给该变量赋值才会给该变量赋值+=：追加变量值，与原变量值之间用空格隔开</code></pre><p>预定义变量：</p><p>makefile 中预定义了许多变量,在隐含规则中通常会用到这些变量：</p><pre><code>宏名        初始值        说明CC            cc            默认使用的编译器CFLAGS        -o            编译器使用的选项MAKE        make        make命令MAKEFLAGS    空             make命令的选项SHELL                    默认使用的shell名PWD                    运行make时的当前路径AR            ar            库管理命令ARFLAGS       -ruv        库管理选项LIBSUFFIXE    .a            库的后缀A            a            库的扩展名</code></pre><p>自动变量：</p><p>它们的值在make运行过程中动态的改变，是隐含规则所必需的变量。</p><pre><code>$@：表示一个规则中的目标文件名。$%：当规则中的目标文件是一个静态库文件时，$%就代表静态库的一个成员名。如果目标不是静态库文件，则该变量    值为空。$&lt;：规则中的第一个依赖文件名。$&gt;：当规则是一个静态库文件时，该变量表示静态库名。$?：所有比目标文件新的依赖文件列表，以空格分隔。如果目标是静态库文件，该变量代表的是    库成员。$^：规则的所有依赖文件列表，以空格分割。如果目标是静态库文件，代表的是库成员。$+：和$^类似，不同的是该变量不除去重复的文件。$*：去掉后缀的目标文件名。</code></pre><ul><li>条件语句：  ifeq ($(CC),gcc)<br>  libs=$(libs_for_gcc)<br>  else<br>  libs=$(normal_libs)<br>  endif<br>  foo:foo.c<pre><code>  $(CC) -o foo foo.c $(libs)</code></pre></li></ul><p>此外，还有ifneq,ifdef,ifndef</p><ul><li>  使用库：</li></ul><p>建立和维护库时，把库名作为目标文件，需要加入库中的文件作为依赖文件。如：</p><pre><code>mylib.a:mylib.a(file1.o) mylib.a(file2.o)或mylib.a:mylib.a(file1.o file2.o)</code></pre><p>接着输入命令：</p><pre><code>ar -ruv 库名 目标文件名</code></pre><p>三、make命令的常用选项：</p><pre><code>-C dir或--directory=DIR：在读取Makefile文件之前，先切换到dir目录下，即把dir目录作为当前目录。-d：输出所有的调试信息。-e或--environment-overrides：不允许makefile对系统环境变量进行重新赋值。-f filename或者--file=FILE或者--makefile=FILE：使用指定文件作为makefile文件。-i或者--ignore-errors：忽略执行make时产生的错误，不退出make。-h或者--help：打印出帮助信息。-n或者--just-print：只打印出要执行的命令，但不执行命令。-o filename或者--old-file=FILE：不重建filename及依赖于filename的文件。-p：执行命令之前，打印出make读取的makefile的所有数据，同时打印出make的版本信息。如果只打印信息而    不执行命令，可使用make -qp ，查看make执行前的隐含规则和预定义变量，使用make -p-f /dev/null。-q：不执行任何命令，返回0表示没有重建目标，返回1表示存在重建目标，返回2表示有错误发生。-r：忽略隐含规则。-R：取消预定义变量。同时打开-r选项。-s：执行但不显示所执行的命令。-t：把所有目标文件的最后修改时间设置为当前系统时间。-v：打印make版本信息。</code></pre>]]></content>
       
