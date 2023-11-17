@@ -17,3 +17,7 @@ categories: 云计算
  - 容器中可以使用`host.docker.internal`作为主机名来访问主机网络。
  - 多个容器可以通过`--network {network_name}`加入同一网络，同一网络中的容器可以通过容器名互相访问。
  - Docker网络有`bridge, host, none, overlay, macvlan, third-party plugin`等类型，在创建网络是通过`--driver`来指定。
+
+ ### CMD or ENTRYPOINT
+
+ 使用命令行运行docker容器时，命令行提供的命令将会替代docker file中CMD，但是会追加在ENTRYPOINT中。
