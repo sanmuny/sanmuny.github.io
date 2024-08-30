@@ -3,7 +3,7 @@ title: 'AI-数学基础之线性代数【草稿】'
 tags:
   - AI
 categories: AI
-published: false
+published: true
 hideInList: false
 isTop: false
 cover: /images/ai.jpg
