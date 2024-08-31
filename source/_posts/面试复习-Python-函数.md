@@ -213,3 +213,28 @@ gen = my_generator()
 for num in gen:
     print(num)
 ```
+
+### 协程
+
+在 Python 中，协程是一种轻量级的并发编程方式，它允许在一个线程内实现多个任务的切换和协作，而不需要使用多线程或多进程。协程可以在等待某个事件发生时暂停执行，然后在事件发生后恢复执行，从而实现高效的并发处理.
+
+优点：
+* 高效的并发处理：协程可以在一个线程内实现多个任务的切换和协作，避免了传统线程之间的上下文切换开销，从而提高了并发处理的效率。
+* 轻量级：协程是一种轻量级的并发编程方式，它不需要操作系统的线程调度和上下文切换，因此占用的资源较少。
+* 易于编程：协程的编程模型相对简单，程序员可以自己控制执行流程，避免了传统线程之间的竞争和同步问题，从而降低了编程的难度。
+
+``` python
+>>> def print_received():
+...   print('started')
+...   x = yield
+...   print('received: {}'.format(x))
+...
+>>> p = print_received()
+>>> p.send(None)
+started
+>>> p.send(10)
+received: 10
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+StopIteration
+```
