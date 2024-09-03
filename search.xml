@@ -4,6 +4,64 @@
   
     
     <entry>
+      <title>面试复习-数据结构-图</title>
+      <link href="/2024/09/03/%E9%9D%A2%E8%AF%95%E5%A4%8D%E4%B9%A0-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%9B%BE/"/>
+      <url>/2024/09/03/%E9%9D%A2%E8%AF%95%E5%A4%8D%E4%B9%A0-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%9B%BE/</url>
+      
+        <content type="html"><![CDATA[<ul><li>图可以用邻接表或者邻接矩阵表示</li><li>在无权图中找出两个节点最短距离通常用广度优先算法 - 队列实现</li><li>在无权图中找出符合条件的路径通常用深度优先算法 - 栈或者递归实现</li></ul><h3 id="求最大岛屿面积"><a href="#求最大岛屿面积" class="headerlink" title="求最大岛屿面积"></a>求最大岛屿面积</h3><p>链接： <a href="https://leetcode.cn/problems/max-area-of-island/">https://leetcode.cn/problems/max-area-of-island/</a></p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> queue</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxAreaOfIsland</span>(<span class="params">self, grid: <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        lenRows = <span class="built_in">len</span>(grid)</span><br><span class="line">        lenCols = <span class="built_in">len</span>(grid[<span class="number">0</span>])</span><br><span class="line">        visited = [[<span class="literal">False</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(lenCols)] <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(lenRows)]</span><br><span class="line">        maxArea = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> row <span class="keyword">in</span> <span class="built_in">range</span>(lenRows):</span><br><span class="line">            <span class="keyword">for</span> col <span class="keyword">in</span> <span class="built_in">range</span>(lenCols):</span><br><span class="line">                <span class="keyword">if</span> grid[row][col] == <span class="number">1</span> <span class="keyword">and</span> <span class="keyword">not</span> visited[row][col]:</span><br><span class="line">                    area = self.getArea(grid, visited, row, col)</span><br><span class="line">                    maxArea = <span class="built_in">max</span>(maxArea, area)</span><br><span class="line">        <span class="keyword">return</span> maxArea</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getArea</span>(<span class="params">self, grid, visited, row, col</span>):</span></span><br><span class="line">        lenRows = <span class="built_in">len</span>(grid)</span><br><span class="line">        lenCols = <span class="built_in">len</span>(grid[<span class="number">0</span>])</span><br><span class="line">        area = <span class="number">0</span></span><br><span class="line">        q = queue.Queue()</span><br><span class="line">        q.put((row, col))</span><br><span class="line">        visited[row][col] = <span class="literal">True</span></span><br><span class="line">        directions = [(<span class="number">0</span>, <span class="number">1</span>), (<span class="number">0</span>, -<span class="number">1</span>), (-<span class="number">1</span>, <span class="number">0</span>), (<span class="number">1</span>, <span class="number">0</span>)]</span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> q.empty():</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                area += <span class="number">1</span></span><br><span class="line">                curRow, curCol = q.get()</span><br><span class="line">                <span class="keyword">for</span> <span class="built_in">dir</span> <span class="keyword">in</span> directions:</span><br><span class="line">                    nextRow = curRow + <span class="built_in">dir</span>[<span class="number">0</span>]</span><br><span class="line">                    nextCol = curCol + <span class="built_in">dir</span>[<span class="number">1</span>]</span><br><span class="line">                    <span class="keyword">if</span> (</span><br><span class="line">                        <span class="number">0</span> &lt;= nextRow &lt; lenRows</span><br><span class="line">                        <span class="keyword">and</span> <span class="number">0</span> &lt;= nextCol &lt; lenCols</span><br><span class="line">                        <span class="keyword">and</span> grid[nextRow][nextCol] == <span class="number">1</span></span><br><span class="line">                        <span class="keyword">and</span> <span class="keyword">not</span> visited[nextRow][nextCol]</span><br><span class="line">                    ):</span><br><span class="line">                        q.put((nextRow, nextCol))</span><br><span class="line">                        visited[nextRow][nextCol] = <span class="literal">True</span></span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">return</span> area</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> 计算机基础 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 数据结构 </tag>
+            
+            <tag> 算法 </tag>
+            
+            <tag> 图 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>面试复习-专利-数据冗余</title>
+      <link href="/2024/09/02/%E9%9D%A2%E8%AF%95%E5%A4%8D%E4%B9%A0-%E4%B8%93%E5%88%A9-%E6%95%B0%E6%8D%AE%E5%86%97%E4%BD%99/"/>
+      <url>/2024/09/02/%E9%9D%A2%E8%AF%95%E5%A4%8D%E4%B9%A0-%E4%B8%93%E5%88%A9-%E6%95%B0%E6%8D%AE%E5%86%97%E4%BD%99/</url>
+      
+        <content type="html"><![CDATA[<h3 id="Heterogenous-replication-in-a-hybrid-cloud-database"><a href="#Heterogenous-replication-in-a-hybrid-cloud-database" class="headerlink" title="Heterogenous replication in a hybrid cloud database"></a>Heterogenous replication in a hybrid cloud database</h3><p>链接：<a href="https://patents.google.com/patent/WO2023040954A1/en">https://patents.google.com/patent/WO2023040954A1/en</a></p><p>该专利旨在解决混合云计算环境中数据冗余的问题，通过将文件拆分为块、计算块签名、比较块签名来识别重复文件，并选择删除候选文件，以减少存储重复数据，提高存储效率。</p><img src="/images/patent_dr.png" width="500px" />]]></content>
+      
+      
+      <categories>
+          
+          <category> 云计算 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 专利 </tag>
+            
+            <tag> 面试 </tag>
+            
+            <tag> 数据冗余 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>面试复习-Python-面向对象</title>
       <link href="/2024/08/31/%E9%9D%A2%E8%AF%95%E5%A4%8D%E4%B9%A0-Python-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"/>
       <url>/2024/08/31/%E9%9D%A2%E8%AF%95%E5%A4%8D%E4%B9%A0-Python-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</url>
