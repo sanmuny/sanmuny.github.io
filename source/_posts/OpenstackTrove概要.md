@@ -1,6 +1,6 @@
 ---
 title: 'Openstack Trove概要'
-date: 2017-06-12 10:36:16
+date: 2024-09-04 12:27:05
 tags: [dbaas,openstack,trove]
 published: true
 hideInList: false
@@ -24,6 +24,8 @@ Openstack Trove是openstack为用户提供的数据库即服务(DBaaS)。所谓D
 Trove架构
 -------
 Trove API和用户进行交互，当Trove API接收到用户请求时，trove API首先会调用Keystone的API来对用户进行认证，认证通过后才会去执行相应的操作。Trove API会同步处理操作简单的一些请求，复杂的请求则会通过Message Queue (RabbitMQ)交给Task Manager来处理。Task Manager会监听RabbitMQ的一个topic，收到请求后就会进行处理。这些请求通常是分配数据库实例、管理数据库实例的生命周期、操作数据库等。和openstack的其他组件一样，Trove也有一个Infrastructure Database来存储自己本身的数据，如数据库实例的信息等。Trove conductor的主要功能是接收来自guest agent的状态更新信息，这些信息会被存储在Infrastructure database里面或者作为调用结果返回给其他服务。通常这些状态更新信息包括：guest agent心跳包，数据库备份状态等。Guest Agent运营于数据库服务器中(虚拟机)，给trove其他组件提供了一套内部使用的API，trove的其他组件通过Message Queue来调用这些API，guest agent收到API调用请求后，执行相应的数据库操作。
+
+<img src="/images/trove.png" width="500px" />
 
 Trove的安装部署请参考Openstack官方文档(多坑慎入)：
 
