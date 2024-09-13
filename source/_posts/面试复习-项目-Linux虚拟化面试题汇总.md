@@ -8,7 +8,6 @@ feature:
 isTop: false
 categories: 计算机基础
 tags:
-categories:
 ---
 
 ### CPU虚拟化是怎么实现的？
