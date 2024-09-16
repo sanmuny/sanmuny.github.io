@@ -2,28 +2,23 @@
   class_desc: 值得一读的技术博客
   link_list:
     1:
-      name: IBM DW
-      link: https://my.oschina.net/ibmdw
-      avatar: https://cdn.freelogovectors.net/wp-content/uploads/2016/12/ibm_logo.png
-      descr: IBM Developer Works
+      name: 武特
+      link: http://edsionte.com/techblog
     2:
+      name: 王聪
+      link: http://wangcong.org
+      descr: A Geek's Page
+    3:
       name: 面向信仰编程
       link: https://draveness.me
       avatar: https://draveness.me/images/draven-logo.png
       descr: 《为什么这么设计》、《Go语言设计与实现》作者的博客
 
-- class_name: 网站
-  class_desc: 值得推荐的网站
+
+- class_name: 学习平台
+  class_desc: 值得推荐的学习平台
   link_list:
-    - name: Youtube
-      link: https://www.youtube.com/
-      avatar: https://i.loli.net/2020/05/14/9ZkGg8v3azHJfM1.png
-      descr: 视频网站
-    - name: Weibo
-      link: https://www.weibo.com/
-      avatar: https://i.loli.net/2020/05/14/TLJBum386vcnI1P.png
-      descr: 中国最大社交分享平台
-    - name: Twitter
-      link: https://twitter.com/
-      avatar: https://i.loli.net/2020/05/14/5VyHPQqR6LWF39a.png
-      descr: 社交分享平台
+    - name: 极客时间
+      link: https://time.geekbang.org/
+      avatar: https://static001.geekbang.org/static/time/icon/apple-touch-icon.jpg
+      descr: 极客时间-轻松学习，高效学习-极客邦
