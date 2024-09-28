@@ -37,8 +37,19 @@ VMCB(VM控制块)可以被两种模式(root, vmx)访问，所以可以用来存�
 
 ### 内存虚拟化是怎么实现的？
 
-虚拟机在创建时QEMU会给每个虚拟机分配一块内存(mmap), 虚拟机的物理地址空间其实就是这块内存在QEMU中的虚拟地址空间，EPT扩展页维护了虚拟机物理地址到主机物理地址空间的映射，从而使虚拟机可以访问主机的内存。
+- MTRR(Memory Type Range Register). 物理内存可以被分成几个区域(range)，每个区域对应于如下某一种内存类型：
 
+<img src="/images/mtrr.png" width="500px" />
+
+- MMU(Memory Management Unit)内存管理单元实现了：
+  - 内存区域的访问保护
+  - 虚拟地址到物理地址的转换
+- VMM可以通过EPT(Extended Page Table)实现：
+  - 防止虚拟机访问没有权限的页面
+  - 虚拟机物理地址到真实物理地址的转换
+- TLB(Translation Lookaside Buffer)缓存了虚拟页号到物理页号的映射，如果TLB没有命中，从内存中查找页表的开销会非常大。
+- VPID(Virtual Processor ID) TLB中通过VPID来标识缓存项所属的虚拟机，从而避免了每次VM_EXIT带来的TLB缓存失效的问题，极大的提高了效率
+- 虚拟机在创建时QEMU会给每个虚拟机分配一块内存(mmap), 虚拟机的物理地址空间其实就是这块内存在QEMU中的虚拟地址空间，EPT扩展页维护了虚拟机物理地址到主机物理地址空间的映射，从而使虚拟机可以访问主机的内存。
 - 虚拟机启动时，KVM 和 QEMU 协同工作，为虚拟机分配物理内存，并创建相应的页表结构。
 - 当虚拟机中的应用程序访问内存时，KVM 会通过硬件辅助虚拟化技术将客户机虚拟地址转换为物理地址。
 - QEMU 负责模拟硬件设备，并将对虚拟设备的内存访问转换为对物理内存的访问。
@@ -216,15 +227,30 @@ SR - IOV（Single Root I/O Virtualization）即单根 I/O 虚拟化，以下是�
 
 ### Linux的进程是怎么调度的
 - Linux的调度器是通过模块和调度器类实现的，在系统需要调度的时候，会从调度器中选择优先级最高的调度器进行调度
-- SCHED_FIFO和SCHED_RR用来调度实时进程，SCHED_FIFO会一直占用CPU直到自己退出或者被优先级更高的实时进程抢占，SCHED_RR是同样优先级的实时进程按照时间片轮转调度
-- Linux中的普通进程用的是CFS完全公平调度算法来进行调度，他通过计算虚拟运行时间vruntime，选择vruntime最小的进程进行调度
-- task_struct中的sched_entity记录了虚拟运行时间vruntime，内核用自平衡二叉搜索树红黑树来组织可运行进程队列
-- vruntime += 实际运行时间 * (NICE_0_LOAD/NICE_LOAD) NICE_0_LOAD为nice值为0时的权重，NICE_LOAD为当前进程nice值的权重
-- schedule()会调用context_switch()来：
-  - switch_mm()：切换新进程的虚拟地址空间
-  - switch_to()：切换新进程的处理器状态
+
+| 调度类 | 调度策略 | 调度对象 |
+| --- | --- | --- |
+| stop_sched_class（停机调度类）| 无 | 停机的进程 |
+| dl_sched_class（限期调度类） | SCHED_DEADLINE | dl进程 |
+| rt_sched_class（实时调度类） | SCHED_RR 或者 SCHED_FIFO | 实时进程 |
+| fair_sched_class（公平调度类）| SCHED_NORMAL 或者 SCHED_BATCH | 普通进程 |
+| idle_sched_class（空闲调度类）| SCHED_IDLE | idle进程 |
+
+- 优先级关系：`stop_sched_class > dl_sched_class > rt_sched_class > fair_sched_class > idle_shced_class`
+
+<img src="/images/cfs.png" width="500px" />
+
+- CFS（完全公平调度器）是Linux内核2.6.23版本开始采用的进程调度器，它的基本原理是这样的：设定一个调度周期`sched_latency_ns`，目标是让每个进程在这个周期内至少有机会运行一次，换一种说法就是每个进程等待CPU的时间最长不超过这个调度周期；然后根据进程的数量，大家平分这个调度周期内的CPU使用权，由于进程的优先级即nice值不同，分割调度周期的时候要加权；每个进程的累计运行时间保存在自己的`vruntime`字段里，哪个进程的`vruntime`最小就获得本轮运行的权利。
+- `进程的运行时间 = (调度周期时间 * 进程的weight) / CFS运行队列的总weight`
+- `SCHED_FIFO`和`SCHED_RR`用来调度实时进程，`SCHED_FIFO`会一直占用CPU直到自己退出或者被优先级更高的实时进程抢占，`SCHED_RR`是同样优先级的实时进程按照时间片轮转调度
+- Linux中的普通进程用的是CFS完全公平调度算法来进行调度，他通过计算虚拟运行时间`vruntime`，选择`vruntime`最小的进程进行调度
+- `task_struct`中的`sched_entity`记录了虚拟运行时间`vruntime`，内核用自平衡二叉搜索树红黑树来组织可运行进程队列
+- `vruntime += 实际运行时间 * (NICE_0_LOAD/NICE_LOAD)` NICE_0_LOAD为nice值为0时的权重，NICE_LOAD为当前进程nice值的权重
+- `schedule()`会调用`context_switch()`来：
+  - `switch_mm()`：切换新进程的虚拟地址空间
+  - `switch_to()`：切换新进程的处理器状态
 - 内核会在系统调用、中断处理结束后返回用户空间时，检查`need_resched`标志，如果被设置则重新调度，抢占用户程序的执行
-- 进程threed_info中的preempt_count记录了持有锁的数量，如果为0表明可以被抢占
+- 进程`threed_info`中的`preempt_count`记录了持有锁的数量，如果为`0`表明可以被抢占
 
 
 ### 如果虚拟机出现了故障，可以用哪些Linux命令去解决
