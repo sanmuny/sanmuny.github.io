@@ -1,5 +1,5 @@
 ---
-title: Kubernetes学习笔记
+title: Kubernetes复习笔记
 tags: [kubernetes, cloud native]
 published: true
 hideInList: false
