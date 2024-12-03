@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>2024云-AI-计算国际合作论坛要点小结</title>
+      <link href="/2024/12/03/2024%E4%BA%91-AI-%E8%AE%A1%E7%AE%97%E5%9B%BD%E9%99%85%E5%90%88%E4%BD%9C%E8%AE%BA%E5%9D%9B%E5%B0%8F%E7%BB%93/"/>
+      <url>/2024/12/03/2024%E4%BA%91-AI-%E8%AE%A1%E7%AE%97%E5%9B%BD%E9%99%85%E5%90%88%E4%BD%9C%E8%AE%BA%E5%9D%9B%E5%B0%8F%E7%BB%93/</url>
+      
+        <content type="html"><![CDATA[<ul><li>坚持开放、兼容与自主创新来应对技术封锁</li><li>推进算力国产化，2030年国产化算力占比要达到90%以上</li><li>互联网+ 正在转变为AI+</li><li>人工智能从单模态向多模态发展</li><li>系统软件是制约我国AI发展的关键因素，智算的10种核心基础软件<ul><li>并行系统：DeepSpeed, Megatron-LM, FairScale</li><li>编程框架：PyTorch</li><li>通信库：NCCL</li><li>AI编译器：tvm</li><li>算子库：cuBLAS, cuDNN</li><li>编程语言：CUDA, oneAPI</li><li>调度器</li><li>内存管理</li><li>容错系统</li><li>存储系统</li></ul></li><li>构建国产万卡集群很重要也很难</li><li>异构卡、异地卡训练效果不好</li><li>与通算中心相比，智算中心功率密度更大，负载波动更大，交付时间更短</li><li>智算云计算架构包括智算基础设施、智算平台层和智算服务层，贯穿安全与稳定性保障</li><li>大模型训练中，电力费用占比65%，缺算到缺电</li><li>云计算从通用计算到混合计算再到异构计算，从CPU池化到GPU、NPU、TPU、DPU池化</li><li>大模型浪潮下，企业更需要私有化部署保护数据主权</li><li>企业落地AI的三大困境<ul><li>资源困境：算力烧钱、投资风险</li><li>模型困境：模型难选、难用</li><li>应用困境：数据缺失、应用效果差</li></ul></li></ul><img src="/images/aicloud/aicloud1.jpg" width="500px" /><img src="/images/aicloud/aicloud2.jpg" width="500px" /><img src="/images/aicloud/aicloud3.jpg" width="500px" /><img src="/images/aicloud/aicloud4.jpg" width="500px" /><img src="/images/aicloud/aicloud5.jpg" width="500px" /><img src="/images/aicloud/aicloud6.jpg" width="500px" /><img src="/images/aicloud/aicloud7.jpg" width="500px" /><img src="/images/aicloud/aicloud8.jpg" width="500px" /><img src="/images/aicloud/aicloud9.jpg" width="500px" /><img src="/images/aicloud/aicloud10.jpg" width="500px" /><img src="/images/aicloud/aicloud11.jpg" width="500px" /><img src="/images/aicloud/aicloud12.jpg" width="500px" /><img src="/images/aicloud/aicloud13.jpg" width="500px" /><img src="/images/aicloud/aicloud14.jpg" width="500px" /><img src="/images/aicloud/aicloud15.jpg" width="500px" /><img src="/images/aicloud/aicloud16.jpg" width="500px" /><img src="/images/aicloud/aicloud17.jpg" width="500px" />]]></content>
+      
+      
+      <categories>
+          
+          <category> AI </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> AI </tag>
+            
+            <tag> 云原生 </tag>
+            
+            <tag> 云计算 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>再会，蓝色巨人</title>
       <link href="/2024/11/29/%E5%86%8D%E4%BC%9A%EF%BC%8C%E8%93%9D%E8%89%B2%E5%B7%A8%E4%BA%BA/"/>
       <url>/2024/11/29/%E5%86%8D%E4%BC%9A%EF%BC%8C%E8%93%9D%E8%89%B2%E5%B7%A8%E4%BA%BA/</url>
