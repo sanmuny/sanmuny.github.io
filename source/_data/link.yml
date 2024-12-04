@@ -4,6 +4,7 @@
     1:
       name: 武特
       link: http://edsionte.com/techblog
+      avatar: http://edsionte.com/techblog/wordpress/wp-content/themes/cordobo-green-park-2/favicon.ico
     2:
       name: 王聪
       link: http://wangcong.org
@@ -13,6 +14,11 @@
       link: https://draveness.me
       avatar: https://draveness.me/images/draven-logo.png
       descr: 《为什么这么设计》、《Go语言设计与实现》作者的博客
+    4:
+      name: Linux内核之旅
+      link: https://www.kerneltravel.net/
+      avatar: https://kerneltravel.net/img/favicon.ico
+      descr: Linux内核之旅是一个完全自由和开放的平台，它的建设是在西邮陈莉君教授和在腾讯工作十多年的许振文师兄的指导下完成的，我们的运作方式与国际开源社区一样，所有人都可以共建Linux内核之旅平台，我们都是贡献者，也是受益者。
 
 
 - class_name: 学习平台
