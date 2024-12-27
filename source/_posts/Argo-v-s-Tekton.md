@@ -7,6 +7,7 @@ hideInList: false
 feature: 
 isTop: false
 categories: 开发工具
+cover: /images/devops.jpg
 ---
 
 在云原生的世界里，持续集成/持续交付（CI/CD）工具起着至关重要的作用，Argo和Tekton作为两款备受瞩目的工具，各自具有独特的特点和优势。本文将从多个方面对它们进行详细对比，帮助大家更好地理解和选择适合自己项目的 CI/CD 解决方案。
