@@ -1,0 +1,448 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Go语言中的正则表达式 | 三木的技术博客</title><meta name="keywords" content="go,regexp"><meta name="author" content="三木"><meta name="copyright" content="三木"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="正则表达式在字符串的处理中占有重要的地位，Go语言中的regexp包提供了对正则表达式的支持。 正则表达式基础正则表达式(Regular Expression)是一个特殊的字符串，它定义了一种文本模式。通过正则表达式，你可以从所有文本中匹配到满足特定模式的文本(字符串)，然后可以：  测试字符串是否满足这种特定模式，例如：是不是IP地址、电话号码，银行卡号等 替换文本，将文本中部分或者所有满足这种">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go语言中的正则表达式">
+<meta property="og:url" content="https://wangsen.site/2022/01/12/Go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/index.html">
+<meta property="og:site_name" content="三木的技术博客">
+<meta property="og:description" content="正则表达式在字符串的处理中占有重要的地位，Go语言中的regexp包提供了对正则表达式的支持。 正则表达式基础正则表达式(Regular Expression)是一个特殊的字符串，它定义了一种文本模式。通过正则表达式，你可以从所有文本中匹配到满足特定模式的文本(字符串)，然后可以：  测试字符串是否满足这种特定模式，例如：是不是IP地址、电话号码，银行卡号等 替换文本，将文本中部分或者所有满足这种">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangsen.site/images/go.png">
+<meta property="article:published_time" content="2022-01-12T09:50:04.000Z">
+<meta property="article:modified_time" content="2025-03-14T14:36:52.629Z">
+<meta property="article:author" content="三木">
+<meta property="article:tag" content="go">
+<meta property="article:tag" content="regexp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangsen.site/images/go.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://wangsen.site/2022/01/12/Go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Go语言中的正则表达式',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-03-14 22:36:52'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">134</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">80</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-tie"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">三木的技术博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-tie"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Go语言中的正则表达式</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-01-12T09:50:04.000Z" title="发表于 2022-01-12 17:50:04">2022-01-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-03-14T14:36:52.629Z" title="更新于 2025-03-14 22:36:52">2025-03-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">计算机基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Go语言中的正则表达式"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2022/01/12/Go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/2022/01/12/Go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" itemprop="commentCount"></span></a></span></div></div></div><article class="post-content" id="article-container"><p>正则表达式在字符串的处理中占有重要的地位，Go语言中的regexp包提供了对正则表达式的支持。</p>
+<h3 id="正则表达式基础"><a href="#正则表达式基础" class="headerlink" title="正则表达式基础"></a>正则表达式基础</h3><p>正则表达式(Regular Expression)是一个特殊的字符串，它定义了一种文本模式。通过正则表达式，你可以从所有文本中匹配到满足特定模式的文本(字符串)，然后可以：</p>
+<ol>
+<li>测试字符串是否满足这种特定模式，例如：是不是IP地址、电话号码，银行卡号等</li>
+<li>替换文本，将文本中部分或者所有满足这种特定模式的字符串替换、删除掉</li>
+<li>提取满足这种特定模式的子字符串</li>
+</ol>
+<h4 id="元字符"><a href="#元字符" class="headerlink" title="元字符"></a>元字符</h4><p>元字符在正则表达式中有特殊的意义，要匹配这些元字符本身的话，需要用反斜杆转义。元字符有12个，如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$()*+.?[\^&#123;|</span><br></pre></td></tr></table></figure>
+
+<p><code>]</code>和<code>&#125;</code>不属于元字符是因为它们是否需要被转义依赖于前面是否有<code>[</code>和<code>&#123;</code></p>
+<h4 id="量词"><a href="#量词" class="headerlink" title="量词"></a>量词</h4><p>以下几个字符我们称之为量词，它们表示匹配字符重复的次数。</p>
+<table>
+<thead>
+<tr>
+<th>量词</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>?</td>
+<td>重复0次或者1次</td>
+</tr>
+<tr>
+<td>*</td>
+<td>重复0次或者多次</td>
+</tr>
+<tr>
+<td>+</td>
+<td>重复1次或者多次</td>
+</tr>
+<tr>
+<td>{m, n}</td>
+<td>m,n为数字，至少重复m次，最多重复n次, m和n中的一个可以不指定</td>
+</tr>
+</tbody></table>
+<h4 id="惰性匹配和贪婪匹配"><a href="#惰性匹配和贪婪匹配" class="headerlink" title="惰性匹配和贪婪匹配"></a>惰性匹配和贪婪匹配</h4><p>在量词后面加<code>?</code>表示惰性匹配，如<code>*?</code>,<code>+?</code>,<code>??</code>,<code>&#123;m,n&#125;?</code>等。惰性匹配每匹配到一次就会停下来然后接着匹配表达式后面的部分，如果后面的部分匹配成功，则停止匹配。</p>
+<p>贪婪匹配则相反，量词匹配成功后不会停下来，它会接着匹配直到失败，然后回溯之后再接着匹配表达式后面的部分。</p>
+<p>例如下面的HTML文本，</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">The very <span class="tag">&lt;<span class="name">em</span>&gt;</span>first<span class="tag">&lt;/<span class="name">em</span>&gt;</span> task is to find the beginning of a paragraph.</span><br><span class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">Then you have to find the end of the paragraph</span><br><span class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果用正则表达式<code>&lt;p&gt;.*?&lt;/p&gt;</code>来惰性匹配，它只匹配到第一个段，而如果用正则表达式<code>&lt;p&gt;.*&lt;/p&gt;</code>来进行贪婪匹配，它会匹配到整个文本。</p>
+<h4 id="匹配多个备选中的一个"><a href="#匹配多个备选中的一个" class="headerlink" title="匹配多个备选中的一个"></a>匹配多个备选中的一个</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Mary|Jane|Sue</span><br></pre></td></tr></table></figure>
+<p>匹配 Mary, 或者 Jane 或者 Sue.</p>
+<h4 id="零宽断言-Zero-Length-Assertions-或-环视-lookaround"><a href="#零宽断言-Zero-Length-Assertions-或-环视-lookaround" class="headerlink" title="零宽断言(Zero-Length Assertions) 或 环视 (lookaround)"></a>零宽断言(Zero-Length Assertions) 或 环视 (lookaround)</h4><p>零宽断言用来匹配某个字符串之前或者之后的文本，但匹配到的结果不包含该字符串本身。因为不包含该字符串，所以该断言匹配到的文本长度为0，所以称之为零宽断言。</p>
+<p>零宽断言分为两种：</p>
+<ol>
+<li>回望(lookbehind)，即从匹配位置往后(左)查询。表达式为 <code>(?&lt;=exp)</code>，意思是如果文本的左边满足正则表达式exp，则匹配该文本，不包含exp本身匹配到的字符串。</li>
+<li>前瞻(lookahead)，即从匹配位置往前(右)查询。表达式为<code>(?=exp)</code>，意思是如果文本的右边满足正则表达式exp，则匹配该文本，不包含exp本身匹配到的字符串。</li>
+</ol>
+<p>负向零宽断言(Negative lookaround)则是匹配不满足exp的情形，对应到回望和前瞻则是 <code>(?&lt;!=exp)</code> 和 <code>(?!=exp)</code>。例如<code>(?&lt;!=exp)</code>意思是如果文本的左边<strong>不</strong>满足正则表达式exp，则匹配该文本，同样不包含exp本身匹配不成功的字符串。</p>
+<p>下面的例子可以说明零宽断言的作用。</p>
+<p>如果需要匹配HTML中加粗的文本，但不包含HTML标签本身则可以用下面的正则表达式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(?&lt;=&lt;b&gt;)\w+(?=&lt;/b&gt;)</span><br></pre></td></tr></table></figure>
+
+<p>如果用它来匹配文本 <code>My &lt;b&gt;cat&lt;/b&gt; is furry</code> 的话，只会匹配到<code>cat</code>，<code>&lt;b&gt;</code>和<code>&lt;/b&gt;</code>不会被匹配到。</p>
+<h4 id="字符类"><a href="#字符类" class="headerlink" title="字符类"></a>字符类</h4><p>正则表达式内置了一些字符类，通过下表所列的字符类的写法可以匹配到多个属于这一类字符。</p>
+<table>
+<thead>
+<tr>
+<th>字符类</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>[chars]</td>
+<td>匹配chars中的任一字符</td>
+</tr>
+<tr>
+<td>[^chars]</td>
+<td>匹配任一不在chars中的字符</td>
+</tr>
+<tr>
+<td>[:name:]</td>
+<td>字符类中的所有ASCII字符，name为分类名，正则表达式支持的类名及含义如下表所示</td>
+</tr>
+<tr>
+<td>[^:name:]</td>
+<td>不属于字符类中的所有ASCII字符</td>
+</tr>
+<tr>
+<td>[[:name:]]</td>
+<td>字符类中的任一ASCII字符</td>
+</tr>
+<tr>
+<td>[[^:name:]]</td>
+<td>不在字符类中的任一ASCII字符</td>
+</tr>
+<tr>
+<td>.</td>
+<td>匹配任一字符，如果不指定s修饰符的话，不包括换行符</td>
+</tr>
+<tr>
+<td>\d</td>
+<td>匹配任一ASCII数字，相当于[0-9]</td>
+</tr>
+<tr>
+<td>\D</td>
+<td>匹配任一非数字ASCII字符，相当于[^0-9]</td>
+</tr>
+<tr>
+<td>\s</td>
+<td>空白字符，[ \t\v\n\f\r]</td>
+</tr>
+<tr>
+<td>\S</td>
+<td>非空白字符</td>
+</tr>
+<tr>
+<td>\w</td>
+<td>任一ASCII单词字符，相当于[0-9A-Za-z_]</td>
+</tr>
+<tr>
+<td>\W</td>
+<td>任一ASCII非单词字符，[^0-9A-Za-z_]</td>
+</tr>
+<tr>
+<td>\p{name}</td>
+<td>匹配unicode某一类中的字符</td>
+</tr>
+<tr>
+<td>\P{name}</td>
+<td>匹配不在unicode某一类中的字符</td>
+</tr>
+</tbody></table>
+<h4 id="分组与捕获"><a href="#分组与捕获" class="headerlink" title="分组与捕获"></a>分组与捕获</h4><p>可以用 <code>()</code>对正则表达式进行分组，例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\bMary|Jane|Sue\b</span><br></pre></td></tr></table></figure>
+<p>表示 <code>\bMary</code>，<code>Jane</code>，<code>Sue\b</code>中的一个，这显然不是我们想要的。这时候就需要用括号进行分组。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\b(Mary|Jane|Sue)\b</span><br></pre></td></tr></table></figure>
+
+<p>上面的正则表达式虽然达到了我们想要的结果，但是也捕获了一个分组。()中匹配到的内容会被记录到分组1里面。假如后面还有多个()，则分组名依次加1。但显然我们这里并没有用到捕获的内容，所以可以用下面的表达式告诉引擎不要捕获。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\b(?:Mary|Jane|Sue)\b</span><br></pre></td></tr></table></figure>
+
+<p>那如果我们想要使用捕获到的结果该怎么办呢？可以用 \1 来引用它。 1位分组名，如果要引用第二个分组捕获到的内容则是 \2 (Go语言不支持)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\b\d\d(\d\d)-\1-\1\b</span><br></pre></td></tr></table></figure>
+<p>上面的表达式可以匹配 <code>2008-08-08</code>, <code>2009-09-09</code>这样的日期。</p>
+<p>如果不想使用默认的数字捕获组名字，可以用下面的方法来给捕获组命名。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\b\d\d(?P&lt;m&gt;\d\d)-\k&lt;m&gt;-\k&lt;m&gt;\b</span><br></pre></td></tr></table></figure>
+
+<h4 id="正则表达式的选项"><a href="#正则表达式的选项" class="headerlink" title="正则表达式的选项"></a>正则表达式的选项</h4><table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>i</td>
+<td>大小写不敏感</td>
+</tr>
+<tr>
+<td>m</td>
+<td>多行模式</td>
+</tr>
+<tr>
+<td>s</td>
+<td>. 可以匹配新行</td>
+</tr>
+</tbody></table>
+<h3 id="Go语言中的regexp包"><a href="#Go语言中的regexp包" class="headerlink" title="Go语言中的regexp包"></a>Go语言中的regexp包</h3><h4 id="regexp中的函数"><a href="#regexp中的函数" class="headerlink" title="regexp中的函数"></a>regexp中的函数</h4><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>regexp.Compile(exp)</td>
+<td>用exp编译一个正则表达式，如果成功则返回 *regexp.Regexp和nil</td>
+</tr>
+<tr>
+<td>regexp.MustCompile(exp)</td>
+<td>同上，但编译失败则会触发panic</td>
+</tr>
+<tr>
+<td>regexp.Match(exp, b)</td>
+<td>如果b []byte 满足exp，则返回true, nil</td>
+</tr>
+<tr>
+<td>regexp.MatchReader(exp, r)</td>
+<td>同上, r为 io.RuneReader类型</td>
+</tr>
+<tr>
+<td>regexp.MatchString(exp, s)</td>
+<td>同上，s为字符串类型</td>
+</tr>
+</tbody></table>
+<h4 id="Regexp类型-regexp-Regexp-的方法"><a href="#Regexp类型-regexp-Regexp-的方法" class="headerlink" title="Regexp类型(*regexp.Regexp)的方法"></a>Regexp类型(*regexp.Regexp)的方法</h4><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>rx.Match(b)</td>
+<td>如果类型为[]byte的b满足正则表达式，则返回true</td>
+</tr>
+<tr>
+<td>rx.MatchReader(r)</td>
+<td>如果类型为io.RuneReader的r满足正则表达式，则返回true</td>
+</tr>
+<tr>
+<td>rx.MatchString(s)</td>
+<td>如果字符串s满足正则表达式，则返回true</td>
+</tr>
+<tr>
+<td>rx.ReplaceAllString(s, sr)</td>
+<td>用sr替换s中匹配的部分</td>
+</tr>
+<tr>
+<td>rx.FindString(s)</td>
+<td>返回匹配到的字符串</td>
+</tr>
+<tr>
+<td>rx.FindAllString(s, n)</td>
+<td>返回所有匹配到的字符串 []string类型</td>
+</tr>
+</tbody></table>
+<h4 id="regexp包的用法示例"><a href="#regexp包的用法示例" class="headerlink" title="regexp包的用法示例"></a>regexp包的用法示例</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;regexp&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	match, _ := regexp.MatchString(<span class="string">&quot;p[a-z]+ch&quot;</span>, <span class="string">&quot;peach&quot;</span>)</span><br><span class="line">	fmt.Println(match) <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">	r, _ := regexp.Compile(<span class="string">&quot;p[a-z]+ch&quot;</span>)</span><br><span class="line"></span><br><span class="line">	fmt.Println(r.MatchString(<span class="string">&quot;peach&quot;</span>)) <span class="comment">// true</span></span><br><span class="line">	fmt.Println(r.FindString(<span class="string">&quot;peach punch&quot;</span>)) <span class="comment">// peach</span></span><br><span class="line">	fmt.Println(r.FindStringIndex(<span class="string">&quot;peach punch&quot;</span>)) <span class="comment">// [0 5]</span></span><br><span class="line">	fmt.Println(r.FindStringSubmatch(<span class="string">&quot;peach apple punch&quot;</span>)) <span class="comment">// [peach]</span></span><br><span class="line">	fmt.Println(r.FindStringSubmatchIndex(<span class="string">&quot;peach apple punch&quot;</span>)) <span class="comment">// [0 5]</span></span><br><span class="line">	fmt.Println(r.FindAllString(<span class="string">&quot;peach apple pinch&quot;</span>, <span class="number">1</span>)) <span class="comment">// [peach]</span></span><br><span class="line">	fmt.Println(r.FindAllString(<span class="string">&quot;peach apple pinch&quot;</span>, <span class="number">2</span>)) <span class="comment">// [peach pinch]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">三木</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://wangsen.site/2022/01/12/Go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">https://wangsen.site/2022/01/12/Go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://wangsen.site" target="_blank">三木的技术博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/go/">go</a><a class="post-meta__tags" href="/tags/regexp/">regexp</a></div><div class="post_share"><div class="social-share" data-image="/images/go.png" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/images/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/images/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/images/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/images/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/05/30/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%A6%82%E8%A6%81/"><img class="prev-cover" src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=2670&amp;q=80" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">函数式编程概要</div></div></a></div><div class="next-post pull-right"><a href="/2021/12/16/Go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2/"><img class="next-cover" src="/images/go.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Go语言中的字符串</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/03/08/Go%E8%AF%AD%E8%A8%80%E7%9A%84%E8%BF%87%E7%A8%8B%E5%BC%8F%E7%BC%96%E7%A8%8B/" title="Go语言的过程式编程"><img class="cover" src="/images/go.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-08</div><div class="title">Go语言的过程式编程</div></div></a></div><div><a href="/2022/12/27/Go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B/" title="Go语言中的集合类型"><img class="cover" src="/images/go.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-12-27</div><div class="title">Go语言中的集合类型</div></div></a></div><div><a href="/2021/12/16/Go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2/" title="Go语言中的字符串"><img class="cover" src="/images/go.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-16</div><div class="title">Go语言中的字符串</div></div></a></div><div><a href="/2021/12/15/Go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B/" title="Go语言中的数值类型"><img class="cover" src="/images/go.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-15</div><div class="title">Go语言中的数值类型</div></div></a></div><div><a href="/2021/12/14/Go%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" title="Go基本数据类型"><img class="cover" src="/images/go.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-14</div><div class="title">Go基本数据类型</div></div></a></div><div><a href="/2021/10/20/Go%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="Go环境变量及常用命令"><img class="cover" src="/images/bg1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-20</div><div class="title">Go环境变量及常用命令</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">三木</div><div class="author-info__description">Honesty and diligence should be your eternal mates.</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">134</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">80</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sanmuny"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/sanmuny" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:kelvin.xupt@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎访问我的技术博客，如果您觉得我的文章对您有所帮助，欢迎打赏和分享！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%9F%BA%E7%A1%80"><span class="toc-number">1.</span> <span class="toc-text">正则表达式基础</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%83%E5%AD%97%E7%AC%A6"><span class="toc-number">1.1.</span> <span class="toc-text">元字符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%87%8F%E8%AF%8D"><span class="toc-number">1.2.</span> <span class="toc-text">量词</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%83%B0%E6%80%A7%E5%8C%B9%E9%85%8D%E5%92%8C%E8%B4%AA%E5%A9%AA%E5%8C%B9%E9%85%8D"><span class="toc-number">1.3.</span> <span class="toc-text">惰性匹配和贪婪匹配</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8C%B9%E9%85%8D%E5%A4%9A%E4%B8%AA%E5%A4%87%E9%80%89%E4%B8%AD%E7%9A%84%E4%B8%80%E4%B8%AA"><span class="toc-number">1.4.</span> <span class="toc-text">匹配多个备选中的一个</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9B%B6%E5%AE%BD%E6%96%AD%E8%A8%80-Zero-Length-Assertions-%E6%88%96-%E7%8E%AF%E8%A7%86-lookaround"><span class="toc-number">1.5.</span> <span class="toc-text">零宽断言(Zero-Length Assertions) 或 环视 (lookaround)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E7%B1%BB"><span class="toc-number">1.6.</span> <span class="toc-text">字符类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E7%BB%84%E4%B8%8E%E6%8D%95%E8%8E%B7"><span class="toc-number">1.7.</span> <span class="toc-text">分组与捕获</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E9%80%89%E9%A1%B9"><span class="toc-number">1.8.</span> <span class="toc-text">正则表达式的选项</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84regexp%E5%8C%85"><span class="toc-number">2.</span> <span class="toc-text">Go语言中的regexp包</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#regexp%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0"><span class="toc-number">2.1.</span> <span class="toc-text">regexp中的函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Regexp%E7%B1%BB%E5%9E%8B-regexp-Regexp-%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">2.2.</span> <span class="toc-text">Regexp类型(*regexp.Regexp)的方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#regexp%E5%8C%85%E7%9A%84%E7%94%A8%E6%B3%95%E7%A4%BA%E4%BE%8B"><span class="toc-number">2.3.</span> <span class="toc-text">regexp包的用法示例</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/03/14/%E4%BC%81%E4%B8%9A%E7%BA%A7Kubernetes%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/" title="企业级Kubernetes离线部署指南"><img src="/images/k8s.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="企业级Kubernetes离线部署指南"/></a><div class="content"><a class="title" href="/2025/03/14/%E4%BC%81%E4%B8%9A%E7%BA%A7Kubernetes%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/" title="企业级Kubernetes离线部署指南">企业级Kubernetes离线部署指南</a><time datetime="2025-03-14T14:44:12.000Z" title="发表于 2025-03-14 22:44:12">2025-03-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/14/Kubernetes%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Kubernetes复习笔记"><img src="/images/k8s.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Kubernetes复习笔记"/></a><div class="content"><a class="title" href="/2025/03/14/Kubernetes%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Kubernetes复习笔记">Kubernetes复习笔记</a><time datetime="2025-03-14T14:36:52.629Z" title="发表于 2025-03-14 22:36:52">2025-03-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/27/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" title="快速排序"><img src="/images/bg3.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="快速排序"/></a><div class="content"><a class="title" href="/2024/12/27/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" title="快速排序">快速排序</a><time datetime="2024-12-27T13:16:56.000Z" title="发表于 2024-12-27 21:16:56">2024-12-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/13/Argo-v-s-Tekton/" title="Argo workflow v.s. Tekton"><img src="/images/devops.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Argo workflow v.s. Tekton"/></a><div class="content"><a class="title" href="/2024/12/13/Argo-v-s-Tekton/" title="Argo workflow v.s. Tekton">Argo workflow v.s. Tekton</a><time datetime="2024-12-13T11:27:34.000Z" title="发表于 2024-12-13 19:27:34">2024-12-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/04/%E5%A6%82%E4%BD%95%E7%BB%99%E4%BA%91%E8%AE%A1%E7%AE%97%E7%94%A8%E6%88%B7%E6%8F%90%E4%BE%9B%E5%AE%89%E5%85%A8%E5%8F%AF%E9%9D%A0%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F/" title="如何给云计算用户提供安全可靠的操作系统镜像"><img src="/images/bg4.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="如何给云计算用户提供安全可靠的操作系统镜像"/></a><div class="content"><a class="title" href="/2024/12/04/%E5%A6%82%E4%BD%95%E7%BB%99%E4%BA%91%E8%AE%A1%E7%AE%97%E7%94%A8%E6%88%B7%E6%8F%90%E4%BE%9B%E5%AE%89%E5%85%A8%E5%8F%AF%E9%9D%A0%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F/" title="如何给云计算用户提供安全可靠的操作系统镜像">如何给云计算用户提供安全可靠的操作系统镜像</a><time datetime="2024-12-04T06:36:24.000Z" title="发表于 2024-12-04 14:36:24">2024-12-04</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2013 - 2025 By 三木</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.2
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container:not\([display]\)').forEach(node => {
+            const target = node.parentNode
+            if (target.nodeName.toLowerCase() === 'li') {
+              target.parentNode.classList.add('has-jax')
+            } else {
+              target.classList.add('has-jax')
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'Pbdwq7jL0Ag8SyVhveiTbaTA-gzGzoHsz',
+      appKey: '5z7cJ4LjydIGAt5kVlcKl6rG',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

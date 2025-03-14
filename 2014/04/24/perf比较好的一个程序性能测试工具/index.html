@@ -1,0 +1,299 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>perf ，比较好的一个程序性能测试工具 | 三木的技术博客</title><meta name="keywords" content="perf"><meta name="author" content="三木"><meta name="copyright" content="三木"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="面对一个问题程序，最好采用自顶向下的策略。先整体看看该程序运行时各种统计事件的大概，再针对某些方向深入细节。而不要一下子扎进琐碎细节，会一叶障目的。 对于优化自己写的代码，cpu bound 型 和 IO bound 型是不一样的：    cpu bound 型：所谓cpu bound型指的是程序大部分时间都在使用CPU。   IO bound 型：由cpu bound型的定义就不难推出了。  p">
+<meta property="og:type" content="article">
+<meta property="og:title" content="perf ，比较好的一个程序性能测试工具">
+<meta property="og:url" content="https://wangsen.site/2014/04/24/perf%E6%AF%94%E8%BE%83%E5%A5%BD%E7%9A%84%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7/index.html">
+<meta property="og:site_name" content="三木的技术博客">
+<meta property="og:description" content="面对一个问题程序，最好采用自顶向下的策略。先整体看看该程序运行时各种统计事件的大概，再针对某些方向深入细节。而不要一下子扎进琐碎细节，会一叶障目的。 对于优化自己写的代码，cpu bound 型 和 IO bound 型是不一样的：    cpu bound 型：所谓cpu bound型指的是程序大部分时间都在使用CPU。   IO bound 型：由cpu bound型的定义就不难推出了。  p">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangsen.site/images/bg.jpg">
+<meta property="article:published_time" content="2014-04-24T03:06:57.000Z">
+<meta property="article:modified_time" content="2025-03-14T14:36:52.631Z">
+<meta property="article:author" content="三木">
+<meta property="article:tag" content="perf">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangsen.site/images/bg.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://wangsen.site/2014/04/24/perf%E6%AF%94%E8%BE%83%E5%A5%BD%E7%9A%84%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'perf ，比较好的一个程序性能测试工具',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-03-14 22:36:52'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">134</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">80</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-tie"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">三木的技术博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-tie"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">perf ，比较好的一个程序性能测试工具</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2014-04-24T03:06:57.000Z" title="发表于 2014-04-24 11:06:57">2014-04-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-03-14T14:36:52.631Z" title="更新于 2025-03-14 22:36:52">2025-03-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">开发工具</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">703</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>3分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="perf ，比较好的一个程序性能测试工具"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2014/04/24/perf%E6%AF%94%E8%BE%83%E5%A5%BD%E7%9A%84%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7/#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/2014/04/24/perf%E6%AF%94%E8%BE%83%E5%A5%BD%E7%9A%84%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7/" itemprop="commentCount"></span></a></span></div></div></div><article class="post-content" id="article-container"><p>面对一个问题程序，最好采用自顶向下的策略。先整体看看该程序运行时各种统计事件的大概，再针对某些方向深入细节。而不要一下子扎进琐碎细节，会一叶障目的。</p>
+<p>对于优化自己写的代码，cpu bound 型 和 IO bound 型是不一样的：</p>
+<ul>
+<li>  cpu bound 型：所谓cpu bound型指的是程序大部分时间都在使用CPU。</li>
+<li>  IO bound 型：由cpu bound型的定义就不难推出了。</li>
+</ul>
+<h3 id="perf-stat-命令用于统计进程总体的信息"><a href="#perf-stat-命令用于统计进程总体的信息" class="headerlink" title="perf stat 命令用于统计进程总体的信息"></a><strong>perf stat 命令用于统计进程总体的信息</strong></h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">/<span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">**<span class="emphasis">*/</span></span></span><br><span class="line"><span class="emphasis"><span class="strong">$ perf stat ./Joseph_ring</span></span></span><br><span class="line"><span class="emphasis"><span class="strong"> Performance counter stats for &#x27;./Joseph_ring&#x27;:</span></span></span><br><span class="line"><span class="emphasis"><span class="strong"></span></span></span><br><span class="line"><span class="emphasis"><span class="strong">         19.755435 task-clock                #    0.000 CPUs utilized          </span></span></span><br><span class="line"><span class="emphasis"><span class="strong">               429 context-switches          #    0.022 M/sec                  </span></span></span><br><span class="line"><span class="emphasis"><span class="strong">                 5 CPU-migrations            #    0.000 M/sec                  </span></span></span><br><span class="line"><span class="emphasis"><span class="strong">               137 page-faults               #    0.007 M/sec                  </span></span></span><br><span class="line"><span class="emphasis"><span class="strong">        27,255,530 cycles                    #    1.380 GHz                    </span></span></span><br><span class="line"><span class="emphasis"><span class="strong">     <span class="xml"><span class="tag">&lt;<span class="name">not</span> <span class="attr">counted</span>&gt;</span></span> stalled-cycles-frontend </span></span></span><br><span class="line"><span class="emphasis"><span class="strong">     <span class="xml"><span class="tag">&lt;<span class="name">not</span> <span class="attr">counted</span>&gt;</span></span> stalled-cycles-backend  </span></span></span><br><span class="line"><span class="emphasis"><span class="strong">         6,521,404 instructions              #    0.24  insns per cycle        </span></span></span><br><span class="line"><span class="emphasis"><span class="strong">         1,157,604 branches                  #   58.597 M/sec                  </span></span></span><br><span class="line"><span class="emphasis"><span class="strong">           161,429 branch-misses             #   13.95% of all branches        </span></span></span><br><span class="line"><span class="emphasis"><span class="strong"></span></span></span><br><span class="line"><span class="emphasis"><span class="strong">     439.901478124 seconds time elapsed</span></span></span><br><span class="line"><span class="emphasis"><span class="strong">/<span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">**<span class="emphasis">*/</span></span></span></span></span><br></pre></td></tr></table></figure>
+
+<p>task-clock：CPU 利用率，该值高，说明程序的多数时间花费在 CPU 计算上而非 IO。</p>
+<p>Context-switches：进程切换次数，记录了程序运行过程中发生了多少次进程切换，频繁的进程切换是应该避免的。</p>
+<p>Cache-misses：程序运行过程中总体的 cache 利用情况，如果该值过高，说明程序的 cache 利用不好</p>
+<p>CPU-migrations：表示进程 t1 运行过程中发生了多少次 CPU 迁移，即被调度器从一个 CPU 转移到另外一个 CPU 上运行。</p>
+<p>Cycles：处理器时钟，一条机器指令可能需要多个 cycles</p>
+<p>Instructions: 机器指令数目。</p>
+<p>IPC：是 Instructions/Cycles 的比值，该值越大越好，说明程序充分利用了处理器的特性。</p>
+<p>branches：待查</p>
+<p>branch misses：待查</p>
+<h3 id="perf-top-命令可查看系统的实时信息"><a href="#perf-top-命令可查看系统的实时信息" class="headerlink" title="perf top 命令可查看系统的实时信息"></a><strong>perf top 命令可查看系统的实时信息</strong></h3><p>例如系统中最耗时的内核函数或某个用户进程：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">/<span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">**<span class="emphasis">*/</span></span></span><br><span class="line"><span class="emphasis"><span class="strong">        $perf top</span></span></span><br><span class="line"><span class="emphasis"><span class="strong">        </span></span></span><br><span class="line"><span class="emphasis"><span class="strong">                     samples  pcnt function                       DSO</span></span></span><br><span class="line"><span class="emphasis"><span class="strong">        </span></span></span><br><span class="line"><span class="emphasis"><span class="strong">                     <span class="strong">____</span><span class="strong">__<span class="emphasis">_ <span class="strong">____</span>_</span> __</span><span class="strong">____</span><span class="strong">____</span><span class="strong">____</span><span class="strong">____</span><span class="strong">____</span><span class="strong">____</span><span class="strong">____</span> <span class="strong">____</span><span class="strong">____</span><span class="strong">____</span><span class="strong">____</span><span class="strong">__</span></span></span></span><br><span class="line"><span class="strong"><span class="emphasis"><span class="strong">        </span></span></span></span><br><span class="line"><span class="strong"><span class="emphasis"><span class="strong">        </span></span></span></span><br><span class="line"><span class="strong"><span class="emphasis"><span class="strong">        </span></span></span></span><br><span class="line"><span class="strong"><span class="emphasis"><span class="strong">                      133.00  9.4% system<span class="emphasis">_call                    [kernel.kallsyms] </span></span></span></span></span><br><span class="line"><span class="emphasis"><span class="strong"><span class="emphasis"><span class="strong">        </span></span></span></span></span><br><span class="line"><span class="emphasis"><span class="strong"><span class="emphasis"><span class="strong">                      126.00  8.9% <span class="strong">__ticket<span class="emphasis">_spin_</span>lock             [kernel.kallsyms] </span></span></span></span></span></span><br><span class="line"><span class="strong"><span class="emphasis"><span class="strong"><span class="emphasis"><span class="strong">        </span></span></span></span></span></span><br><span class="line"><span class="strong"><span class="emphasis"><span class="strong"><span class="emphasis"><span class="strong">                       49.00  3.5% schedule                       [kernel.kallsyms] </span></span></span></span></span></span><br><span class="line"><span class="strong"><span class="emphasis"><span class="strong"><span class="emphasis"><span class="strong">        </span></span></span></span></span></span><br><span class="line"><span class="strong"><span class="emphasis"><span class="strong"><span class="emphasis"><span class="strong">                       49.00  3.5% __</span>ticket_</span>spin<span class="emphasis">_unlock           [kernel.kallsyms] </span></span></span></span></span><br><span class="line"><span class="emphasis"><span class="strong"><span class="emphasis"><span class="strong">        </span></span></span></span></span><br><span class="line"><span class="emphasis"><span class="strong"><span class="emphasis"><span class="strong">                       43.00  3.0% pthread_</span>mutex<span class="emphasis">_lock             libpthread-2.13.so</span></span></span></span></span><br><span class="line"><span class="emphasis"><span class="strong"><span class="emphasis"><span class="strong">        </span></span></span></span></span><br><span class="line"><span class="emphasis"><span class="strong"><span class="emphasis"><span class="strong">                       40.00  2.8% _</span>nv027676rm                    [nvidia]          </span></span></span></span><br><span class="line"><span class="strong"><span class="emphasis"><span class="strong">        </span></span></span></span><br><span class="line"><span class="strong"><span class="emphasis"><span class="strong">                       40.00  2.8% __</span>pthread_mutex_unlock_usercnt libpthread-2.13.so</span></span></span><br><span class="line"><span class="emphasis"><span class="strong">        </span></span></span><br><span class="line"><span class="emphasis"><span class="strong">                       38.00  2.7% <span class="strong">__memset<span class="emphasis">_sse2                  libc-2.13.so      </span></span></span></span></span><br><span class="line"><span class="emphasis"><span class="strong"><span class="emphasis"><span class="strong">        </span></span></span></span></span><br><span class="line"><span class="emphasis"><span class="strong"><span class="emphasis"><span class="strong">                       32.00  2.3% unix_</span>poll                      [kernel.kallsyms] </span></span></span></span><br><span class="line"><span class="strong"><span class="emphasis"><span class="strong">        </span></span></span></span><br><span class="line"><span class="strong"><span class="emphasis"><span class="strong">                       25.00  1.8% __</span>sincos                       libm-2.13.so      </span></span></span><br><span class="line"><span class="emphasis"><span class="strong">        </span></span></span><br><span class="line"><span class="emphasis"><span class="strong">                       24.00  1.7% update_curr                    [kernel.kallsyms] </span></span></span><br><span class="line"><span class="emphasis"><span class="strong">        </span></span></span><br><span class="line"><span class="emphasis"><span class="strong">                       24.00  1.7% sched_clock_local              [kernel.kallsyms] </span></span></span><br><span class="line"><span class="emphasis"><span class="strong">        </span></span></span><br><span class="line"><span class="emphasis"><span class="strong">        /<span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span><span class="strong">**/</span></span></span></span><br><span class="line"><span class="strong"><span class="emphasis"><span class="strong">```   </span></span></span></span><br><span class="line"><span class="strong"><span class="emphasis"><span class="strong"></span></span></span></span><br><span class="line"><span class="strong"><span class="emphasis"><span class="strong">### **</span>perf record<span class="strong">** </span></span></span></span><br><span class="line"><span class="strong"><span class="emphasis"><span class="strong">    </span></span></span></span><br><span class="line"><span class="strong"><span class="emphasis"><span class="strong"></span></span></span></span><br><span class="line"><span class="strong"><span class="emphasis"><span class="strong">记录单个函数级别的统计信息，并使用 perf report 来显示统计结果，以此可以找到热点：</span></span></span></span><br></pre></td></tr></table></figure>
+<pre><code>    /**********************************************************************************/
+    # Events: 46  cpu-clock
+    
+    #
+    
+    # Overhead      Command      Shared Object                  Symbol
+    
+    # ........  ...........  .................  ......................
+    
+    #
+    
+        63.04%  Joseph_ring  [kernel.kallsyms]  [k] 0xc10e7ef2
+    
+         6.52%  Joseph_ring  libc-2.13.so       [.] __GI_vfprintf
+    
+         4.35%  Joseph_ring  libc-2.13.so       [.] __printf
+    
+         4.35%  Joseph_ring  libc-2.13.so       [.] _IO_new_file_xsputn
+    
+         2.17%  Joseph_ring  libc-2.13.so       [.] _itoa_word
+    
+    /**********************************************************************************/
+</code></pre>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">perf <span class="keyword">record</span> -e cpu-clock -g 给出函数的调用关系，以便于找到次级热点：</span><br></pre></td></tr></table></figure>
+<pre><code>    /**********************************************************************************/
+    
+    # Events: 47  cpu-clock
+    
+    #
+    
+    # Overhead      Command      Shared Object                  Symbol
+    
+    # ........  ...........  .................  ......................
+    
+    #
+    
+        72.34%  Joseph_ring  [kernel.kallsyms]  [k] 0xc11017a7
+    
+                |
+    
+                --- 0xc150a125
+    
+                   |          
+    
+                   |--33.33%-- 0xc105e3a7
+    
+                   |          0xc105e4f6
+    
+    
+    /**********************************************************************************/
+</code></pre>
+<p>```</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">三木</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://wangsen.site/2014/04/24/perf%E6%AF%94%E8%BE%83%E5%A5%BD%E7%9A%84%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7/">https://wangsen.site/2014/04/24/perf%E6%AF%94%E8%BE%83%E5%A5%BD%E7%9A%84%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://wangsen.site" target="_blank">三木的技术博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/perf/">perf</a></div><div class="post_share"><div class="social-share" data-image="/images/bg.jpg" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/images/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/images/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/images/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/images/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2014/04/24/make/"><img class="prev-cover" src="/images/bg4.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Make</div></div></a></div><div class="next-post pull-right"><a href="/2014/04/24/Linuxshell%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A15shell%E4%B8%AD%E4%B8%80%E4%BA%9B%E7%89%B9%E6%AE%8A%E7%AC%A6%E5%8F%B7%E7%9A%84%E7%94%A8%E6%B3%95%E6%80%BB%E7%BB%93/"><img class="next-cover" src="/images/bg.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Linux shell 程序设计5——shell中一些特殊符号的用法总结</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">三木</div><div class="author-info__description">Honesty and diligence should be your eternal mates.</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">134</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">80</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sanmuny"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/sanmuny" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:kelvin.xupt@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎访问我的技术博客，如果您觉得我的文章对您有所帮助，欢迎打赏和分享！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#perf-stat-%E5%91%BD%E4%BB%A4%E7%94%A8%E4%BA%8E%E7%BB%9F%E8%AE%A1%E8%BF%9B%E7%A8%8B%E6%80%BB%E4%BD%93%E7%9A%84%E4%BF%A1%E6%81%AF"><span class="toc-number">1.</span> <span class="toc-text">perf stat 命令用于统计进程总体的信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#perf-top-%E5%91%BD%E4%BB%A4%E5%8F%AF%E6%9F%A5%E7%9C%8B%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E6%97%B6%E4%BF%A1%E6%81%AF"><span class="toc-number">2.</span> <span class="toc-text">perf top 命令可查看系统的实时信息</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/03/14/%E4%BC%81%E4%B8%9A%E7%BA%A7Kubernetes%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/" title="企业级Kubernetes离线部署指南"><img src="/images/k8s.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="企业级Kubernetes离线部署指南"/></a><div class="content"><a class="title" href="/2025/03/14/%E4%BC%81%E4%B8%9A%E7%BA%A7Kubernetes%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/" title="企业级Kubernetes离线部署指南">企业级Kubernetes离线部署指南</a><time datetime="2025-03-14T14:44:12.000Z" title="发表于 2025-03-14 22:44:12">2025-03-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/14/Kubernetes%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Kubernetes复习笔记"><img src="/images/k8s.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Kubernetes复习笔记"/></a><div class="content"><a class="title" href="/2025/03/14/Kubernetes%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Kubernetes复习笔记">Kubernetes复习笔记</a><time datetime="2025-03-14T14:36:52.629Z" title="发表于 2025-03-14 22:36:52">2025-03-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/27/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" title="快速排序"><img src="/images/bg3.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="快速排序"/></a><div class="content"><a class="title" href="/2024/12/27/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" title="快速排序">快速排序</a><time datetime="2024-12-27T13:16:56.000Z" title="发表于 2024-12-27 21:16:56">2024-12-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/13/Argo-v-s-Tekton/" title="Argo workflow v.s. Tekton"><img src="/images/devops.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Argo workflow v.s. Tekton"/></a><div class="content"><a class="title" href="/2024/12/13/Argo-v-s-Tekton/" title="Argo workflow v.s. Tekton">Argo workflow v.s. Tekton</a><time datetime="2024-12-13T11:27:34.000Z" title="发表于 2024-12-13 19:27:34">2024-12-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/04/%E5%A6%82%E4%BD%95%E7%BB%99%E4%BA%91%E8%AE%A1%E7%AE%97%E7%94%A8%E6%88%B7%E6%8F%90%E4%BE%9B%E5%AE%89%E5%85%A8%E5%8F%AF%E9%9D%A0%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F/" title="如何给云计算用户提供安全可靠的操作系统镜像"><img src="/images/bg4.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="如何给云计算用户提供安全可靠的操作系统镜像"/></a><div class="content"><a class="title" href="/2024/12/04/%E5%A6%82%E4%BD%95%E7%BB%99%E4%BA%91%E8%AE%A1%E7%AE%97%E7%94%A8%E6%88%B7%E6%8F%90%E4%BE%9B%E5%AE%89%E5%85%A8%E5%8F%AF%E9%9D%A0%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F/" title="如何给云计算用户提供安全可靠的操作系统镜像">如何给云计算用户提供安全可靠的操作系统镜像</a><time datetime="2024-12-04T06:36:24.000Z" title="发表于 2024-12-04 14:36:24">2024-12-04</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2013 - 2025 By 三木</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.2
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container:not\([display]\)').forEach(node => {
+            const target = node.parentNode
+            if (target.nodeName.toLowerCase() === 'li') {
+              target.parentNode.classList.add('has-jax')
+            } else {
+              target.classList.add('has-jax')
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'Pbdwq7jL0Ag8SyVhveiTbaTA-gzGzoHsz',
+      appKey: '5z7cJ4LjydIGAt5kVlcKl6rG',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

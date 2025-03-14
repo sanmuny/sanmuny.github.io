@@ -1,0 +1,317 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>基于Linux与lpc3250开发板的交叉开发环境搭建 | 三木的技术博客</title><meta name="keywords" content="linux"><meta name="author" content="三木"><meta name="copyright" content="三木"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="###一、Bootloader的安装（在windows下进行） 1、什么是Bootloader: 要想弄明白什么是Bootloader，我们先从PC上的bootloader说起。PC上的BIOS和硬盘上的引导记录有着和嵌入式开发板中的bootloader类似的作用。PC的Bootloader由BIOS和MBR组成，BIOS固化在主板的一个芯片上，MBR则是硬盘的主引导扇区的缩写。PC启动后，首先执">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于Linux与lpc3250开发板的交叉开发环境搭建">
+<meta property="og:url" content="https://wangsen.site/2014/04/24/%E5%9F%BA%E4%BA%8ELinux%E4%B8%8Elpc3250%E5%BC%80%E5%8F%91%E6%9D%BF%E7%9A%84%E4%BA%A4%E5%8F%89%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/index.html">
+<meta property="og:site_name" content="三木的技术博客">
+<meta property="og:description" content="###一、Bootloader的安装（在windows下进行） 1、什么是Bootloader: 要想弄明白什么是Bootloader，我们先从PC上的bootloader说起。PC上的BIOS和硬盘上的引导记录有着和嵌入式开发板中的bootloader类似的作用。PC的Bootloader由BIOS和MBR组成，BIOS固化在主板的一个芯片上，MBR则是硬盘的主引导扇区的缩写。PC启动后，首先执">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangsen.site/images/bg4.jpg">
+<meta property="article:published_time" content="2014-04-24T06:35:09.000Z">
+<meta property="article:modified_time" content="2025-03-14T14:36:52.631Z">
+<meta property="article:author" content="三木">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangsen.site/images/bg4.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://wangsen.site/2014/04/24/%E5%9F%BA%E4%BA%8ELinux%E4%B8%8Elpc3250%E5%BC%80%E5%8F%91%E6%9D%BF%E7%9A%84%E4%BA%A4%E5%8F%89%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '基于Linux与lpc3250开发板的交叉开发环境搭建',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2025-03-14 22:36:52'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">134</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">80</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-tie"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">三木的技术博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-tie"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">基于Linux与lpc3250开发板的交叉开发环境搭建</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2014-04-24T06:35:09.000Z" title="发表于 2014-04-24 14:35:09">2014-04-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-03-14T14:36:52.631Z" title="更新于 2025-03-14 22:36:52">2025-03-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="基于Linux与lpc3250开发板的交叉开发环境搭建"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2014/04/24/%E5%9F%BA%E4%BA%8ELinux%E4%B8%8Elpc3250%E5%BC%80%E5%8F%91%E6%9D%BF%E7%9A%84%E4%BA%A4%E5%8F%89%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/2014/04/24/%E5%9F%BA%E4%BA%8ELinux%E4%B8%8Elpc3250%E5%BC%80%E5%8F%91%E6%9D%BF%E7%9A%84%E4%BA%A4%E5%8F%89%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" itemprop="commentCount"></span></a></span></div></div></div><article class="post-content" id="article-container"><p>###<strong>一、Bootloader的安装（在windows下进行）</strong></p>
+<p>1、什么是Bootloader:</p>
+<p>要想弄明白什么是Bootloader，我们先从PC上的bootloader说起。PC上的BIOS和硬盘上的引导记录有着和嵌入式开发板中的bootloader类似的作用。PC的Bootloader由BIOS和MBR组成，BIOS固化在主板的一个芯片上，MBR则是硬盘的主引导扇区的缩写。PC启动后，首先执行BIOS的启动程序，根据用户的COMS设置，BOIS加载硬盘MBR的启动数据，并把系统的控制权交给保存在MBR中的OS Loader（如grub），最后再由OS Loader将控制权交给OS内核。</p>
+<p>了解了什么是PC中的Bootloader，我们再来看什么是嵌入式系统中的Bootloader。嵌入式系统中没有与BIOS类似的芯片，这就需要开发人员自己设计Boootloader。不过，我们不必从零开始写这些代码，已经有公司和组织为大多数嵌入式系统写好了Bootloader。</p>
+<p>2、lpc3250的Bootloader组成：</p>
+<ul>
+<li>  kickstart：位于Flash的Block0，负责加载从Flash Block1开始的程序，这里只的是S1L。开发板上电后，kickstart被内部的IROM加载并执行。IROM只能加载Block1以内的映像，而kickstart被加载后将被允许加载从Flash Block1开始的多个Block的映像文件。所以，kickstart上电后，kickstart加载S1L，也可以直接加载放在Block1的应用程序。</li>
+<li>  S1L：对芯片和板子进行初始化，并提供一个用于应用程序开发和执行控制的监控程序。其常用功能如下： @擦写nandFlash @串口下载，SD卡下载 @设置CPU频率 @设置从SD卡，NandFlash启动 @加载引导Eboot</li>
+<li>  Eboot：设置内核在NandFlash中的位置，内核复制到RAM的位置，以及内核的大小；网络下载</li>
+<li>  Uboot：操作系统引导。Uboot的具体分析留到以后再说。</li>
+</ul>
+<p>3、安装步骤：</p>
+<ul>
+<li>  由于笔记本不带串口，所以第一步是找个usb串口连接线，并安装好驱动。</li>
+<li>  将开发板的电源线连接好，然后连接开发板串口与PC上的usb串口。</li>
+<li>  利用开发板所带光盘中的smartARM3250_boot.exe安装kickstart和S1L：进入到光盘中smartARM3250_boot.exe所在的目录，确保kickstart.bin和stage1.bin也在该目录下。运行smartARM3250_boot.exe。首先选择好串口，我的是com3。如果你不知道你的串口是多少的话，可以在右键单击我的电脑——》管理——》设备管理器。查看到自己的串口位置后，点击打开串口。点击装载Bootloader，软件会提示你短接jp6，点击确定，短接jp6后reset开发板，过几秒钟便提示装载成功。这儿的bootloader不是我们上面所讲的bootloader，它指的是bootloader.bin，我们</li>
+</ul>
+<p>执行了上面过程后，smartARM3250_boot.exe就将bootloader.bin拷贝到开发板执行，其实我们可以把bootloader理解成smartARM3250_boot.exe的客户端软件。</p>
+<p>装载bootloader.bin后，我们下来就正式安装kickstart了。在右下脚的Flash擦出中选择编程NandFlash， 块地址设为0，点击选择文件，选择kickstart.bin。点击编程。这样我们就把kickstart.bin装载到了NandFlash的Block0。用同样的方法我们可以装载S1L，只是要将块地址改为1。</p>
+<ul>
+<li>  安装U-boot或Eboot:</li>
+</ul>
+<p>a. 打开windows的超级终端，配置好参数后连接。reset开发板，进入到SmartArm3250的工作台，将光盘中的u-boot.bin或eboot.nb0拷贝到一张SD卡上，然后将SD卡插入到开发板的SD插槽中，在超级终端中输入命令：load blk u-boot.bin(eboot.nb0) raw 0x83fc0000，将u-boot.bin或eboot.nb0加载到SDRAM中。 b. 在超级终端中敲入命令：nsave。将u-boot.bin(eboot.nb0)写入到NANDFlash。 c. 最后输入命令：aboot flash raw 0x83fc0000，设置从NANDFlash启动U-boot(Eboot）。</p>
+<p>###<strong>二、Linux系统（Ubuntu）下所需要的软件的安装步骤：</strong></p>
+<p>1、交叉工具链的安装：</p>
+<p>a、什么是交叉工具链：在PC机上开发嵌入式软件所需要的编译器、make等工具的集合。</p>
+<p>b、安装步骤：</p>
+<ul>
+<li>将光盘中的tc-nxp-lnx-armvfp-4.3.2-1.i386.rpm拷贝到PC机的桌面。</li>
+<li>打开终端，输入sudo rpm –force-debian -ivh tc-nxp-lnx-armvfp-4.3.2.1-1.i386.rpm命令。</li>
+<li>执行上述命令后，就将交叉工具链安装到/opt/nxp目录中了，现在我们将安装路径加入到PATH变量中去。在终端中输入命令：  gedit ~/.bashrc</li>
+</ul>
+<p>在打开的.bashrc文件的末尾添加如下语句：</p>
+<pre><code>export PATH=&quot;$PATH:/$HOME/bin:/opt/nxp/gcc-4.3.2-glibc-2.7/bin&quot;
+</code></pre>
+<p>保存关闭，注销当前用户，重新登录</p>
+<ul>
+<li>  检测是否安装好交叉工具链：在终端中输入arm-vfp-linux-gnu-并按TAB键，如果能看到很多arm-vfp-linux-gnu-为前缀的命令，则说明交叉开发工具链已经安装好了。</li>
+</ul>
+<p>2、NFS服务器的安装：</p>
+<p>(NFS的详细介绍请参考<a target="_blank" rel="noopener" href="http://blog.csdn.net/sailor_8318/archive/2008/04/15/2295495.aspx">NFS</a>)</p>
+<p>a、NFS的功能：</p>
+<p>NFS是网络文件系统的缩写，它的功能是把NFS服务器（即Linux主机）的某个目录挂载到开发板的文件系统上（开发板上Linux系统的安装我们在后面会讲到），这样，开发板就可以执行该目录中的可执行程序。这样做的优点在于，不用将程序写入开发板的Flash，减少了对Flash的损害。</p>
+<p>b、NFS的安装：</p>
+<p>在Ubuntu下的安装很easy：　sudo　apt-get install nfs-sever</p>
+<p>3、TFTP服务器的安装：</p>
+<p>a、什么是tptp：TFTP是远程文件传输协议的缩写，其作用是将主机中设定目录下的文件拷贝到开发板的文件系统中，它与NFS的区别显而意见。</p>
+<p>b、安装：还是很easy：sudo apt-get install tftp-hpa tftpd-hpa xinetd。第一个是客户端程序，第二个是服务器端程序，第三个是守护进程。</p>
+<p>c、Ubuntu系统在安装完成后自动启动tftp服务，也可以通过命令：</p>
+<pre><code>sudo service xinetd start或restart命令启动。
+</code></pre>
+<p>d、然后进入xinetd.d文件夹（cd /etc/xinetd.d），查看是否有一个tftp文件，如果没有就新建一个，如果有的话就查看内容是否与下面的一致，不一致则修改，内容如下：</p>
+<pre><code>service tftp  
+&#123;  
+    socket_type = dgram  
+    wait = yes  
+    disable = no  
+    user = root  
+    protocol = udp  
+    server = /usr/sbin/in.tftpd  
+    server_args = -s /home/tftpboot  
+    log_on_success += PID HOST DURATION  
+    log_on_failure += HOST  
+&#125;  
+</code></pre>
+<p>e、然后保存关闭。输入命令：sudo /etc/init.d/xinetd restart重启服务。</p>
+<p>TFTP的使用我们到后面在介绍。</p>
+<p>4、minicom的安装和配置：</p>
+<p>a、minicom的功能：就四个字，超级终端</p>
+<p>b、安装：sudo apt-get install minicom</p>
+<p>c、配置：在终端输入：sudo minicom -s选择串口设置，串口设备设为/dev/ttyUSB0（也许你的不一样，可以在dev目录下查看）,波特率设为115200，硬件流和软件流控制都设为No。回车退回到刚进入时的界面，选择save setup as dfl。</p>
+<p>###<strong>三、Linux内核，安全文件系统和根文件系统的安装：</strong></p>
+<p>1、连接好串口线和网线。</p>
+<p>2、插入光盘，将光盘中的uImage文件拷贝到/var/lib/tftpboot目录下。</p>
+<p>3、在主机终端中输入：sudo chmod -R 777 /var/lib/tftpboot 命令来改变该目录权限。（这个目录是tftp服务器默认存放要传输文件的目录）</p>
+<p>4、打开另一个终端，输入命令：sudo minicom</p>
+<p>5、reset开发板，这时终端就进入了U-boot的工作台。</p>
+<p>5、在工作台中输入命令：tftp 80008000 uImage将内核镜像文件拷贝到开发板内存中。</p>
+<p>6、在工作台中输入命令：nand write.jffs2 0x80008000 0x00200000 $(filesize)将镜像文件从内存中拷贝到NANDFlash相应的位置。</p>
+<p>7、在工作台中输入命令：setenv kernelsize $(filesize) 设置内核大小为镜像文件大小。</p>
+<p>8、在工作台中输入命令：saveenv 保存设置</p>
+<p>9、安装安全文件系统：</p>
+<ul>
+<li>将光盘中的safefs.cramfs文件放到/var/lib/tftpboot目录下。</li>
+<li>在工作台中输入命令：  tftp 80008000 safefs.cramfs nand erase clean 0x00600000 $(filesize)<br>  nand write.jffs2 0x80008000 0x00600000 $(filesize)</li>
+</ul>
+<p>10、将光盘中的rootfs.tar.bz2文件和burn文件拷贝到一张SD卡上。</p>
+<p>11、将SD卡插入开发板插槽中，在工作台输入命令：run safemode。</p>
+<p>12、坐等烧写完成，reset开发板。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">三木</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://wangsen.site/2014/04/24/%E5%9F%BA%E4%BA%8ELinux%E4%B8%8Elpc3250%E5%BC%80%E5%8F%91%E6%9D%BF%E7%9A%84%E4%BA%A4%E5%8F%89%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">https://wangsen.site/2014/04/24/%E5%9F%BA%E4%BA%8ELinux%E4%B8%8Elpc3250%E5%BC%80%E5%8F%91%E6%9D%BF%E7%9A%84%E4%BA%A4%E5%8F%89%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://wangsen.site" target="_blank">三木的技术博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/linux/">linux</a></div><div class="post_share"><div class="social-share" data-image="/images/bg4.jpg" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/images/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/images/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/images/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/images/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2014/04/24/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E4%BF%A1%E5%8F%B7%E9%87%8F%E6%9C%BA%E5%88%B6/"><img class="prev-cover" src="/images/bg3.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Linux系统中的信号量机制</div></div></a></div><div class="next-post pull-right"><a href="/2014/04/24/ls%E5%91%BD%E4%BB%A4%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90/"><img class="next-cover" src="/images/bg1.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">ls命令实现分析</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2024/09/04/Linux%E8%99%9A%E6%8B%9F%E5%8C%96%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB/" title="Linux虚拟化面试题汇总"><img class="cover" src="/images/bg1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-09-04</div><div class="title">Linux虚拟化面试题汇总</div></div></a></div><div><a href="/2017/09/05/LinuxMint%E5%90%AF%E7%94%A8VNC/" title="[转]Linux Mint启用VNC"><img class="cover" src="/images/bg3.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2017-09-05</div><div class="title">[转]Linux Mint启用VNC</div></div></a></div><div><a href="/2014/07/30/%E5%8F%91%E8%A1%8C%E7%89%88%E5%88%B6%E4%BD%9C%E5%8F%8AAnaconda%E5%9F%BA%E7%A1%80/" title="发行版制作及Anaconda基础"><img class="cover" src="/images/bg1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2014-07-30</div><div class="title">发行版制作及Anaconda基础</div></div></a></div><div><a href="/2014/04/24/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E4%BF%A1%E5%8F%B7%E9%87%8F%E6%9C%BA%E5%88%B6/" title="Linux系统中的信号量机制"><img class="cover" src="/images/bg3.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2014-04-24</div><div class="title">Linux系统中的信号量机制</div></div></a></div><div><a href="/2014/04/24/%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/" title="内核源码编译"><img class="cover" src="/images/bg1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2014-04-24</div><div class="title">内核源码编译</div></div></a></div><div><a href="/2014/04/24/Linux%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/" title="Linux基础知识总结"><img class="cover" src="/images/bg4.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2014-04-24</div><div class="title">Linux基础知识总结</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">三木</div><div class="author-info__description">Honesty and diligence should be your eternal mates.</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">134</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">80</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sanmuny"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/sanmuny" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:kelvin.xupt@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎访问我的技术博客，如果您觉得我的文章对您有所帮助，欢迎打赏和分享！</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/03/14/%E4%BC%81%E4%B8%9A%E7%BA%A7Kubernetes%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/" title="企业级Kubernetes离线部署指南"><img src="/images/k8s.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="企业级Kubernetes离线部署指南"/></a><div class="content"><a class="title" href="/2025/03/14/%E4%BC%81%E4%B8%9A%E7%BA%A7Kubernetes%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/" title="企业级Kubernetes离线部署指南">企业级Kubernetes离线部署指南</a><time datetime="2025-03-14T14:44:12.000Z" title="发表于 2025-03-14 22:44:12">2025-03-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/14/Kubernetes%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Kubernetes复习笔记"><img src="/images/k8s.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Kubernetes复习笔记"/></a><div class="content"><a class="title" href="/2025/03/14/Kubernetes%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Kubernetes复习笔记">Kubernetes复习笔记</a><time datetime="2025-03-14T14:36:52.629Z" title="发表于 2025-03-14 22:36:52">2025-03-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/27/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" title="快速排序"><img src="/images/bg3.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="快速排序"/></a><div class="content"><a class="title" href="/2024/12/27/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" title="快速排序">快速排序</a><time datetime="2024-12-27T13:16:56.000Z" title="发表于 2024-12-27 21:16:56">2024-12-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/13/Argo-v-s-Tekton/" title="Argo workflow v.s. Tekton"><img src="/images/devops.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Argo workflow v.s. Tekton"/></a><div class="content"><a class="title" href="/2024/12/13/Argo-v-s-Tekton/" title="Argo workflow v.s. Tekton">Argo workflow v.s. Tekton</a><time datetime="2024-12-13T11:27:34.000Z" title="发表于 2024-12-13 19:27:34">2024-12-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/04/%E5%A6%82%E4%BD%95%E7%BB%99%E4%BA%91%E8%AE%A1%E7%AE%97%E7%94%A8%E6%88%B7%E6%8F%90%E4%BE%9B%E5%AE%89%E5%85%A8%E5%8F%AF%E9%9D%A0%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F/" title="如何给云计算用户提供安全可靠的操作系统镜像"><img src="/images/bg4.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="如何给云计算用户提供安全可靠的操作系统镜像"/></a><div class="content"><a class="title" href="/2024/12/04/%E5%A6%82%E4%BD%95%E7%BB%99%E4%BA%91%E8%AE%A1%E7%AE%97%E7%94%A8%E6%88%B7%E6%8F%90%E4%BE%9B%E5%AE%89%E5%85%A8%E5%8F%AF%E9%9D%A0%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F/" title="如何给云计算用户提供安全可靠的操作系统镜像">如何给云计算用户提供安全可靠的操作系统镜像</a><time datetime="2024-12-04T06:36:24.000Z" title="发表于 2024-12-04 14:36:24">2024-12-04</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2013 - 2025 By 三木</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.2
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container:not\([display]\)').forEach(node => {
+            const target = node.parentNode
+            if (target.nodeName.toLowerCase() === 'li') {
+              target.parentNode.classList.add('has-jax')
+            } else {
+              target.classList.add('has-jax')
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'Pbdwq7jL0Ag8SyVhveiTbaTA-gzGzoHsz',
+      appKey: '5z7cJ4LjydIGAt5kVlcKl6rG',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

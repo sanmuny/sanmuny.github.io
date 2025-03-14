@@ -1,0 +1,349 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Linux系统中的信号量机制 | 三木的技术博客</title><meta name="keywords" content="linux"><meta name="author" content="三木"><meta name="copyright" content="三木"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1、信号量的定义： struct semaphore &amp;#123;     spinlock_t lock;     unsigned int count;     struct list_head wait_list; &amp;#125;;  在linux中，信号量用上述结构体表示，我们可以通过该结构体定义一个信号量。 2、信号量的初始化： 可用void sema_init(struct semaph">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux系统中的信号量机制">
+<meta property="og:url" content="https://wangsen.site/2014/04/24/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E4%BF%A1%E5%8F%B7%E9%87%8F%E6%9C%BA%E5%88%B6/index.html">
+<meta property="og:site_name" content="三木的技术博客">
+<meta property="og:description" content="1、信号量的定义： struct semaphore &amp;#123;     spinlock_t lock;     unsigned int count;     struct list_head wait_list; &amp;#125;;  在linux中，信号量用上述结构体表示，我们可以通过该结构体定义一个信号量。 2、信号量的初始化： 可用void sema_init(struct semaph">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangsen.site/images/bg3.jpg">
+<meta property="article:published_time" content="2014-04-24T06:39:27.000Z">
+<meta property="article:modified_time" content="2025-03-14T14:36:52.630Z">
+<meta property="article:author" content="三木">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangsen.site/images/bg3.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://wangsen.site/2014/04/24/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E4%BF%A1%E5%8F%B7%E9%87%8F%E6%9C%BA%E5%88%B6/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Linux系统中的信号量机制',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2025-03-14 22:36:52'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">134</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">80</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-tie"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">三木的技术博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-tie"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Linux系统中的信号量机制</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2014-04-24T06:39:27.000Z" title="发表于 2014-04-24 14:39:27">2014-04-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-03-14T14:36:52.630Z" title="更新于 2025-03-14 22:36:52">2025-03-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Linux系统中的信号量机制"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2014/04/24/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E4%BF%A1%E5%8F%B7%E9%87%8F%E6%9C%BA%E5%88%B6/#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/2014/04/24/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E4%BF%A1%E5%8F%B7%E9%87%8F%E6%9C%BA%E5%88%B6/" itemprop="commentCount"></span></a></span></div></div></div><article class="post-content" id="article-container"><p>1、信号量的定义：</p>
+<pre><code>struct semaphore &#123;
+    spinlock_t lock;
+    unsigned int count;
+    struct list_head wait_list;
+&#125;;
+</code></pre>
+<p>在linux中，信号量用上述结构体表示，我们可以通过该结构体定义一个信号量。</p>
+<p>2、信号量的初始化：</p>
+<p>可用void sema_init(struct semaphore *sem, int val);直接创建，其中val为信号量初值。也可以用两个宏来定义和初始化信号量的值为1或0：</p>
+<pre><code>DECLARE_MUTEX(name)    :    定义信号量name并初始化为1
+DECLARE_MUTEX_LOCKED(name)    :    定义信号量name并初始化为0
+</code></pre>
+<p>还可以用下面的函数初始化：</p>
+<pre><code>void init_MUTEX(struct semaphore *sem);     //初始化信号量的值为1
+void init_MUTEX_LOCKED(struct semaphore *sem);    //初始化信号量的值为0
+</code></pre>
+<p>3、信号量的原子操作：</p>
+<p>p操作：</p>
+<ul>
+<li>  void down(struct semaphore *sem); //用来获取信号量，如果信号量值大于或等于0，获取信号量，否则进入睡眠状态，睡眠状态不可唤醒</li>
+<li>  void down_interruptible(struct semephore *sem); //用来获取信号量，如果信号量大于或等于0，获取信号量，否则进入睡眠状态，等待信号量被释放后，激活该程。</li>
+<li>  void down_trylock(struct semaphore *sem); //试图获取信号量，如果信号量已被其他进程获取，则立刻返回非零值，调用者不会睡眠</li>
+</ul>
+<p>v操作：</p>
+<ul>
+<li>  void up(struct semaphore *sem); //释放信号量，并唤醒等待该资源进程队列的第一个进程</li>
+</ul>
+<p>4、经典同步问题的解决方案：</p>
+<ul>
+<li>  生产者和消费者问题：</li>
+</ul>
+<p>a、单缓冲区问题描述：生产者向消费者提供产品，它们共享一个有界缓冲区，生产者向其中投放产品，消费者从中取得产品。同时，每个进程都互斥的占用CPU。假定生产者和消费者是互相等效的，只要缓冲区未满，生产者就可以把产品送入缓冲区，类似的，只要缓冲区未空，消费者便可以从缓冲区中取走产品并消费它。生产者—消费者的同步关系将禁止生产者向已满的缓冲区中放入产品，也禁止消费者从空的缓冲区中获取产品</p>
+<p>问题分析： 需要定义两个信号量，一个用于互斥访问缓冲区，另一个用于生产者与消费者之间的同步。s1=1; s2=0;</p>
+<p>伪代码：</p>
+<pre><code>生产者进程            
+
+while(1)                                         
+&#123;                                       
+    printf(“I&#39;m producing!\n”);                                        
+    down_interruptible(&amp;s1);                                         
+    printf(“I&#39;m putting a product into the buffer\n”);          
+    up(&amp;s1);                   
+    up(&amp;s2);                
+&#125;               
+</code></pre>
+<p>消费者进程</p>
+<pre><code>while(1)  
+&#123;
+    down_interruptible(&amp;s2);
+    down_interruptible(&amp;s1);
+    printf(“I&#39;m getting a product\n”);
+    up(&amp;s1);
+    printf(“I&#39;m consuming a product\n”);
+&#125;
+</code></pre>
+<p>b、多生产者、多消费者、n个缓冲区</p>
+<p>问题描述：有一群生产者进程在生产产品，并将这些产品提供给消费者进程去消费。为使生产者进程与消费者进程并发执行，在两者之间设置了n个缓冲区，生产者将产品放入一个缓冲区中，消费者可以从一个缓冲区中取走产品去消费。要求生产者进程与消费者进程必须保持同步，即不允许生产者进程向一个满的缓冲区放产品，也不允许消费者从一个空的缓冲区取产品。</p>
+<p>问题分析：该问题貌似比a问题复杂的多，首先我们定义一个数组buffer[n]，来表示n个缓冲区，还需要定义两个变量：in 表示要存入的缓冲区的下标，out表示要取产品的缓冲区的下标。定义三个信号量：s1用于实现对缓冲池的互斥操作，empty表示空缓冲区的个数，full表示满缓冲区的个数。初值：in=out=0; s1=1; full=0; empty=n;</p>
+<p>伪代码如下：</p>
+<pre><code>生产者进程                                                                  
+
+while(1)                                                                          
+&#123;                                                                                      
+    printf(“I&#39;m producing!\n”);                                                   
+    down_interruptible(&amp;empty);                                           
+    down_interruptible(&amp;s1);                                                   
+    printf(“I&#39;m putting a product into the buffer[in]\n”);                 
+                                                                                                          
+    in = (in+1)%n;                                                                                
+    up(&amp;s1);                                                                                      
+    up(&amp;full);                                                                     
+&#125;                                                                                       
+</code></pre>
+<p>消费者进程</p>
+<ul>
+<li>哲学家进餐问题  while(1) { down_interruptible(&amp;full); down_interruptible(&amp;s1); printf(“I’m getting a product from buffer[out]\n”); out = (out+1)%n; up(&amp;empty); printf(“I’m consuming a product\n”); }</li>
+</ul>
+<p>问题描述：五个哲学家共用一个圆桌，分别坐在周围的五张椅子上，在圆桌上有五只碗和五只筷子，他们交替进行思考和进餐。哲学家饥饿时便试图取最靠近他的两只筷子，当同时获得两只筷子时便可用餐，用餐完毕后放下筷子。</p>
+<p>问题分析： 五只筷子为临界资源，定义包含五个元素的信号量数组来实现对筷子的互斥使用。chopstick[5]，五个信号量的初值都为1。</p>
+<p>伪代码：</p>
+<p>第i（i=0,1,2,3,4）个哲学家进程：</p>
+<pre><code>while(1)
+&#123;
+          down_interruptible(&amp;chopstick[i]);
+          down_interruptible(&amp;chopstick[(i+1)%5]);
+          printf(“I&#39;m eating!\n”);
+          up(&amp;chopstick[i]);
+          up(&amp;chopstick[(i+1)%5);
+&#125;
+</code></pre>
+<ul>
+<li>  读者写者问题：</li>
+</ul>
+<p>问题描述：一个文件可被多个进程共享，reader进程读取该文件，而writer进程负责写文件，允许多个reader进程同时读取文件，但不允许一个writer进程和其他reader进程或writer进程同时访问文件。</p>
+<p>问题分析：进程对文件互斥访问的实现可借助一个信号量就可以搞定，但是我们需要引入一个count变量来记录reader进程的个数，对这个变量的访问也是互斥的，所以也需要引入一个信号量。定义信号量rs实现对count的互斥访问，定义ws实现对文件的互斥访问。两信号量初值都为1</p>
+<p>伪代码：</p>
+<pre><code>reader进程                                 
+&#123;                                                                                          
+        down_interruptible(&amp;rs);                                                                                                                                                                                                   
+        count++;
+        up(&amp;rs);  
+        printf(“I&#39;m reading!\n”);   
+       down_interruptible(&amp;rs);
+       count--;
+       if(count == 0)&#123;
+               up(&amp;ws);
+        &#125;
+        up(&amp;rs);
+&#125;       
+
+ writer进程
+ &#123;
+    down_interruptible(&amp;ws);           
+    if (count == 0)&#123; 
+        printf(“I&#39;m writing!\n”);
+        down_interruptible(&amp;ws);                                     
+    &#125; 
+    up(&amp;ws);
+&#125;
+</code></pre>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">三木</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://wangsen.site/2014/04/24/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E4%BF%A1%E5%8F%B7%E9%87%8F%E6%9C%BA%E5%88%B6/">https://wangsen.site/2014/04/24/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E4%BF%A1%E5%8F%B7%E9%87%8F%E6%9C%BA%E5%88%B6/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://wangsen.site" target="_blank">三木的技术博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/linux/">linux</a></div><div class="post_share"><div class="social-share" data-image="/images/bg3.jpg" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/images/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/images/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/images/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/images/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2014/05/15/QEMU1%E4%BD%BF%E7%94%A8QEMU%E5%88%9B%E5%BB%BA%E8%99%9A%E6%8B%9F%E6%9C%BA/"><img class="prev-cover" src="/images/bg3.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">QEMU 1: 使用QEMU创建虚拟机</div></div></a></div><div class="next-post pull-right"><a href="/2014/04/24/%E5%9F%BA%E4%BA%8ELinux%E4%B8%8Elpc3250%E5%BC%80%E5%8F%91%E6%9D%BF%E7%9A%84%E4%BA%A4%E5%8F%89%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"><img class="next-cover" src="/images/bg4.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">基于Linux与lpc3250开发板的交叉开发环境搭建</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2024/09/04/Linux%E8%99%9A%E6%8B%9F%E5%8C%96%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB/" title="Linux虚拟化面试题汇总"><img class="cover" src="/images/bg1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-09-04</div><div class="title">Linux虚拟化面试题汇总</div></div></a></div><div><a href="/2017/09/05/LinuxMint%E5%90%AF%E7%94%A8VNC/" title="[转]Linux Mint启用VNC"><img class="cover" src="/images/bg3.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2017-09-05</div><div class="title">[转]Linux Mint启用VNC</div></div></a></div><div><a href="/2014/07/30/%E5%8F%91%E8%A1%8C%E7%89%88%E5%88%B6%E4%BD%9C%E5%8F%8AAnaconda%E5%9F%BA%E7%A1%80/" title="发行版制作及Anaconda基础"><img class="cover" src="/images/bg1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2014-07-30</div><div class="title">发行版制作及Anaconda基础</div></div></a></div><div><a href="/2014/04/24/%E5%9F%BA%E4%BA%8ELinux%E4%B8%8Elpc3250%E5%BC%80%E5%8F%91%E6%9D%BF%E7%9A%84%E4%BA%A4%E5%8F%89%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="基于Linux与lpc3250开发板的交叉开发环境搭建"><img class="cover" src="/images/bg4.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2014-04-24</div><div class="title">基于Linux与lpc3250开发板的交叉开发环境搭建</div></div></a></div><div><a href="/2014/04/24/%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/" title="内核源码编译"><img class="cover" src="/images/bg1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2014-04-24</div><div class="title">内核源码编译</div></div></a></div><div><a href="/2014/04/24/Linux%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/" title="Linux基础知识总结"><img class="cover" src="/images/bg4.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2014-04-24</div><div class="title">Linux基础知识总结</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">三木</div><div class="author-info__description">Honesty and diligence should be your eternal mates.</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">134</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">80</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sanmuny"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/sanmuny" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:kelvin.xupt@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎访问我的技术博客，如果您觉得我的文章对您有所帮助，欢迎打赏和分享！</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/03/14/%E4%BC%81%E4%B8%9A%E7%BA%A7Kubernetes%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/" title="企业级Kubernetes离线部署指南"><img src="/images/k8s.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="企业级Kubernetes离线部署指南"/></a><div class="content"><a class="title" href="/2025/03/14/%E4%BC%81%E4%B8%9A%E7%BA%A7Kubernetes%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/" title="企业级Kubernetes离线部署指南">企业级Kubernetes离线部署指南</a><time datetime="2025-03-14T14:44:12.000Z" title="发表于 2025-03-14 22:44:12">2025-03-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/14/Kubernetes%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Kubernetes复习笔记"><img src="/images/k8s.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Kubernetes复习笔记"/></a><div class="content"><a class="title" href="/2025/03/14/Kubernetes%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Kubernetes复习笔记">Kubernetes复习笔记</a><time datetime="2025-03-14T14:36:52.629Z" title="发表于 2025-03-14 22:36:52">2025-03-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/27/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" title="快速排序"><img src="/images/bg3.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="快速排序"/></a><div class="content"><a class="title" href="/2024/12/27/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" title="快速排序">快速排序</a><time datetime="2024-12-27T13:16:56.000Z" title="发表于 2024-12-27 21:16:56">2024-12-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/13/Argo-v-s-Tekton/" title="Argo workflow v.s. Tekton"><img src="/images/devops.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Argo workflow v.s. Tekton"/></a><div class="content"><a class="title" href="/2024/12/13/Argo-v-s-Tekton/" title="Argo workflow v.s. Tekton">Argo workflow v.s. Tekton</a><time datetime="2024-12-13T11:27:34.000Z" title="发表于 2024-12-13 19:27:34">2024-12-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/04/%E5%A6%82%E4%BD%95%E7%BB%99%E4%BA%91%E8%AE%A1%E7%AE%97%E7%94%A8%E6%88%B7%E6%8F%90%E4%BE%9B%E5%AE%89%E5%85%A8%E5%8F%AF%E9%9D%A0%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F/" title="如何给云计算用户提供安全可靠的操作系统镜像"><img src="/images/bg4.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="如何给云计算用户提供安全可靠的操作系统镜像"/></a><div class="content"><a class="title" href="/2024/12/04/%E5%A6%82%E4%BD%95%E7%BB%99%E4%BA%91%E8%AE%A1%E7%AE%97%E7%94%A8%E6%88%B7%E6%8F%90%E4%BE%9B%E5%AE%89%E5%85%A8%E5%8F%AF%E9%9D%A0%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F/" title="如何给云计算用户提供安全可靠的操作系统镜像">如何给云计算用户提供安全可靠的操作系统镜像</a><time datetime="2024-12-04T06:36:24.000Z" title="发表于 2024-12-04 14:36:24">2024-12-04</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2013 - 2025 By 三木</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.2
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container:not\([display]\)').forEach(node => {
+            const target = node.parentNode
+            if (target.nodeName.toLowerCase() === 'li') {
+              target.parentNode.classList.add('has-jax')
+            } else {
+              target.classList.add('has-jax')
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'Pbdwq7jL0Ag8SyVhveiTbaTA-gzGzoHsz',
+      appKey: '5z7cJ4LjydIGAt5kVlcKl6rG',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

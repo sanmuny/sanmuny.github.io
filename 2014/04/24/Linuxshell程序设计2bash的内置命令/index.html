@@ -1,0 +1,514 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Linux shell 程序设计2——bash的内置命令 | 三木的技术博客</title><meta name="keywords" content="shell"><meta name="author" content="三木"><meta name="copyright" content="三木"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="常用的内置命令忽略，来看看shell编程中其他一些重要的内置命令： 1、help：显示所有内置命令列表，或显示一个具体命令的用法。 -s： 表示列出命令的语法格式 例子： help -s help help: help [-dms] [pattern …] 2、echo：用来显示一行文字。默认自动换行。 -n：取消自动换行。 -e：让字符串中的特殊字符起作用，即使字符串在单引号中。  例子： ec">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux shell 程序设计2——bash的内置命令">
+<meta property="og:url" content="https://wangsen.site/2014/04/24/Linuxshell%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A12bash%E7%9A%84%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:site_name" content="三木的技术博客">
+<meta property="og:description" content="常用的内置命令忽略，来看看shell编程中其他一些重要的内置命令： 1、help：显示所有内置命令列表，或显示一个具体命令的用法。 -s： 表示列出命令的语法格式 例子： help -s help help: help [-dms] [pattern …] 2、echo：用来显示一行文字。默认自动换行。 -n：取消自动换行。 -e：让字符串中的特殊字符起作用，即使字符串在单引号中。  例子： ec">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangsen.site/images/bg1.jpg">
+<meta property="article:published_time" content="2014-04-24T02:12:50.000Z">
+<meta property="article:modified_time" content="2025-03-14T14:36:52.630Z">
+<meta property="article:author" content="三木">
+<meta property="article:tag" content="shell">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangsen.site/images/bg1.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://wangsen.site/2014/04/24/Linuxshell%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A12bash%E7%9A%84%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Linux shell 程序设计2——bash的内置命令',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2025-03-14 22:36:52'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">134</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">80</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-tie"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">三木的技术博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-tie"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Linux shell 程序设计2——bash的内置命令</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2014-04-24T02:12:50.000Z" title="发表于 2014-04-24 10:12:50">2014-04-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-03-14T14:36:52.630Z" title="更新于 2025-03-14 22:36:52">2025-03-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Linux shell 程序设计2——bash的内置命令"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2014/04/24/Linuxshell%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A12bash%E7%9A%84%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/2014/04/24/Linuxshell%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A12bash%E7%9A%84%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/" itemprop="commentCount"></span></a></span></div></div></div><article class="post-content" id="article-container"><p>常用的内置命令忽略，来看看shell编程中其他一些重要的内置命令：</p>
+<p>1、help：显示所有内置命令列表，或显示一个具体命令的用法。</p>
+<p>-s： 表示列出命令的语法格式</p>
+<p>例子：</p>
+<p>help -s help help: help [-dms] [pattern …]</p>
+<p>2、echo：用来显示一行文字。默认自动换行。</p>
+<pre><code>-n：取消自动换行。
+-e：让字符串中的特殊字符起作用，即使字符串在单引号中。
+</code></pre>
+<p>例子： echo hello world 或 echo ‘hello world’ 或 echo “hello world” 输出结果为：hello world $echo -e “hello \n world” hello world $ echo -e ‘hello \n world’ hello world</p>
+<p>3、printf：显示格式字符串，类似于c中的printf函数</p>
+<p>格式：printf “格式字符串” 参数</p>
+<pre><code>-v ：不显示到标准输出，而是赋值给-v选项后面的变量
+</code></pre>
+<p>例子：</p>
+<pre><code>str= &quot;hello world&quot;
+printf &quot;%s\n&quot; &quot;$str&quot;     执行结果：hello world
+
+printf -v str &quot;hello world&quot; 
+echo $str                      执行结果：hello world
+
+printf &quot;%q&quot; &quot;hello world \n&quot; 执行结果：hello\ world\\n 无换行
+</code></pre>
+<p>%q这个选项我想了很久才弄明白它的含义：</p>
+<p>将字符串或变量中的转义字符 用 源码格式替换。于是，上面的例子中，空格变成了\空格，\变成了\，而且\n没有了换行的作用</p>
+<p>printf详细用法请参考博客：</p>
+<p><a target="_blank" rel="noopener" href="http://bbs.chinaunix.net/thread-845520-1-1.html">http://bbs.chinaunix.net/thread-845520-1-1.html</a></p>
+<p>4、: 什么也不做，返回0</p>
+<p>例子：</p>
+<pre><code>:
+echo $?                    运行结果：0
+</code></pre>
+<p>5、. 或 source ：在现行shell中执行shell程序</p>
+<p>例子：</p>
+<p>编辑脚本文件a_var.sh：</p>
+<pre><code>#!/bin/bash
+a=31
+</code></pre>
+<p>保存退出后回到终端，修改a_var.sh的权限并输入命令：</p>
+<pre><code>./a_var.sh
+</code></pre>
+<p>执行，然后在终端执行：</p>
+<pre><code>echo $a
+</code></pre>
+<p>输出结果为一个空行，意味着变量a的值为空，我们再以命令.空格a_var.sh 或source a_var.sh 执行，然后输入：</p>
+<pre><code>echo $a                     其输出结果为：  31
+</code></pre>
+<p>第一种方式执行a_var.sh，bash会创建一个shell去执行，当子shell执行完成后，它的变量a会被系统收回。</p>
+<p>6、alias：显示或设定程序别名</p>
+<p>例子：</p>
+<pre><code>alias          执行结果：列出所有的别名
+alias ll=&#39;ls -al&#39;  
+ll               执行结果：等价于执行了  ls -al
+</code></pre>
+<p>7、unalias：取消别名</p>
+<pre><code>alias ll
+</code></pre>
+<p>8、exit ：离开脚本或登录shell，可带返回值</p>
+<p>exit 1</p>
+<p>9、history：显示过去曾经执行过的shell指令，与history命令相关的有三个重要的变量：</p>
+<p>HISTFILE ：记录存放历史命令文件的路径，如：</p>
+<pre><code>echo $HISTFILE                    结果为：/home/kelvin/.bash_history
+</code></pre>
+<p>HISTFILESIZE：设置历史命令文件命令的最大个数，超过这个个数，序号在前的命令记录就会被删除</p>
+<p>HISTSIZE：设置终端中交互式命令的历史记录个数。它和HISTFILESIZE相比的最小值起作用。</p>
+<p>10、fc：列出登录主机后最近执行过的命令。一般和选项 -l 配合使用。</p>
+<p>例子：</p>
+<pre><code>$fc -l      结果：
+
+363     cat /etc/profile
+364     echo $HISTORY
+365     echo $HISTORYFILE
+366     echo $HISTFILE
+367     ehco $HISTFILESIZE
+368     echo $HISTFILESIZE
+369     echo $HISTSIZE
+370     history 
+371     history
+372     echo $HISTFILE
+373     lw
+374     ls
+375     fc -l
+376     fc -l 368
+377     fc -l echo l
+378     fc -l
+fc -l 375     列出375行以后的命令                输出结果：
+375     fc -l
+376     fc -l 368
+377     fc -l echo l
+378     fc -l
+fc -l 375 377 列出375到377之间的命令          输出结果：
+375     fc -l
+376     fc -l 368
+377     fc -l echo l
+fc -l echo  l    列出从 关键字 echo 到 l之间的内容     输出结果：
+372     echo $HISTFILE
+373     lw
+374     ls
+</code></pre>
+<p>11、type：对一个命令的类型进行说明(包含命令行程序)。</p>
+<p>例子：</p>
+<pre><code>$type ls
+
+ls 已被别名为“ls --color=auto”
+
+$type cp
+
+cp 是 /bin/cp
+
+$type fc
+
+fc 是一个 shell 内部命令
+</code></pre>
+<p>12、set：列出所有变量和函数的内容，加入选项可以设置bash的某个属性是否打开</p>
+<p>例子：</p>
+<pre><code>$set -o 查看所有属性，或打开某个属性
+
+allexport          off
+braceexpand        on
+emacs              on
+errexit            off
+errtrace           off
+functrace          off
+hashall            on
+histexpand         on
+history            on
+ignoreeof          off
+interactive-comments    on
+keyword            off
+monitor            on
+noclobber          off
+noexec             off
+noglob             off
+nolog              off
+notify             off
+nounset            off
+onecmd             off
+physical           off
+pipefail           off
+posix              off
+privileged         off
+verbose            off
+vi                 off
+xtrace             off
+
+$set -o notify
+set -o              打开notify属性后显示所有属性状态，输出结果：
+allexport          off
+braceexpand        on    
+emacs              on
+errexit            off
+errtrace           off
+unctrace          off
+hashall            on
+histexpand         on
+history            on
+ignoreeof          off
+interactive-comments    on
+keyword            off
+monitor            on
+noclobber          off
+noexec             off
+noglob             off
+nolog              off
+notify             on
+nounset            off
+onecmd             off
+physical           off
+pipef    ail           off
+posix              off
+privileged         off    
+verbose            off
+vi                 off
+xtrace             off
+
+set  +o notify 
+set -o         关闭notify属性，并显示所有属性状态：
+allexport          off
+braceexpand        on
+emacs              on
+errexit            off
+errtrace           off
+functrace          off
+hashall            on
+histexpand         on
+history            on
+ignoreeof          off
+interactive-comments    on
+keyword            off
+monitor            on
+noclobber          off
+noexec             off
+noglob             off
+nolog              off
+notify             off
+nounset            off
+onecmd             off
+physical           off
+pipefail           off
+posix              off
+privileged         off
+verbose            off
+vi                 off
+xtrace             off
+</code></pre>
+<p>set -C 或 set -o noclobber ：保护已存在文件，不让重定向覆盖文件内容，只能追加。</p>
+<p>例如：</p>
+<pre><code>set -C 
+touch a.c
+echo adfad &gt;  a.c  提示出错：
+bash: a.c：无法覆盖已经存在的文件
+</code></pre>
+<p>但当我们追加内容时不会提示出错：</p>
+<pre><code>echo adfasf &gt;&gt; a.c
+</code></pre>
+<p>可用set +C 取消</p>
+<p>set -u：用于测试变量是否存在</p>
+<p>例如：</p>
+<pre><code>: $i
+</code></pre>
+<p>echo $? 这儿的返回值应该为1，因为变量i不存在</p>
+<pre><code>i=1
+: $i
+</code></pre>
+<p>echo $? 这儿的输出结果应该是0。同样，可以用set +u取消作用</p>
+<p>set -v：显示当前shell的每一个执行命令，换句话说，就是把执行的命令打印出来</p>
+<p>例如：</p>
+<pre><code>kelvin@kelvin-Founder:~$ set -v
+kelvin@kelvin-Founder:~$ ls
+ls
+a.c  Linux material  project_files  record  shell  software  桌面
+</code></pre>
+<p>可用于对shell脚本的排错，该属性可用set +v取消作用</p>
+<p>13、shopt：很多方面都和set命令一样，但它增加了很多选项。</p>
+<pre><code>-s：开启选项
+-u：关闭选项
+-o：set -o
+-q：以返回值的形式表示开关状态，非0表示关，0表示开
+</code></pre>
+<p>set和shopt 的细节参见：</p>
+<p><a target="_blank" rel="noopener" href="http://blogold.chinaunix.net/u3/94271/showart.php?id=2195391">http://blogold.chinaunix.net/u3/94271/showart.php?id=2195391</a></p>
+<p>14、read：从标准输入读取一行数据</p>
+<p>例子：</p>
+<pre><code>#!/bin/bash
+echo &quot;please input your name &quot;
+read your_name                             //如果不输入your_name，读取结果会默认存入变量ERPLY
+echo &quot;your name is :&quot;  $your_name   
+</code></pre>
+<p>执行结果：</p>
+<pre><code>please in put your name 
+kelvin
+your name is : kelvin
+</code></pre>
+<p>read -p “提示信息” ；所以上述sh脚本也可写成：</p>
+<pre><code>#!/bin/bash
+read -p &quot;please input your name&quot; your_name
+echo &quot;your name is:&quot; $your_name
+</code></pre>
+<p>read -a arr：将一行数据存入数组arr</p>
+<p>例如：</p>
+<pre><code>read -a arr &lt;&lt;(echo 1 2 343 23) 
+</code></pre>
+<p>这样，echo ${arr[2]} 的输出结果就是343</p>
+<p>read还可以读值给多个变量：</p>
+<pre><code>IFS=&#39;:&#39;
+read f1 f2 f3 f4 f5 f6 f7 &lt; /etc/passwd
+</code></pre>
+<p>因为passwd中7个字段是由:分割开的，所以令IFS=’:’</p>
+<p>15、time：打印设置命令执行的real user sys时间，real 表示命令真正运行时间，cpu使用时间由两部分表示： user表示用户态程序执行时间， sys 表示系统调用时间。</p>
+<p>例如：</p>
+<pre><code>time ls
+time ls
+adf.sh  a_var.sh  name.sh
+
+real    0m0.004s
+user    0m0.000s
+sys    0m0.000s
+</code></pre>
+<p>16、exec：后接命令或程序，执行命令或程序，并取代原来的shell执行环境；执行重定向生效，例如：</p>
+<p>exec &lt; file 那么凡是由标准输入读入数据的操作都改为由file读入数据</p>
+<p>17、eval：读取变量，并将变量的内容作为命令执行</p>
+<p>例如：</p>
+<pre><code>listlog=&quot;ls -al /var/log/*.log&quot;
+eval $listlog
+</code></pre>
+<p>执行结果：ls -al /var/log/*.log将被执行。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">三木</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://wangsen.site/2014/04/24/Linuxshell%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A12bash%E7%9A%84%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/">https://wangsen.site/2014/04/24/Linuxshell%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A12bash%E7%9A%84%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://wangsen.site" target="_blank">三木的技术博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/shell/">shell</a></div><div class="post_share"><div class="social-share" data-image="/images/bg1.jpg" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/images/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/images/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/images/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/images/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2014/04/24/Linuxshell%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A13%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%A8%8B%E5%BA%8F/"><img class="prev-cover" src="/images/bg1.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Linux shell 程序设计3——命令行程序</div></div></a></div><div class="next-post pull-right"><a href="/2014/04/24/Linuxshell%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A11%E5%AE%89%E8%A3%85%E5%8F%8A%E5%85%A5%E9%97%A8/"><img class="next-cover" src="/images/bg4.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Linux shell 程序设计1——安装及入门</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2014/04/24/ls%E5%91%BD%E4%BB%A4%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90/" title="ls命令实现分析"><img class="cover" src="/images/bg1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2014-04-24</div><div class="title">ls命令实现分析</div></div></a></div><div><a href="/2014/04/24/Linuxshell%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A15shell%E4%B8%AD%E4%B8%80%E4%BA%9B%E7%89%B9%E6%AE%8A%E7%AC%A6%E5%8F%B7%E7%9A%84%E7%94%A8%E6%B3%95%E6%80%BB%E7%BB%93/" title="Linux shell 程序设计5——shell中一些特殊符号的用法总结"><img class="cover" src="/images/bg.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2014-04-24</div><div class="title">Linux shell 程序设计5——shell中一些特殊符号的用法总结</div></div></a></div><div><a href="/2014/04/24/Linuxshell%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A14shell%E5%8F%98%E9%87%8F/" title="Linux shell 程序设计4——shell变量"><img class="cover" src="/images/bg3.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2014-04-24</div><div class="title">Linux shell 程序设计4——shell变量</div></div></a></div><div><a href="/2014/04/24/Linuxshell%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A13%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%A8%8B%E5%BA%8F/" title="Linux shell 程序设计3——命令行程序"><img class="cover" src="/images/bg1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2014-04-24</div><div class="title">Linux shell 程序设计3——命令行程序</div></div></a></div><div><a href="/2014/04/24/Linuxshell%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A11%E5%AE%89%E8%A3%85%E5%8F%8A%E5%85%A5%E9%97%A8/" title="Linux shell 程序设计1——安装及入门"><img class="cover" src="/images/bg4.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2014-04-24</div><div class="title">Linux shell 程序设计1——安装及入门</div></div></a></div><div><a href="/2014/04/24/Shell%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%B0%8F%E7%BB%93/" title="Shell常用命令小结"><img class="cover" src="/images/bg.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2014-04-24</div><div class="title">Shell常用命令小结</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">三木</div><div class="author-info__description">Honesty and diligence should be your eternal mates.</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">134</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">80</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sanmuny"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/sanmuny" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:kelvin.xupt@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎访问我的技术博客，如果您觉得我的文章对您有所帮助，欢迎打赏和分享！</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/03/14/%E4%BC%81%E4%B8%9A%E7%BA%A7Kubernetes%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/" title="企业级Kubernetes离线部署指南"><img src="/images/k8s.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="企业级Kubernetes离线部署指南"/></a><div class="content"><a class="title" href="/2025/03/14/%E4%BC%81%E4%B8%9A%E7%BA%A7Kubernetes%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/" title="企业级Kubernetes离线部署指南">企业级Kubernetes离线部署指南</a><time datetime="2025-03-14T14:44:12.000Z" title="发表于 2025-03-14 22:44:12">2025-03-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/14/Kubernetes%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Kubernetes复习笔记"><img src="/images/k8s.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Kubernetes复习笔记"/></a><div class="content"><a class="title" href="/2025/03/14/Kubernetes%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Kubernetes复习笔记">Kubernetes复习笔记</a><time datetime="2025-03-14T14:36:52.629Z" title="发表于 2025-03-14 22:36:52">2025-03-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/27/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" title="快速排序"><img src="/images/bg3.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="快速排序"/></a><div class="content"><a class="title" href="/2024/12/27/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" title="快速排序">快速排序</a><time datetime="2024-12-27T13:16:56.000Z" title="发表于 2024-12-27 21:16:56">2024-12-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/13/Argo-v-s-Tekton/" title="Argo workflow v.s. Tekton"><img src="/images/devops.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Argo workflow v.s. Tekton"/></a><div class="content"><a class="title" href="/2024/12/13/Argo-v-s-Tekton/" title="Argo workflow v.s. Tekton">Argo workflow v.s. Tekton</a><time datetime="2024-12-13T11:27:34.000Z" title="发表于 2024-12-13 19:27:34">2024-12-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/04/%E5%A6%82%E4%BD%95%E7%BB%99%E4%BA%91%E8%AE%A1%E7%AE%97%E7%94%A8%E6%88%B7%E6%8F%90%E4%BE%9B%E5%AE%89%E5%85%A8%E5%8F%AF%E9%9D%A0%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F/" title="如何给云计算用户提供安全可靠的操作系统镜像"><img src="/images/bg4.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="如何给云计算用户提供安全可靠的操作系统镜像"/></a><div class="content"><a class="title" href="/2024/12/04/%E5%A6%82%E4%BD%95%E7%BB%99%E4%BA%91%E8%AE%A1%E7%AE%97%E7%94%A8%E6%88%B7%E6%8F%90%E4%BE%9B%E5%AE%89%E5%85%A8%E5%8F%AF%E9%9D%A0%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F/" title="如何给云计算用户提供安全可靠的操作系统镜像">如何给云计算用户提供安全可靠的操作系统镜像</a><time datetime="2024-12-04T06:36:24.000Z" title="发表于 2024-12-04 14:36:24">2024-12-04</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2013 - 2025 By 三木</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.2
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container:not\([display]\)').forEach(node => {
+            const target = node.parentNode
+            if (target.nodeName.toLowerCase() === 'li') {
+              target.parentNode.classList.add('has-jax')
+            } else {
+              target.classList.add('has-jax')
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'Pbdwq7jL0Ag8SyVhveiTbaTA-gzGzoHsz',
+      appKey: '5z7cJ4LjydIGAt5kVlcKl6rG',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

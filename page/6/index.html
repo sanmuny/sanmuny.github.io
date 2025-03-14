@@ -1,0 +1,315 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>三木的技术博客 - Honesty and diligence should be your eternal mates.</title><meta name="author" content="三木"><meta name="copyright" content="三木"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Honesty and diligence should be your eternal mates.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="三木的技术博客">
+<meta property="og:url" content="https://wangsen.site/page/6/index.html">
+<meta property="og:site_name" content="三木的技术博客">
+<meta property="og:description" content="Honesty and diligence should be your eternal mates.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangsen.site/images/avatar.png">
+<meta property="article:author" content="三木">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangsen.site/images/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://wangsen.site/page/6/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '三木的技术博客',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2025-03-15 00:14:43'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">134</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">80</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-tie"></i><span> 关于我</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">三木的技术博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-tie"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2021/09/30/SQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0SQL%E6%A6%82%E8%A6%81/" title="SQL学习笔记 - SQL概要">     <img class="post_bg" src="/images/bg.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SQL学习笔记 - SQL概要"></a></div><div class="recent-post-info"><a class="article-title" href="/2021/09/30/SQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0SQL%E6%A6%82%E8%A6%81/" title="SQL学习笔记 - SQL概要">SQL学习笔记 - SQL概要</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-09-30T08:32:43.000Z" title="发表于 2021-09-30 16:32:43">2021-09-30</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8A%80%E6%9C%AF/">数据库技术</a></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-comments"></i><a href="/2021/09/30/SQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0SQL%E6%A6%82%E8%A6%81/#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/2021/09/30/SQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0SQL%E6%A6%82%E8%A6%81/" itemprop="commentCount"></span></a><span class="article-meta-label"> 条评论</span></span></div><div class="content">SQL 是为数不多的声明性语言之一，用来和数据库管理系统进行对话。SQL语句分为四种类型：
+
+DDL(Data Definition Language)，也就是数据定义语言，它用来定义我们的数据库对象，包括数据库、数据表和列。通过使用DDL，我们可以创建，删除和修改数据库和表结构。
+DML(Data Manipulation Language)，数据操作语言，我们用它操作和数据库相关的记录，比如增加、删除、修改数据表中的记录。
+DCL(Data Control Language)，数据控制语言，我们用它来定义访问权限和安全级别。
+DQL(Data Query Language)，数据查询语言，我们用它查询想要的记录
+
+SQL执行流程Oracle数据库中的执行流程：
+
+语法检查：检查SQL拼写是否正确，如果不正确，Oracle会报语法错误。
+语义检查：检查SQL中的访问对象是否存在。比如我们在写SELECT语句的时候，列名写错了，系统就会提示错误。语法检查和语义检查的作用是保证SQL语句没有错误。
+权限检查：看用户是否具备访问该数据的权限。
+共享池检查：共享池（Shared Pool）是 ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2021/08/23/Reacthooks%E6%A6%82%E8%A6%81/" title="React hooks 概要">     <img class="post_bg" src="/images/bg4.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="React hooks 概要"></a></div><div class="recent-post-info"><a class="article-title" href="/2021/08/23/Reacthooks%E6%A6%82%E8%A6%81/" title="React hooks 概要">React hooks 概要</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-08-23T08:21:49.000Z" title="发表于 2021-08-23 16:21:49">2021-08-23</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/">应用开发</a></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-comments"></i><a href="/2021/08/23/Reacthooks%E6%A6%82%E8%A6%81/#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/2021/08/23/Reacthooks%E6%A6%82%E8%A6%81/" itemprop="commentCount"></span></a><span class="article-meta-label"> 条评论</span></span></div><div class="content">React 基础知识回顾React(响应)的设计理念是，当数据发生变化时，UI能自动把变化反映出来。它的诞生颠覆了传统的web UI开发模式，它把UI的开发从复杂的DOM操作中解脱出来，让开发者专注于数据、逻辑和UI组件本身。
+
+
+
+
+组件 (component)React 是通过组件的方式来组织和描述UI的。组件可以分为两种类型：
+
+内置组件。内置组件其实就是映射到 HTML 节点的组件，例如 div、input、table 等等，作为一种约定，它们都是小写字母。
+自定义组件。自定义组件其实就是自己创建的组件，使用时必须以大写字母开头，例如 TopicList、TopicDetail。
+
+
+123456789function CommentBox() &#123;  return (    &lt;div&gt;      &lt;CommentHeader /&gt;      &lt;CommentList /&gt;      &lt;CommentForm /&gt;    &lt;/div&gt;  );&#125;
+
+状态 (state)和属性(props)组件的状态用于 ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2021/08/12/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%A6%82%E8%A6%81/" title="云原生概要">     <img class="post_bg" src="/images/bg2.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="云原生概要"></a></div><div class="recent-post-info"><a class="article-title" href="/2021/08/12/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%A6%82%E8%A6%81/" title="云原生概要">云原生概要</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-08-12T08:15:37.000Z" title="发表于 2021-08-12 16:15:37">2021-08-12</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E4%BA%91%E8%AE%A1%E7%AE%97/">云计算</a></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-comments"></i><a href="/2021/08/12/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%A6%82%E8%A6%81/#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/2021/08/12/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%A6%82%E8%A6%81/" itemprop="commentCount"></span></a><span class="article-meta-label"> 条评论</span></span></div><div class="content">什么是云原生设计目的云原生软件的设计目的是预测故障，并且即使当它所依赖的基础设施出现故障，或者发生其他变化时，它也依然能够保持稳定运行。
+将变化或者失败视为正常规律，让面向失败的设计成为它们构建、交付和管理软件过程中的一个组成部分。
+
+
+
+云计算时代应用需求
+零停机时间软件开发人员或者架构师对设计和开发一个松耦合、组件化的系统同样负有责任，应该通过部署冗余组件来应对不可避免的故障，并设置隔离机制来防止故障在整个系统中引起连锁反应。而且，还必须把软件设计成能够在不停机的情况下完成计划事件（例如，升级）。
+
+缩短反馈周期频道的软件发布可以缩短反馈周期，降低风险
+
+多设备支持用户越来越希望他们的应用体验随时可以从一个设备无缝切换到另一个设备上。
+
+互联设备（物联网）数据量和基础架构之间的差异，需要新的软件设计和实践来解决。
+
+数据驱动数据量正在不断增加，数据源分布得更加广泛，而软件的交付周期正在缩短这些应用程序需要的不是单一的共享数据库，而是一个由更小的、本地化数据库组成的网络，以及能够在多个数据库管理系统之间管理数据关系的软件。
+
+
+定义云原生软件是高度分布式的，必须在一个不断变化的环境中 ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2020/01/15/Javascript%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/" title="Javascript中的异步编程">     <img class="post_bg" src="/images/bg4.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Javascript中的异步编程"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/01/15/Javascript%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/" title="Javascript中的异步编程">Javascript中的异步编程</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-01-15T08:15:37.000Z" title="发表于 2020-01-15 16:15:37">2020-01-15</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">计算机基础</a></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-comments"></i><a href="/2020/01/15/Javascript%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/2020/01/15/Javascript%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/" itemprop="commentCount"></span></a><span class="article-meta-label"> 条评论</span></span></div><div class="content">Javascript最开始是用于浏览器中的前端编程语言。Javascript是单线程的，为了能及时响应用户操作，javascript对耗时操作（如Ajax请求、本地文件读取等)的处理是异步进行的，也即是所谓的异步编程。除了快速响应用户操作之外，另外一个让javascript采用异步方式的原因是，程序无法预知用户会进行哪些操作。比如说程序无法提前知道用户是点“取消”按钮还是“确定”按钮。所以，Javascript采用了事件注册的方式来处理这个问题。在程序编写时，可以给用户点击“取消”按钮和“确认”按钮注册不同的回调函数，这样当用户点击不同的按钮时，不同的回调函数会被执行。本文从回调函数开始，介绍了Promise、async/await几种Javascript主要的异步编程方式。
+
+异步编程和回调函数无论是Ajax请求，还是事件处理，Javascript都是通过回调函数来完成的。谈及异步编程和回调函数，可以回想一下操作系统中的中断及中断处理程序。由于CPU的速度比外设快出许多，为了提高CPU的处理效率，计算机系统引入了中断的概念，外设在读写数据的时候，CPU可以忙别的事情，等到外设读写完数 ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2019/06/18/Sass%E6%A6%82%E8%A6%81/" title="Sass 概要">     <img class="post_bg" src="/images/bg2.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Sass 概要"></a></div><div class="recent-post-info"><a class="article-title" href="/2019/06/18/Sass%E6%A6%82%E8%A6%81/" title="Sass 概要">Sass 概要</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-06-18T06:51:52.000Z" title="发表于 2019-06-18 14:51:52">2019-06-18</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/">应用开发</a></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-comments"></i><a href="/2019/06/18/Sass%E6%A6%82%E8%A6%81/#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/2019/06/18/Sass%E6%A6%82%E8%A6%81/" itemprop="commentCount"></span></a><span class="article-meta-label"> 条评论</span></span></div><div class="content">前端开发中最大的坑之一莫过于写css，流水账式的写法让众多码农们头痛不已。好在有了sass，写css不再死板。sass对css的增强如下：
+宏定义宏定义的优点在于一处定义，多处使用，需要修改的时候只需要修改定义的地方即可。虽然sass没有明确的说明，但其实以下几种语法与C语言中的宏定义非常类似：
+
+变量 sass中的变量适用于替换css中参数的值。例如： scss: $basic-margin: “10px 20px”; #box01 {   margin: $basic-margin; } #box02 {   margin: $basic-margin; } css: #box01 {   margin: “10px 20px”; } #box02 {   margin: “10px 20px”; } sass允许根据变量，选择性的输出css，类似于开关，例如： scss: $rounded-corners: false; .button {   border: 1px solid black;   border-radius: if($rounded-corners, 5px,  ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2019/01/11/%E8%8E%B7%E5%8F%96%E9%9A%90%E8%97%8F%E5%85%83%E7%B4%A0%E7%9A%84%E5%AE%BD%E5%BA%A6/" title="获取隐藏元素的宽度">     <img class="post_bg" src="/images/bg1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="获取隐藏元素的宽度"></a></div><div class="recent-post-info"><a class="article-title" href="/2019/01/11/%E8%8E%B7%E5%8F%96%E9%9A%90%E8%97%8F%E5%85%83%E7%B4%A0%E7%9A%84%E5%AE%BD%E5%BA%A6/" title="获取隐藏元素的宽度">获取隐藏元素的宽度</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-01-11T08:10:54.000Z" title="发表于 2019-01-11 16:10:54">2019-01-11</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/">应用开发</a></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-comments"></i><a href="/2019/01/11/%E8%8E%B7%E5%8F%96%E9%9A%90%E8%97%8F%E5%85%83%E7%B4%A0%E7%9A%84%E5%AE%BD%E5%BA%A6/#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/2019/01/11/%E8%8E%B7%E5%8F%96%E9%9A%90%E8%97%8F%E5%85%83%E7%B4%A0%E7%9A%84%E5%AE%BD%E5%BA%A6/" itemprop="commentCount"></span></a><span class="article-meta-label"> 条评论</span></span></div><div class="content">问题描述如果DOM元素的fu’yu是被隐藏的(display: none)，那么无论使用DOM的接口，还是jquery的接口来获取该元素的宽度，得到的结果始终是0. 例如：
+&lt;div id=&quot;node&quot;&gt;
+&lt;p&gt;
+    hello world
+&lt;/p&gt;
+&lt;/div&gt;
+
+#node &#123;
+    display: none;
+&#125;
+
+alert($(&#39;#node p&#39;).width());
+
+解决方法在过去元素的宽度之前，临时修改元素的display为block，获取之后再讲其设置回none 例如：
+function get_width(obj) &#123;
+var width = 0;
+  obj.parent().css(&#39;display&#39;, &#39;block&#39;);
+width = obj.width();
+obj.parent().css(&#39;display&#39;, &#39;none&#39;);
+return width;
+&#125;
+ ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2019/01/08/ES6%E6%A8%A1%E5%9D%97%E7%BC%96%E7%A8%8B/" title="ES6: 模块编程">     <img class="post_bg" src="/images/bg.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ES6: 模块编程"></a></div><div class="recent-post-info"><a class="article-title" href="/2019/01/08/ES6%E6%A8%A1%E5%9D%97%E7%BC%96%E7%A8%8B/" title="ES6: 模块编程">ES6: 模块编程</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-01-08T13:34:59.000Z" title="发表于 2019-01-08 21:34:59">2019-01-08</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">计算机基础</a></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-comments"></i><a href="/2019/01/08/ES6%E6%A8%A1%E5%9D%97%E7%BC%96%E7%A8%8B/#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/2019/01/08/ES6%E6%A8%A1%E5%9D%97%E7%BC%96%E7%A8%8B/" itemprop="commentCount"></span></a><span class="article-meta-label"> 条评论</span></span></div><div class="content">Javascript模块的限制
+  只能运行于严格模式
+  模块中的顶级作用域中的变量，不会被自动添加到全局作用域
+  顶级作用域的this为undefined
+
+导出如果想让模块中的变量、函数、类被其他模块使用，需要将其导出，导出的方法如下：
+
+  export var color = “red”;
+  export function print_hello(){};
+  export { print_hello }
+  export { print_hello as printh };
+  export default function print_hello(){};
+  export default print_hello
+  export { print_hello as default}
+
+导入如果想使用其他模块中的变量、函数、类，需要将其导入。导入后的变量、类、函数为只读。导入的方法如下：
+
+  import { color, print_hello } from “./example.js”;
+  import * as example from “./example. ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2019/01/03/ES6%E6%95%B0%E7%BB%84/" title="ES6：数组">     <img class="post_bg" src="/images/bg3.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ES6：数组"></a></div><div class="recent-post-info"><a class="article-title" href="/2019/01/03/ES6%E6%95%B0%E7%BB%84/" title="ES6：数组">ES6：数组</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-01-03T08:25:11.000Z" title="发表于 2019-01-03 16:25:11">2019-01-03</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">计算机基础</a></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-comments"></i><a href="/2019/01/03/ES6%E6%95%B0%E7%BB%84/#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/2019/01/03/ES6%E6%95%B0%E7%BB%84/" itemprop="commentCount"></span></a><span class="article-meta-label"> 条评论</span></span></div><div class="content">新增的静态方法Array.of() ：可以将传入的参数逐个传入数组，即使只有一个数值类型的参数，也会成为新数组的成员，而不是代表数组的长度 Array.from()：可以将类数组结构转化为数组，例如: Array.from(arguments). 利用Array.from()也可以转换原来的数组，例如：
+let trans_args = function() &#123;
+    let args = Array.from(arguments, (value)=&gt;value + 1);
+    console.log(args);
+&#125;
+
+trans_args(1, 2, 3);
+
+$ node test.js 
+[ 2, 3, 4 ]
+
+新增的普通方法find() 与findIndex()：传入一个回调函数来表明查找的条件，例如：
+&gt; let arr = [1, 2, 3, 4, 5];
+undefined
+&gt; arr.find((n)=&gt;n&gt;3);
+4
+&gt; arr.findIndex((n)=&gt;n&gt;3);
+3
+
+fill(va ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2019/01/02/ES6%E4%B8%AD%E7%9A%84%E7%B1%BB/" title="ES6中的类">     <img class="post_bg" src="/images/bg1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ES6中的类"></a></div><div class="recent-post-info"><a class="article-title" href="/2019/01/02/ES6%E4%B8%AD%E7%9A%84%E7%B1%BB/" title="ES6中的类">ES6中的类</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-01-02T09:43:54.000Z" title="发表于 2019-01-02 17:43:54">2019-01-02</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/">应用开发</a></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-comments"></i><a href="/2019/01/02/ES6%E4%B8%AD%E7%9A%84%E7%B1%BB/#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/2019/01/02/ES6%E4%B8%AD%E7%9A%84%E7%B1%BB/" itemprop="commentCount"></span></a><span class="article-meta-label"> 条评论</span></span></div><div class="content">ES6中添加的class关键字其实并非真正的类，而是ES5用函数来模拟类的语法糖。在ES6中可以用如下的语法创建一个类：
+class Students &#123;
+    constructor(name, age) &#123;
+        this.name = name;
+        this.age = age;
+    &#125;
+    sayName() &#123;
+        console.log(this.name);
+    &#125;
+    sayAge() &#123;
+        console.log(this.age);
+    &#125;
+&#125;
+
+let st1 = new Students(&#39;sen&#39;, 18);
+st1.sayName();
+st1.sayAge();
+
+使用ES6的class语法糖和ES5自定义的类还是有些区别的：
+
+  类的声明不会被提升，类的实例化只能在类的声明之后
+  类声明中的代码只能运行在严格模式下
+  类中的方法是不可枚举的
+  实例化的时候必须加new关键字
+  在 ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2018/12/07/ES6%E8%BF%AD%E4%BB%A3%E5%99%A8%E4%B8%8E%E7%94%9F%E6%88%90%E5%99%A8/" title="ES6: 迭代器与生成器">     <img class="post_bg" src="/images/bg.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ES6: 迭代器与生成器"></a></div><div class="recent-post-info"><a class="article-title" href="/2018/12/07/ES6%E8%BF%AD%E4%BB%A3%E5%99%A8%E4%B8%8E%E7%94%9F%E6%88%90%E5%99%A8/" title="ES6: 迭代器与生成器">ES6: 迭代器与生成器</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2018-12-07T08:23:24.000Z" title="发表于 2018-12-07 16:23:24">2018-12-07</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">计算机基础</a></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-comments"></i><a href="/2018/12/07/ES6%E8%BF%AD%E4%BB%A3%E5%99%A8%E4%B8%8E%E7%94%9F%E6%88%90%E5%99%A8/#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/2018/12/07/ES6%E8%BF%AD%E4%BB%A3%E5%99%A8%E4%B8%8E%E7%94%9F%E6%88%90%E5%99%A8/" itemprop="commentCount"></span></a><span class="article-meta-label"> 条评论</span></span></div><div class="content">什么是迭代器？迭代器是一个对象，它拥有一个next方法，调用next方法会返回一个对象，该对象有两个属性值，value和done。每次调用next方法，返回的value表示可迭代对象中的下一个值，done表示迭代是否完成。根据此定义，可用下面的代码实现一个迭代器:
+let create_iter = function(items) &#123;
+    let i = 0;
+    return &#123;
+        next: function() &#123;
+            let value, done;
+            if (i &gt;= items.length) &#123;
+                value = null;
+                done = true;
+            &#125; else &#123;
+                value = items\[i++\];
+                done = false;
+            &#125;
+           ...</div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/5/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/#content-inner">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/#content-inner">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/#content-inner">14</a><a class="extend next" rel="next" href="/page/7/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">三木</div><div class="author-info__description">Honesty and diligence should be your eternal mates.</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">134</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">80</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sanmuny"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/sanmuny" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:kelvin.xupt@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎访问我的技术博客，如果您觉得我的文章对您有所帮助，欢迎打赏和分享！</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/03/14/%E4%BC%81%E4%B8%9A%E7%BA%A7Kubernetes%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/" title="企业级Kubernetes离线部署指南"><img src="/images/k8s.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="企业级Kubernetes离线部署指南"/></a><div class="content"><a class="title" href="/2025/03/14/%E4%BC%81%E4%B8%9A%E7%BA%A7Kubernetes%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/" title="企业级Kubernetes离线部署指南">企业级Kubernetes离线部署指南</a><time datetime="2025-03-14T14:44:12.000Z" title="发表于 2025-03-14 22:44:12">2025-03-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/14/Kubernetes%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Kubernetes复习笔记"><img src="/images/k8s.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Kubernetes复习笔记"/></a><div class="content"><a class="title" href="/2025/03/14/Kubernetes%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Kubernetes复习笔记">Kubernetes复习笔记</a><time datetime="2025-03-14T14:36:52.629Z" title="发表于 2025-03-14 22:36:52">2025-03-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/27/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" title="快速排序"><img src="/images/bg3.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="快速排序"/></a><div class="content"><a class="title" href="/2024/12/27/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" title="快速排序">快速排序</a><time datetime="2024-12-27T13:16:56.000Z" title="发表于 2024-12-27 21:16:56">2024-12-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/13/Argo-v-s-Tekton/" title="Argo workflow v.s. Tekton"><img src="/images/devops.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Argo workflow v.s. Tekton"/></a><div class="content"><a class="title" href="/2024/12/13/Argo-v-s-Tekton/" title="Argo workflow v.s. Tekton">Argo workflow v.s. Tekton</a><time datetime="2024-12-13T11:27:34.000Z" title="发表于 2024-12-13 19:27:34">2024-12-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/04/%E5%A6%82%E4%BD%95%E7%BB%99%E4%BA%91%E8%AE%A1%E7%AE%97%E7%94%A8%E6%88%B7%E6%8F%90%E4%BE%9B%E5%AE%89%E5%85%A8%E5%8F%AF%E9%9D%A0%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F/" title="如何给云计算用户提供安全可靠的操作系统镜像"><img src="/images/bg4.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="如何给云计算用户提供安全可靠的操作系统镜像"/></a><div class="content"><a class="title" href="/2024/12/04/%E5%A6%82%E4%BD%95%E7%BB%99%E4%BA%91%E8%AE%A1%E7%AE%97%E7%94%A8%E6%88%B7%E6%8F%90%E4%BE%9B%E5%AE%89%E5%85%A8%E5%8F%AF%E9%9D%A0%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F/" title="如何给云计算用户提供安全可靠的操作系统镜像">如何给云计算用户提供安全可靠的操作系统镜像</a><time datetime="2024-12-04T06:36:24.000Z" title="发表于 2024-12-04 14:36:24">2024-12-04</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            <a class="card-more-btn" href="/categories/" title="查看更多">
+    <i class="fas fa-angle-right"></i></a>
+            </div>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/AI/"><span class="card-category-list-name">AI</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/DevOps/"><span class="card-category-list-name">DevOps</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Linux/"><span class="card-category-list-name">Linux</span><span class="card-category-list-count">23</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E4%BA%91%E8%AE%A1%E7%AE%97/"><span class="card-category-list-name">云计算</span><span class="card-category-list-count">13</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/"><span class="card-category-list-name">应用开发</span><span class="card-category-list-count">17</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"><span class="card-category-list-name">开发工具</span><span class="card-category-list-count">5</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8A%80%E6%9C%AF/"><span class="card-category-list-name">数据库技术</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E7%B3%BB%E7%BB%9F%E5%BC%80%E5%8F%91/"><span class="card-category-list-name">系统开发</span><span class="card-category-list-count">1</span></a></li>
+            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/AI/" style="font-size: 1.23em; color: #999ea6">AI</a> <a href="/tags/Ansible/" style="font-size: 1.1em; color: #999">Ansible</a> <a href="/tags/Kubernetes/" style="font-size: 1.1em; color: #999">Kubernetes</a> <a href="/tags/apache/" style="font-size: 1.1em; color: #999">apache</a> <a href="/tags/api/" style="font-size: 1.1em; color: #999">api</a> <a href="/tags/argo/" style="font-size: 1.1em; color: #999">argo</a> <a href="/tags/atom/" style="font-size: 1.1em; color: #999">atom</a> <a href="/tags/ceph/" style="font-size: 1.1em; color: #999">ceph</a> <a href="/tags/cgroups/" style="font-size: 1.1em; color: #999">cgroups</a> <a href="/tags/cloud-native/" style="font-size: 1.1em; color: #999">cloud native</a> <a href="/tags/css/" style="font-size: 1.23em; color: #999ea6">css</a> <a href="/tags/dbaas/" style="font-size: 1.1em; color: #999">dbaas</a> <a href="/tags/devops/" style="font-size: 1.23em; color: #999ea6">devops</a> <a href="/tags/django/" style="font-size: 1.1em; color: #999">django</a> <a href="/tags/dom/" style="font-size: 1.17em; color: #999c9f">dom</a> <a href="/tags/es6/" style="font-size: 1.37em; color: #99a4b2">es6</a> <a href="/tags/fcitx/" style="font-size: 1.1em; color: #999">fcitx</a> <a href="/tags/flex/" style="font-size: 1.1em; color: #999">flex</a> <a href="/tags/fuse/" style="font-size: 1.17em; color: #999c9f">fuse</a> <a href="/tags/gerrit/" style="font-size: 1.1em; color: #999">gerrit</a> <a href="/tags/go/" style="font-size: 1.3em; color: #99a1ac">go</a> <a href="/tags/graphql/" style="font-size: 1.1em; color: #999">graphql</a> <a href="/tags/html/" style="font-size: 1.1em; color: #999">html</a> <a href="/tags/javascript/" style="font-size: 1.5em; color: #99a9bf">javascript</a> <a href="/tags/jenkins/" style="font-size: 1.1em; color: #999">jenkins</a> <a href="/tags/jquery/" style="font-size: 1.17em; color: #999c9f">jquery</a> <a href="/tags/kobject/" style="font-size: 1.1em; color: #999">kobject</a> <a href="/tags/koji/" style="font-size: 1.1em; color: #999">koji</a> <a href="/tags/kubernetes/" style="font-size: 1.1em; color: #999">kubernetes</a> <a href="/tags/kvm/" style="font-size: 1.23em; color: #999ea6">kvm</a> <a href="/tags/linux/" style="font-size: 1.37em; color: #99a4b2">linux</a> <a href="/tags/make/" style="font-size: 1.1em; color: #999">make</a> <a href="/tags/mysql/" style="font-size: 1.17em; color: #999c9f">mysql</a> <a href="/tags/namespace/" style="font-size: 1.1em; color: #999">namespace</a> <a href="/tags/nbd/" style="font-size: 1.1em; color: #999">nbd</a> <a href="/tags/openapi/" style="font-size: 1.1em; color: #999">openapi</a> <a href="/tags/openstack/" style="font-size: 1.1em; color: #999">openstack</a> <a href="/tags/perf/" style="font-size: 1.1em; color: #999">perf</a> <a href="/tags/promise/" style="font-size: 1.1em; color: #999">promise</a> <a href="/tags/python/" style="font-size: 1.43em; color: #99a6b9">python</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span><a class="card-more-btn" href="/archives/" title="查看更多">
+    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/03/"><span class="card-archive-list-date">三月 2025</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/12/"><span class="card-archive-list-date">十二月 2024</span><span class="card-archive-list-count">4</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/11/"><span class="card-archive-list-date">十一月 2024</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/10/"><span class="card-archive-list-date">十月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/09/"><span class="card-archive-list-date">九月 2024</span><span class="card-archive-list-count">19</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/08/"><span class="card-archive-list-date">八月 2024</span><span class="card-archive-list-count">8</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/06/"><span class="card-archive-list-date">六月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/10/"><span class="card-archive-list-date">十月 2023</span><span class="card-archive-list-count">1</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">134</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">161.4k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-03-14T16:14:42.933Z"></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2013 - 2025 By 三木</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>(() => {
+  function loadValine () {
+    function initValine () {
+      let initData = {
+        el: '#vcomment',
+        appId: 'Pbdwq7jL0Ag8SyVhveiTbaTA-gzGzoHsz',
+        appKey: '5z7cJ4LjydIGAt5kVlcKl6rG',
+      }
+      
+      const valine = new Valine(initData)
+    }
+
+    if (typeof Valine === 'function') initValine() 
+    else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+  }
+
+  window.pjax ? loadValine() : window.addEventListener('load', loadValine)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

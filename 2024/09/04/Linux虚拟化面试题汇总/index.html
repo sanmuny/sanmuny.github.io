@@ -1,0 +1,638 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Linux虚拟化面试题汇总 | 三木的技术博客</title><meta name="keywords" content="linux,kvm,virtio,qemu"><meta name="author" content="三木"><meta name="copyright" content="三木"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="CPU虚拟化是怎么实现的？硬件辅助虚拟化的情况下，CPU提供了根模式和非根模式，VMM 运行在根模式下，拥有最高的特权级别，可以直接访问物理硬件资源。Guest OS 运行在非根模式（VMX）下，当它执行敏感指令时，处理器会自动切换到根模式，由 VMM 进行处理。   QEMU会为每个vcpu创建一个线程，这个线程会通过ioctl给KVM发送KVM_RUN指令让CPU进入VMX模式并切换成VM的上">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux虚拟化面试题汇总">
+<meta property="og:url" content="https://wangsen.site/2024/09/04/Linux%E8%99%9A%E6%8B%9F%E5%8C%96%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB/index.html">
+<meta property="og:site_name" content="三木的技术博客">
+<meta property="og:description" content="CPU虚拟化是怎么实现的？硬件辅助虚拟化的情况下，CPU提供了根模式和非根模式，VMM 运行在根模式下，拥有最高的特权级别，可以直接访问物理硬件资源。Guest OS 运行在非根模式（VMX）下，当它执行敏感指令时，处理器会自动切换到根模式，由 VMM 进行处理。   QEMU会为每个vcpu创建一个线程，这个线程会通过ioctl给KVM发送KVM_RUN指令让CPU进入VMX模式并切换成VM的上">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangsen.site/images/bg1.jpg">
+<meta property="article:published_time" content="2024-09-04T11:29:51.000Z">
+<meta property="article:modified_time" content="2025-03-14T14:36:52.630Z">
+<meta property="article:author" content="三木">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="kvm">
+<meta property="article:tag" content="virtio">
+<meta property="article:tag" content="qemu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangsen.site/images/bg1.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://wangsen.site/2024/09/04/Linux%E8%99%9A%E6%8B%9F%E5%8C%96%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Linux虚拟化面试题汇总',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-03-14 22:36:52'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">134</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">80</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-tie"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">三木的技术博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-tie"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Linux虚拟化面试题汇总</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-09-04T11:29:51.000Z" title="发表于 2024-09-04 19:29:51">2024-09-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-03-14T14:36:52.630Z" title="更新于 2025-03-14 22:36:52">2025-03-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">计算机基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">9.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>29分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Linux虚拟化面试题汇总"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2024/09/04/Linux%E8%99%9A%E6%8B%9F%E5%8C%96%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB/#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/2024/09/04/Linux%E8%99%9A%E6%8B%9F%E5%8C%96%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB/" itemprop="commentCount"></span></a></span></div></div></div><article class="post-content" id="article-container"><h3 id="CPU虚拟化是怎么实现的？"><a href="#CPU虚拟化是怎么实现的？" class="headerlink" title="CPU虚拟化是怎么实现的？"></a>CPU虚拟化是怎么实现的？</h3><p>硬件辅助虚拟化的情况下，CPU提供了根模式和非根模式，VMM 运行在根模式下，拥有最高的特权级别，可以直接访问物理硬件资源。Guest OS 运行在非根模式（VMX）下，当它执行敏感指令时，处理器会自动切换到根模式，由 VMM 进行处理。</p>
+<img src="/images/vcpu.png" width="500px" />
+
+<p>QEMU会为每个vcpu创建一个线程，这个线程会通过ioctl给KVM发送<code>KVM_RUN</code>指令让CPU进入VMX模式并切换成VM的上下文。</p>
+<p>VMCB(VM控制块)可以被两种模式(root, vmx)访问，所以可以用来存储：</p>
+<ul>
+<li>HOST CPU上下文</li>
+<li>Guest CPU上下文</li>
+<li>Guest Entry/EXECUTION/EXIT 控制区，KVM可以配置哪些指令和异常能导致VM exit.</li>
+<li>Exit information: VM exit的原因</li>
+</ul>
+<p>敏感指令包括：</p>
+<ul>
+<li>访问或修改控制寄存器（如 CR0、CR3、CR4 等）的指令。这些寄存器控制着处理器的关键运行模式和特性。</li>
+<li>执行输入 / 输出（I/O）指令。例如，直接对硬件设备进行读写操作的指令，因为这些指令可能会影响整个系统的稳定性和安全性。</li>
+<li>启动和停止中断的指令。对中断的控制需要在特权级别下进行，以确保系统的正常运行和响应。</li>
+</ul>
+<p>特权指令包括：</p>
+<ul>
+<li>切换处理器运行模式的指令。例如，从用户模式切换到内核模式或监督模式的指令，这些指令通常只能在特定的特权级别下执行。</li>
+<li>对内存管理单元（MMU）进行设置和控制的指令。包括设置页表、开启或关闭虚拟内存等操作，这些操作对于系统的内存管理至关重要，需要特权才能执行。</li>
+<li>执行系统调用的指令</li>
+</ul>
+<h3 id="内存虚拟化是怎么实现的？"><a href="#内存虚拟化是怎么实现的？" class="headerlink" title="内存虚拟化是怎么实现的？"></a>内存虚拟化是怎么实现的？</h3><ul>
+<li>MTRR(Memory Type Range Register). 物理内存可以被分成几个区域(range)，每个区域对应于如下某一种内存类型：</li>
+</ul>
+<img src="/images/mtrr.png" width="500px" />
+
+<ul>
+<li>MMU(Memory Management Unit)内存管理单元实现了：<ul>
+<li>内存区域的访问保护</li>
+<li>虚拟地址到物理地址的转换</li>
+</ul>
+</li>
+<li>VMM可以通过EPT(Extended Page Table)实现：<ul>
+<li>防止虚拟机访问没有权限的页面</li>
+<li>虚拟机物理地址到真实物理地址的转换</li>
+</ul>
+</li>
+<li>TLB(Translation Lookaside Buffer)缓存了虚拟页号到物理页号的映射，如果TLB没有命中，从内存中查找页表的开销会非常大。</li>
+<li>VPID(Virtual Processor ID) TLB中通过VPID来标识缓存项所属的虚拟机，从而避免了每次VM_EXIT带来的TLB缓存失效的问题，极大的提高了效率</li>
+<li>虚拟机在创建时QEMU会给每个虚拟机分配一块内存(mmap), 虚拟机的物理地址空间其实就是这块内存在QEMU中的虚拟地址空间，EPT扩展页维护了虚拟机物理地址到主机物理地址空间的映射，从而使虚拟机可以访问主机的内存。</li>
+<li>虚拟机启动时，KVM 和 QEMU 协同工作，为虚拟机分配物理内存，并创建相应的页表结构。</li>
+<li>当虚拟机中的应用程序访问内存时，KVM 会通过硬件辅助虚拟化技术将客户机虚拟地址转换为物理地址。</li>
+<li>QEMU 负责模拟硬件设备，并将对虚拟设备的内存访问转换为对物理内存的访问。</li>
+<li>如果虚拟机需要更多内存，KVM 和 QEMU 会共同进行内存分配和管理，确保虚拟机有足够的内存可用。</li>
+<li>QEMU 还可以对内存进行优化和共享，以提高性能和减少内存使用量。</li>
+</ul>
+<h3 id="中断的处理"><a href="#中断的处理" class="headerlink" title="中断的处理"></a>中断的处理</h3><ul>
+<li><p>设备生成中断不考虑时钟同步，直接发送给中断控制器和CPU。异常的处理与中断类似，但考虑时钟同步，被称为同步中断</p>
+</li>
+<li><p>CPU收到中断后，内核会调用<code>do_IRQ()</code></p>
+</li>
+<li><p>do_IRQ会获取中断号、保存被中断进程的上下文</p>
+</li>
+<li><p>do_IRQ根据中断号获取对应的中断处理程序</p>
+</li>
+<li><p>当中断处理程序结束后do_IRQ会将保存在内核栈中的进程上下文恢复</p>
+</li>
+<li><p>将程序计数器的值恢复为被中断进程的下一条指令</p>
+</li>
+<li><p>中断上下文不可以睡眠，中断处理程序并不具有自己的栈，它会共享被中断进程的内核栈。或者配置内核，让每个CPU都有一个页用作中断栈</p>
+</li>
+<li><p>中断处理程序分为上下两部分，上半部通常只执行有严格时限的工作，如中断应答、复位硬件、从网卡缓冲区把数据拷贝到内存等。下半部执行比较耗时的工作。</p>
+</li>
+</ul>
+<p>下半部执行的三种方式：</p>
+<ul>
+<li>软中断：需要编译的时候就注册软中断，中断处理程序执行完硬件设备相关的操作后就会调用do_softirq()函数执行被raise_softirq(SOFTIRQ_TYPE)挂起的软中断。类型相同的软中断可以在所有处理器上同时执行。</li>
+<li>tasklet: tasklet其实是用软中断实现的(Hi_SOFTIRQ及TASKLET_IRQ)。它允许驱动程序动态的注册。类型相同的tasklet不能同时执行。</li>
+<li>工作队列：通过在进程上下文中启动一个内核线程去执行，允许睡眠。系统有缺省的workqueue来处理数据，驱动程序也可以创建自己的workqueue来执行下半部的任务。对于一个workqueue，每个CPU上都有一个cpu_workqueue_struct来定义在该CPU上运行的内核线程</li>
+</ul>
+<h3 id="多线程访问一块内存的时候，怎么样优化其性能"><a href="#多线程访问一块内存的时候，怎么样优化其性能" class="headerlink" title="多线程访问一块内存的时候，怎么样优化其性能"></a>多线程访问一块内存的时候，怎么样优化其性能</h3><ul>
+<li>可以将内存池化，可以避免频繁的分配与释放</li>
+<li>使用无锁的结构：原子操作或者利用内存屏障实现无锁的队列</li>
+<li>将数据分区，不同的线程处理不同区域的数据可以避免竞争</li>
+<li>在读多写少的情况下，可以使用读写锁</li>
+<li>使用细粒度锁</li>
+<li>内存对齐</li>
+<li>数据预取：根据线程的访问模式，提前将可能被访问的数据加载到缓存中，减少线程等待数据从内存加载到缓存的时间。</li>
+<li>缓存行对齐：处理器在加载内存数据时通常是按照缓存行（一般为 64 字节）进行加载的，当多线程访问的数据位于不同的缓存行时，可以减少线程之间的缓存竞争。</li>
+</ul>
+<h3 id="介绍一下Virtio"><a href="#介绍一下Virtio" class="headerlink" title="介绍一下Virtio"></a>介绍一下Virtio</h3><p>Virtio 是一种 I/O 半虚拟化解决方案，主要用于提高虚拟机与宿主机之间的 I/O 性能.</p>
+<p>基本架构</p>
+<ul>
+<li>前端驱动（Guest Front - end Driver）<ul>
+<li>存在于虚拟机中：运行在虚拟机操作系统内部，它负责将虚拟机中的 I/O 请求传递到宿主机。例如，当虚拟机中的应用程序发起一个磁盘读写请求或者网络数据包发送 / 接收请求时，前端驱动会将这些请求按照 Virtio 规范进行封装。</li>
+<li>适配 Virtio 规范：遵循 Virtio 的接口标准，将虚拟机的硬件设备抽象为 Virtio 设备，使得虚拟机操作系统可以像操作物理硬件设备一样操作这些虚拟设备。例如，在网络通信方面，前端驱动会将网络数据包按照 Virtio 网络设备的格式进行封装，准备发送给宿主机。</li>
+</ul>
+</li>
+<li>后端驱动（Host Back - end Driver）<ul>
+<li>位于宿主机上：在宿主机操作系统中运行，负责接收来自虚拟机前端驱动的 I/O 请求，并将这些请求转换为对物理硬件设备的实际操作。例如，当后端驱动接收到虚拟机发送的磁盘读写请求时，它会将这些请求转发给物理磁盘控制器进行处理。</li>
+<li>硬件交互与资源管理：与物理硬件设备进行直接交互，管理和分配物理资源以满足虚拟机的 I/O 需求。例如，在内存管理方面，后端驱动需要确保虚拟机的内存与宿主机的物理内存之间的数据传输高效、安全地进行。</li>
+</ul>
+</li>
+</ul>
+<img src="/images/virtio-1.gif" width="500px" />
+
+<ul>
+<li>virtio模块给前端驱动提供了操作virtqueue的接口。前端驱动可以根据需求创建一个或者多个virtqueue来与后端进行通信。</li>
+</ul>
+<img src="/images/virtio-2.gif" width="500px" />
+
+<ul>
+<li>virtio_driver结构体表示在虚拟机中的virtio前端驱动，在前端驱动模块初始化的时候，需要调用<code>register_virtio_driver</code>来注册。它定义了上层的设备驱动以及所支持的设备ID，设备的feature table，以及一系列的回调函数。</li>
+<li>virtio_device结构体代表了虚拟机中的virtio设备。</li>
+<li>virtio_device引用的virtio_config_ops定义了配置virtio设备的一些操作</li>
+<li>virtqueue结构体中包含了其服务的virtio设备，以及virtqueue_ops</li>
+</ul>
+<p>virtio使用流程：</p>
+<ol>
+<li>前端驱动调用<code>register_virtio_driver</code>来注册virtio驱动</li>
+<li>当有virtio驱动支持设备列表中的设备加入后，会调用virtio_driver中注册的probe函数</li>
+<li>probe函数通常会调用<code>virtio_find_vqs</code>来申请所需要的virtqueue</li>
+<li>当虚拟机需要向Hypervisor发送数据时，调用virtqueue_ops中的<code>add_buffer</code>函数来添加数据，添加完成后调用<code>kick</code>通知Hypervisor</li>
+<li>虚拟机可以轮询<code>get_buffer</code>函数来获取数据，也可以睡眠，等待被callback唤醒</li>
+</ol>
+<h3 id="介绍一下NUMA"><a href="#介绍一下NUMA" class="headerlink" title="介绍一下NUMA"></a>介绍一下NUMA</h3><p>NUMA（Non - Uniform Memory Access，非一致内存访问）是一种计算机内存设计架构，以下是它的相关介绍：</p>
+<p>基本概念</p>
+<ul>
+<li><p>内存节点：在 NUMA 架构中，系统的物理内存被划分为多个节点（Node）。每个节点都有自己的本地内存，并且可以被特定的一组处理器（通常是在物理位置上靠近该内存节点的处理器）更快地访问。例如，在一个具有两个 NUMA 节点的服务器中，节点 0 的内存对于与节点 0 紧密关联的处理器来说是本地内存，而对于节点 1 相关联的处理器来说则是远程内存。</p>
+</li>
+<li><p>处理器与内存的关联：每个处理器都有一个优先访问的本地内存节点，但也可以访问其他节点的内存（称为远程内存访问）。不过，访问远程内存的速度通常比访问本地内存慢，这是因为远程访问需要经过额外的内部互连线路（如 QPI 或 UPI 总线），会带来更高的延迟。</p>
+</li>
+<li><p><code>numactl --membind=0 &lt;command&gt;</code></p>
+</li>
+<li><p><code>numactl --interleave=all &lt;command&gt;</code></p>
+</li>
+<li><p><code>numactl --membind=0 --cpunodebind=0 -p 1234</code></p>
+</li>
+<li><p><code>numactl --interleave=all &lt;command&gt;</code></p>
+</li>
+</ul>
+<h3 id="Kubevirt是怎么实现虚拟机管理的"><a href="#Kubevirt是怎么实现虚拟机管理的" class="headerlink" title="Kubevirt是怎么实现虚拟机管理的"></a>Kubevirt是怎么实现虚拟机管理的</h3><p>自定义资源定义（CRD）</p>
+<ul>
+<li>定义虚拟机资源：Kubevirt 在 Kubernetes 基础上定义了一系列与虚拟机相关的自定义资源，如 VirtualMachine（VM）、VirtualMachineInstance（VMI）等。这些 CRD 允许用户像管理 Kubernetes 原生资源（如 Pod、Deployment 等）一样管理虚拟机。例如，用户可以通过创建一个 VMI 资源的 YAML 文件，描述虚拟机的规格（如 CPU、内存、磁盘等）、网络配置等信息，然后将其提交给 Kubernetes API 服务器进行创建。</li>
+<li>扩展 Kubernetes API：通过 CRD，Kubevirt 扩展了 Kubernetes 的 API，使 Kubernetes 能够理解和处理虚拟机相关的操作。这意味着可以使用 Kubernetes 的命令行工具（如 kubectl）来管理虚拟机的整个生命周期，包括创建、启动、停止、删除等操作。例如，kubectl create -f &lt;vmi - yaml - file&gt;可以根据指定的 VMI YAML 文件创建一个虚拟机实例。</li>
+<li>管理虚拟机生命周期：Kubevirt 利用 Kubernetes 的控制器模式来管理虚拟机的生命周期。它包含了多个控制器，每个控制器负责特定的任务。例如，VirtualMachineController 负责处理 VirtualMachine 资源的创建、更新和删除操作，并将其转换为对 VMI 资源的操作。当用户创建一个 VirtualMachine 资源时，VirtualMachineController 会根据其配置创建相应的 VMI 资源，并确保它们的状态保持一致。</li>
+<li>协调资源状态：控制器会不断监控虚拟机相关资源的状态，并根据需要进行调整和协调。例如，如果一个 VMI 资源的状态变为异常（如虚拟机崩溃或网络故障），相关的控制器会尝试采取恢复措施，如重启虚拟机或重新配置网络。这与 Kubernetes 管理 Pod 等资源的方式类似，通过控制器的协调机制来确保系统的稳定性和可靠性。</li>
+</ul>
+<p>网络管理</p>
+<ul>
+<li>集成 CNI 插件：Kubevirt 集成了容器网络接口（CNI）插件来实现虚拟机的网络连接。CNI 插件负责为虚拟机分配网络地址、配置网络路由以及提供网络服务（如 DHCP、DNS 等）。例如，当一个虚拟机启动时，Kubevirt 会调用相应的 CNI 插件（如 Multus CNI）为其创建网络接口，并根据网络配置将虚拟机连接到指定的网络中。</li>
+<li>支持多种网络模式：除了基本的网络连接，Kubevirt 还支持多种复杂的网络模式。例如，在多租户环境中，可以通过网络策略（Network Policy）来控制虚拟机之间的网络访问权限，实现网络隔离和安全控制。另外，对于需要高性能网络的场景，Kubevirt 可以支持 SR - IOV 等硬件加速技术，提高虚拟机的网络吞吐量和降低网络延迟。</li>
+</ul>
+<p>存储管理</p>
+<ul>
+<li>使用存储卷：Kubevirt 利用 Kubernetes 的存储卷（Volume）概念来管理虚拟机的存储。用户可以在 VMI 资源中定义存储卷的类型（如 PersistentVolumeClaim - PVC、HostPath 等）、大小和挂载点。例如，通过创建一个 PVC 并将其挂载到虚拟机内部的特定目录，虚拟机可以使用持久化存储来保存数据。这使得虚拟机的数据可以独立于虚拟机的生命周期进行管理，即使虚拟机被删除，数据仍然可以保留在存储卷中。</li>
+<li>存储插件支持：Kubevirt 支持多种存储插件，如 Ceph、GlusterFS 等。这些存储插件可以提供高性能、高可靠的存储服务，满足不同场景下虚拟机的存储需求。例如，在大规模集群环境中，可以使用 Ceph 作为存储后端，为虚拟机提供分布式、可扩展的存储资源。同时，存储插件还支持动态存储供应（Dynamic Provisioning），即根据虚拟机的需求自动创建和分配存储资源。</li>
+</ul>
+<h3 id="Linux是如何管理内存的"><a href="#Linux是如何管理内存的" class="headerlink" title="Linux是如何管理内存的"></a>Linux是如何管理内存的</h3><ul>
+<li>page结构体用来表示一个物理页面，其包含引用计数、虚拟地址等信息</li>
+<li>alloc_pages(gfp_mask, order)可以分配2 ** order个连续的物理页，返回第一个页的page结构体</li>
+<li>__get_free_page(gfp_mask, order)返回所分配第一个页的虚拟地址</li>
+<li>内核用slab为内核中用到的数据结构分配空间，slab通常由物理连续的内存页组成，一个slab可以存储多个同类型内核对象</li>
+</ul>
+<h3 id="什么是SR-IOV"><a href="#什么是SR-IOV" class="headerlink" title="什么是SR-IOV"></a>什么是SR-IOV</h3><p>SR - IOV（Single Root I/O Virtualization）即单根 I/O 虚拟化，以下是关于它的详细介绍：</p>
+<p>基本概念</p>
+<p>物理功能（PF）和虚拟功能（VF）</p>
+<ul>
+<li>物理功能（PF）：在 SR - IOV 架构中，物理功能（PF）是指物理设备（如网卡、显卡等）本身所具备的完全功能的接口。它可以像传统的物理设备一样被操作系统识别和配置。例如，在一个支持 SR - IOV 的网卡中，PF 可以进行复杂的网络配置、驱动程序更新等操作，并且拥有对物理设备的完全控制权。</li>
+<li>虚拟功能（VF）：虚拟功能（VF）是从物理功能（PF）中派生出来的轻量级的虚拟接口。VF 与 PF 共享物理设备的硬件资源，但它的功能相对简化，只包含了与数据传输相关的必要功能。例如，一个支持 SR - IOV 的网卡可以创建多个 VF，每个 VF 都可以被分配给一个虚拟机或者容器，使它们能够直接访问物理网络，而无需经过复杂的软件模拟。</li>
+</ul>
+<p>工作原理</p>
+<ul>
+<li>资源分配与共享<ul>
+<li>硬件资源划分：SR - IOV 技术在硬件层面将物理设备的资源（如内存、带宽、中断等）划分为多个部分，分别分配给 PF 和 VF。例如，在一个网卡中，硬件会将一定的缓存空间、数据传输带宽等资源分配给每个 VF，确保 VF 在进行数据传输时能够获得稳定的性能。</li>
+<li>共享物理设备：VF 与 PF 共享物理设备的物理端口、链路层控制器等硬件组件。这样，多个 VF 可以同时利用物理设备的高速数据传输通道，提高了硬件资源的利用率。例如，在一个 10Gb/s 的网卡上，通过 SR - IOV 创建多个 VF 后，这些 VF 可以共同使用网卡的 10Gb/s 带宽进行数据传输。</li>
+</ul>
+</li>
+<li>设备发现与配置<ul>
+<li>BIOS 和硬件初始化：在系统启动过程中，BIOS 和硬件会进行初始化操作，检测和配置 SR - IOV 相关的硬件组件。例如，在服务器主板的 BIOS 设置中，可能会有关于 SR - IOV 的启用选项，当启用该选项后，系统启动时会自动检测支持 SR - IOV 的设备，并进行相应的初始化工作。</li>
+<li>操作系统和驱动程序支持：操作系统和设备驱动程序需要对 SR - IOV 进行支持，才能正确识别和配置 PF 和 VF。例如，在 Linux 操作系统中，内核需要加载支持 SR - IOV 的网络驱动程序，该驱动程序会与硬件进行交互，发现并配置 PF 和 VF。当一个 VF 被分配给一个虚拟机时，虚拟机中的操作系统也需要相应的驱动程序来识别和使用 VF。</li>
+</ul>
+</li>
+</ul>
+<p>技术优势</p>
+<ul>
+<li>提高网络性能<ul>
+<li>降低虚拟化开销：在传统的虚拟化环境中，虚拟机通过软件模拟的方式共享物理网络设备，这会带来一定的性能开销。而 SR - IOV 通过硬件直接分配 VF 给虚拟机，减少了软件模拟的中间环节，从而降低了网络延迟和提高了网络吞吐量。例如，在高性能计算、大数据处理等对网络性能要求较高的场景中，使用 SR - IOV 可以显著提高数据传输效率。</li>
+<li>实现接近物理设备的性能：VF 可以直接访问物理设备的硬件资源，使得虚拟机或者容器在网络性能上能够接近使用物理设备的性能。例如，在一个测试环境中，对比使用传统虚拟网卡和使用 SR - IOV 的 VF 的虚拟机的网络性能，可以发现使用 VF 的虚拟机在网络延迟和吞吐量方面都有明显的提升。</li>
+</ul>
+</li>
+<li>增强资源利用率和灵活性<ul>
+<li>灵活分配资源：SR - IOV 允许根据不同的需求灵活地创建和分配 VF。例如，在一个数据中心中，对于不同的业务应用（如 Web 服务、数据库服务等），可以根据其网络负载特点分配不同数量的 VF，实现资源的优化配置。</li>
+<li>提高硬件资源复用率：通过创建多个 VF，可以在同一物理设备上同时为多个虚拟机或者容器提供服务，提高了硬件资源的复用率。例如，在一个拥有多个虚拟机的云计算环境中，使用 SR - IOV 技术的网卡可以支持更多的虚拟机同时进行网络通信，而无需额外增加物理网卡的数量。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Linux的进程是怎么创建的"><a href="#Linux的进程是怎么创建的" class="headerlink" title="Linux的进程是怎么创建的"></a>Linux的进程是怎么创建的</h3><ul>
+<li>进程是操作系统管理与分配资源的主体，它在Linux中用task_struct来表示，进程描述符包含了打开的文件、挂起的信号、进程的地址空间、进程的状态等信息。</li>
+<li>每个进程都会有一个1页或者2页的内核栈，栈底保存了<code>thread_info</code>结构体，内核可以通过它找到在slab分配器中动态分配的task_struct</li>
+<li>进程有如下的状态<ul>
+<li>TASK_RUNNING：正在执行或者在运行队列等待执行</li>
+<li>TASK_INTERRUPTIBLE：可中断睡眠</li>
+<li>TASK_UNINTERRUPTIBLE: 不可中断睡眠</li>
+<li>__TASK_TRACED</li>
+<li>__TASK_STOPPED</li>
+</ul>
+</li>
+</ul>
+<p>创建过程：</p>
+<ul>
+<li>调用<code>dup_task_struct</code>为子进程创建一个内核栈、thread_info和task_struct，值与当前进程相同</li>
+<li>检查资源是否足够</li>
+<li>子进程设置自己的进程描述符</li>
+<li>子进程的状态被设置为TASK_UNINTERRUPTIBLE</li>
+<li>设置PF_SUPERPRIV、PF_FORKNOEXEC等flag</li>
+<li>分配有效的PID</li>
+<li>根据标志选择是否共享或者拷贝打开的文件、文件系统信息、信号处理函数、进程地址空间、命名空间等信息</li>
+</ul>
+<p>线程的创建通常是通过clone系统调用来做的，和进程的创建过程类似。只不过是标志位设置成了<code>CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND</code>以共享进程的地址空间、文件系统信息、文件描述符、信号处理程序。</p>
+<p>内核线程与普通进程的区别在于没有自己的地址空间，即task_struct中的mm被设置为NULL。</p>
+<p>销毁过程：</p>
+<ul>
+<li>设置标志位PF_EXITING</li>
+<li>删除内核定时器中的任务</li>
+<li>如果mm_struct没有被共享，则释放</li>
+<li>如果进程在等待IPC信号，则从队列中删除</li>
+<li>减少文件系统信息以及文件描述符的引用计数，如果清零就释放</li>
+<li>设置task_struct中的退出状态码</li>
+<li>给子进程找养父进程，线程组中的其他进程或者init进程</li>
+<li>状态设置为<code>TASK_ZOMBIE</code>，仅保留了内核栈、thread_info、task_struct给父进程提供信息</li>
+<li>如果父进程检索到了信息，就将上述剩下的资源释放</li>
+</ul>
+<h3 id="Linux的进程是怎么调度的"><a href="#Linux的进程是怎么调度的" class="headerlink" title="Linux的进程是怎么调度的"></a>Linux的进程是怎么调度的</h3><ul>
+<li>Linux的调度器是通过模块和调度器类实现的，在系统需要调度的时候，会从调度器中选择优先级最高的调度器进行调度</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>调度类</th>
+<th>调度策略</th>
+<th>调度对象</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>stop_sched_class（停机调度类）</td>
+<td>无</td>
+<td>停机的进程</td>
+</tr>
+<tr>
+<td>dl_sched_class（限期调度类）</td>
+<td>SCHED_DEADLINE</td>
+<td>dl进程</td>
+</tr>
+<tr>
+<td>rt_sched_class（实时调度类）</td>
+<td>SCHED_RR 或者 SCHED_FIFO</td>
+<td>实时进程</td>
+</tr>
+<tr>
+<td>fair_sched_class（公平调度类）</td>
+<td>SCHED_NORMAL 或者 SCHED_BATCH</td>
+<td>普通进程</td>
+</tr>
+<tr>
+<td>idle_sched_class（空闲调度类）</td>
+<td>SCHED_IDLE</td>
+<td>idle进程</td>
+</tr>
+</tbody></table>
+<ul>
+<li>优先级关系：<code>stop_sched_class &gt; dl_sched_class &gt; rt_sched_class &gt; fair_sched_class &gt; idle_shced_class</code></li>
+</ul>
+<img src="/images/cfs.png" width="500px" />
+
+<ul>
+<li>CFS（完全公平调度器）是Linux内核2.6.23版本开始采用的进程调度器，它的基本原理是这样的：设定一个调度周期<code>sched_latency_ns</code>，目标是让每个进程在这个周期内至少有机会运行一次，换一种说法就是每个进程等待CPU的时间最长不超过这个调度周期；然后根据进程的数量，大家平分这个调度周期内的CPU使用权，由于进程的优先级即nice值不同，分割调度周期的时候要加权；每个进程的累计运行时间保存在自己的<code>vruntime</code>字段里，哪个进程的<code>vruntime</code>最小就获得本轮运行的权利。</li>
+<li><code>进程的运行时间 = (调度周期时间 * 进程的weight) / CFS运行队列的总weight</code></li>
+<li><code>SCHED_FIFO</code>和<code>SCHED_RR</code>用来调度实时进程，<code>SCHED_FIFO</code>会一直占用CPU直到自己退出或者被优先级更高的实时进程抢占，<code>SCHED_RR</code>是同样优先级的实时进程按照时间片轮转调度</li>
+<li>Linux中的普通进程用的是CFS完全公平调度算法来进行调度，他通过计算虚拟运行时间<code>vruntime</code>，选择<code>vruntime</code>最小的进程进行调度</li>
+<li><code>task_struct</code>中的<code>sched_entity</code>记录了虚拟运行时间<code>vruntime</code>，内核用自平衡二叉搜索树红黑树来组织可运行进程队列</li>
+<li><code>vruntime += 实际运行时间 * (NICE_0_LOAD/NICE_LOAD)</code> NICE_0_LOAD为nice值为0时的权重，NICE_LOAD为当前进程nice值的权重</li>
+<li><code>schedule()</code>会调用<code>context_switch()</code>来：<ul>
+<li><code>switch_mm()</code>：切换新进程的虚拟地址空间</li>
+<li><code>switch_to()</code>：切换新进程的处理器状态</li>
+</ul>
+</li>
+<li>内核会在系统调用、中断处理结束后返回用户空间时，检查<code>need_resched</code>标志，如果被设置则重新调度，抢占用户程序的执行</li>
+<li>进程<code>threed_info</code>中的<code>preempt_count</code>记录了持有锁的数量，如果为<code>0</code>表明可以被抢占</li>
+</ul>
+<h3 id="如果虚拟机出现了故障，可以用哪些Linux命令去解决"><a href="#如果虚拟机出现了故障，可以用哪些Linux命令去解决" class="headerlink" title="如果虚拟机出现了故障，可以用哪些Linux命令去解决"></a>如果虚拟机出现了故障，可以用哪些Linux命令去解决</h3><ul>
+<li><p>top/htop</p>
+<ul>
+<li>作用：实时显示系统中各个进程的资源占用情况，包括 CPU、内存、交换空间等。top是 Linux 系统自带的基本工具，而htop是一个功能更加强大、界面更加友好的进程监控工具。例如，通过top命令可以看到哪些进程占用了大量的 CPU 资源或者内存资源</li>
+</ul>
+</li>
+<li><p>free</p>
+<ul>
+<li>作用：显示系统内存（包括物理内存和交换空间）的使用情况。例如，free -m以 MB 为单位显示内存的总量、已使用量、空闲量、共享内存量以及缓冲和缓存占用量等信息。</li>
+<li>故障场景示例：如果虚拟机出现内存不足相关的错误（如应用程序因内存耗尽而崩溃），可以使用free命令查看内存的使用情况，确定是否需要增加虚拟机的内存分配或者优化内存使用。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">total：表示系统总的可用物理内存大小，计算公式为total = used + free + buff/cache。</span><br><span class="line">used：已被使用的物理内存大小。</span><br><span class="line">free：未被使用的物理内存大小，这部分内存是完全没有被占用的。</span><br><span class="line">shared：多个进程共享的内存大小，通常在某些特殊的进程间通信或者共享内存场景下会有数据。</span><br><span class="line">buff/cache：这是内核缓冲区（buffer）和页面缓存（cache）的大小总和。缓冲区用于存储块设备（如磁盘）的读写缓冲数据；页面缓存用于缓存文件系统中文件的页面数据，以提高文件读写的效率。</span><br><span class="line">available：这是一个估计值，表示新的应用程序还可以使用的物理内存大小。它考虑了系统中未被使用的内存、可回收的缓存等因素，是一个对应用程序可分配内存更准确的评估。</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>iostat</p>
+<ul>
+<li>直接在命令行输入iostat，会显示系统整体的 CPU 使用情况以及各个磁盘设备的 I/O 统计信息</li>
+<li>磁盘性能评估：通过iostat可以查看磁盘的读写速度、I/O 操作次数等信息，从而评估磁盘的性能。例如，如果kB_read/s和kB_wrtn/s的值非常低，而%iowait的值较高，可能表示磁盘性能不足或者存在 I/O 瓶颈。</li>
+<li>I/O 瓶颈排查：当系统整体性能出现问题，怀疑是磁盘 I/O 导致时，iostat -x可以提供详细的磁盘 I/O 信息。比如，如果r_await或w_await的值很大，说明磁盘读写操作的等待时间过长，可能存在磁盘故障、磁盘负载过高或者其他影响磁盘性能的因素。</li>
+<li>磁盘负载监控：在一个多用户或者多任务的环境中，使用iostat可以监控各个磁盘设备的负载情况。例如，在一个数据库服务器中，通过定期查看磁盘的tps和%util等指标，可以了解磁盘的繁忙程度，以便及时调整数据库的存储策略或者优化服务器的配置。</li>
+</ul>
+</li>
+<li><p>netstat</p>
+<ul>
+<li>网络连接监控：通过netstat可以查看当前系统与外部主机建立的网络连接情况。例如，在排查网络故障时，查看是否存在异常的网络连接（如未知的远程连接或者过多的连接）。如果发现某个应用程序建立了大量异常的连接，可能存在安全风险或者程序故障。</li>
+<li>服务监听检查：使用netstat -l可以检查系统中哪些网络服务正在监听特定的端口。例如，在配置 Web 服务器后，可以通过该命令确认 Web 服务是否正确地在 80 端口（或者其他指定端口）进行监听。</li>
+<li>网络协议统计分析：netstat -s提供的网络协议统计信息对于分析网络性能和排查网络问题非常有帮助。比如，如果tcp协议的重传数据包数量过多，可能表示网络存在不稳定或者拥塞的情况，需要进一步检查网络设备或者网络配置。</li>
+<li>进程与网络连接关联：结合-p参数可以确定哪些进程在使用网络资源。例如，当系统出现网络带宽异常占用的情况时，通过netstat -p可以找到相关的进程，进而分析该进程是否正常或者是否需要进行优化。</li>
+</ul>
+</li>
+</ul>
+<h3 id="在Openstack环境中，虚拟机初始化的时候是怎么配置ssh-key的"><a href="#在Openstack环境中，虚拟机初始化的时候是怎么配置ssh-key的" class="headerlink" title="在Openstack环境中，虚拟机初始化的时候是怎么配置ssh key的"></a>在Openstack环境中，虚拟机初始化的时候是怎么配置ssh key的</h3><ul>
+<li><p>自动化脚本添加：可以编写脚本在镜像制作过程中自动添加 SSH Key 公钥。例如，使用脚本语言（如 Python）结合相关的镜像操作工具（如guestfish）来操作镜像。脚本可以在镜像中创建/root/.ssh目录（如果不存在），并将公钥写入到authorized_keys文件中。这样制作出来的镜像在每次创建虚拟机实例时，都已经包含了预先配置好的 SSH Key 公钥。</p>
+</li>
+<li><p>使用元数据服务注入公钥</p>
+<ul>
+<li>原理：OpenStack 提供了元数据服务，虚拟机在启动过程中可以通过网络获取元数据信息。在制作镜像时，在镜像中配置一个脚本（如在 Linux 系统中可以是一个cloud - init脚本），该脚本在虚拟机启动时会从元数据服务获取 SSH Key 公钥信息，并将其添加到相应的位置。</li>
+<li>具体操作：在镜像制作过程中，将cloud - init相关的软件包安装到镜像中，并在镜像的启动配置文件（如/etc/rc.local或者/etc/cloud/cloud.cfg）中添加执行获取和配置公钥的脚本命令。例如，脚本可以从元数据服务的特定 URL（如<a target="_blank" rel="noopener" href="http://169.254.169.254/openstack/latest/meta_data.json%EF%BC%89%E8%8E%B7%E5%8F%96%E5%8C%85%E5%90%AB">http://169.254.169.254/openstack/latest/meta_data.json）获取包含</a> SSH Key 公钥的元数据信息，然后将公钥写入到/root/.ssh/authorized_keys文件中。</li>
+</ul>
+</li>
+</ul>
+<h3 id="TCP的连接是怎么建立的"><a href="#TCP的连接是怎么建立的" class="headerlink" title="TCP的连接是怎么建立的"></a>TCP的连接是怎么建立的</h3><p>TCP段中的标志位有：</p>
+<ul>
+<li>SYN: 同步标志，用于建立连接</li>
+<li>ACK: 确认标志，表示确认收到请求</li>
+<li>RST: 复位标志，用于复位相应的 TCP 连接</li>
+<li>PSH: 推标志，用于请求立即将数据交付给接收方的应用程序，而不是在缓冲区中等待</li>
+<li>FIN: 结束标志，用于请求关闭连接</li>
+<li>URG: 紧急标志，用于指示数据包中的数据应被优先处理。</li>
+</ul>
+<p>TCP建立连接的步骤如下：</p>
+<ul>
+<li>客户端发送一个标志位SYN为1、序列号为随机数x的数据段给服务器端，并进入SYNC-SENT状态</li>
+<li>服务器端回复一个ACK标志位为1、SYN标志位为1、顺序号为<code>x+1</code>、应答号为随机数y的数据段表示接受连接，并进入SYNC-RCVD状态</li>
+<li>客户端再发送给服务器端一个ACK标志位为1、顺序号为<code>x+1</code>、应答号为<code>y+1</code>的数据段，并进入ESTABLISHED状态</li>
+<li>服务器端收到上述数据段后进入ESTABLISHED状态</li>
+</ul>
+<p>TCP关闭连接的步骤如下：</p>
+<ul>
+<li>客户端发送一个标志位FIN为1的数据段，并进入<code>FIN_WAIT_1</code>状态</li>
+<li>服务器端收到后会发送个客户端一个ACK为1的数据段并进入<code>CLOSE_WAIT</code>状态</li>
+<li>服务器端发送一个FIN 和 ACK 标志位都被设置为 1的数据段，进入<code>LAST_ACK</code>状态</li>
+<li>客户端发送一个ACK为1的报文给服务器端，进入<code>TIME_WAIT</code>状态，服务器收到后进入<code>CLOSED</code>状态</li>
+<li>客户端等待<code>2*MSL</code>的时间后进入<code>CLOSED</code>状态</li>
+</ul>
+<p>TCP 关闭连接时客户端在<code>TIME_WAIT</code>状态下会等待 2 倍的最大报文段生存时间（2MSL），主要原因如下：</p>
+<ul>
+<li><p>确保 ACK 被接收<br>当客户端发送最后一个 ACK 确认报文段以响应服务器的 FIN 报文段后，这个 ACK 报文段可能在传输过程中丢失。如果丢失，服务器将重新发送 FIN 报文段。<br>客户端在 TIME - WAIT 状态等待 2MSL 时间，能够确保它有足够的时间收到服务器重传的 FIN 报文段，并再次发送 ACK 确认报文段。</p>
+</li>
+<li><p>使旧连接的报文段在网络中消失<br>TCP 连接使用 IP 地址和端口号来标识。在网络环境中，可能存在报文段由于网络延迟等原因而延迟到达的情况。<br>当一个新的连接建立时，如果之前旧连接的报文段仍在网络中传播，可能会干扰新连接。等待 2MSL 时间可以保证本次连接中产生的所有报文段都从网络中消失，从而避免旧的连接报文段对下一个 TCP 连接造成干扰。</p>
+</li>
+</ul>
+<h3 id="如何设计一个软件"><a href="#如何设计一个软件" class="headerlink" title="如何设计一个软件"></a>如何设计一个软件</h3><ol>
+<li><p>Linux系统的设计理念”Do one thing, and do it well”，每个Linux命令都只做很小的功能，但通过Shell的组合可以实现更为复杂的功能。这点和函数式编程的风格也比较类似。所以在做架构设计的时候尽量让模块功能明确，可以提高可重用性以及快速的定位和分析问题。</p>
+</li>
+<li><p>在交互设计的时候尽量遵循现有的一些规范，如RESTful API。接口的设计需要明确，尽量不要有重复的、叠加的功能。</p>
+</li>
+<li><p>在数据存储方面，尽量避免多个组件共同直接操作数据库，需要设计一个单独的组件来负责数据的处理。</p>
+</li>
+<li><p>为提升性能，可以考虑设计与实现缓存系统。</p>
+</li>
+<li><p>需要设计和实现日志系统，尽量让日志信息详细、准确以便快速定位和分析问题。</p>
+</li>
+</ol>
+<h3 id="设计一个高性能的存储系统"><a href="#设计一个高性能的存储系统" class="headerlink" title="设计一个高性能的存储系统"></a>设计一个高性能的存储系统</h3><ol>
+<li><p>可以实现一个缓存</p>
+</li>
+<li><p>设备虚拟化可以从半虚拟化下移到硬件辅助虚拟化以提升性能</p>
+</li>
+<li><p>使用异步I/O或者I/O多路复用可以批量处理数据以提升性能</p>
+</li>
+<li><p>可以通过写时复用等技术延后处理极有可能不用处理的数据</p>
+</li>
+<li><p>后台线程如清理程序的设计可以给上层提供较全面的接口，以便上层组件可以根据实际的业务需求去更改配置进行性能优化</p>
+</li>
+</ol>
+<h3 id="重构的时机，重构的代码如何保证，如何和设计模式结合"><a href="#重构的时机，重构的代码如何保证，如何和设计模式结合" class="headerlink" title="重构的时机，重构的代码如何保证，如何和设计模式结合"></a>重构的时机，重构的代码如何保证，如何和设计模式结合</h3><ol>
+<li><p>代码的可扩展性及可重用性太差，实现新功能的代价远大于重构的代价的时候应该进行重构。拿我所做的IaaS镜像自动化的项目举例来说，原先的设计是<br>每个操作系统类型、版本都对应了一套构建脚本以及Devops pipeline，然而，随着支持的操作系统越来越多，版本越来越多，支持新的操作系统或者版本<br>的代价将会变的很大。这个时候就需要进行重构，让多个操作系统、多个版本的构建脚本统一起来。</p>
+</li>
+<li><p>重构软件时，可以利用不同技术的脚手架工具，让项目的内容尽可能的完整。如python或者js的脚手架工具会帮我们生成完整的目录结构。如文档、代码、单元测试、<br>集成测试、E2E测试、脚本工具等。</p>
+</li>
+<li><p>重构的代码应该有完善的Devops管理机制。如CI的时候，需要不同的开发人员来评审代码，PR中的新代码单元测试的代码覆盖率达到80%等。部署的时候需要<br>对不同的环境的权限进行严格的管理，如开发环境、staging、产品环境。</p>
+</li>
+<li><p>设计模块的功能尽量明确和单一，可以保证代码的可重用性，也可以能够尽快的分析出问题。另外可以实现抽象层，抽象层只需要定义一些接口，而具体的<br>功能可以用过下层的驱动或者适配层来完成。</p>
+</li>
+</ol>
+<h3 id="已知有快照等特性，设计存储系统容灾架构、及关键组件"><a href="#已知有快照等特性，设计存储系统容灾架构、及关键组件" class="headerlink" title="已知有快照等特性，设计存储系统容灾架构、及关键组件"></a>已知有快照等特性，设计存储系统容灾架构、及关键组件</h3><ol>
+<li><p>数据采集器：负责从混合云或者其他的数据中心接收或者采集所需要备份的数据和元数据</p>
+</li>
+<li><p>IAM: 负责身份认证、秘钥管理和权限管理等内容</p>
+</li>
+<li><p>元数据管理器：负责将其他组件生成的元数据保存到系统数据库中</p>
+</li>
+<li><p>数据管理器：负责数据的校验、去重等功能，并调用元数据管理器将元数据写入数据库</p>
+</li>
+<li><p>消息队列：负责各个组件的通信</p>
+</li>
+<li><p>后端存储器：将数据落地到跨AZ或者地区的分布式的存储系统</p>
+</li>
+<li><p>API服务器：提供对外的RESTful API访问</p>
+</li>
+<li><p>SDK, CMD tool, library, UI</p>
+</li>
+<li><p>API的分类可以有：数据源的管理，定时策略，备份区域管理，数据备份策略，数据的读写等功能，秘钥管理</p>
+</li>
+</ol>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3><h3 id="当前项目代码行数大概多少"><a href="#当前项目代码行数大概多少" class="headerlink" title="当前项目代码行数大概多少"></a>当前项目代码行数大概多少</h3><p>… …</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">三木</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://wangsen.site/2024/09/04/Linux%E8%99%9A%E6%8B%9F%E5%8C%96%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB/">https://wangsen.site/2024/09/04/Linux%E8%99%9A%E6%8B%9F%E5%8C%96%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://wangsen.site" target="_blank">三木的技术博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/linux/">linux</a><a class="post-meta__tags" href="/tags/kvm/">kvm</a><a class="post-meta__tags" href="/tags/virtio/">virtio</a><a class="post-meta__tags" href="/tags/qemu/">qemu</a></div><div class="post_share"><div class="social-share" data-image="/images/bg1.jpg" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/images/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/images/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/images/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/images/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/09/07/%E9%9D%A2%E8%AF%95%E5%A4%8D%E4%B9%A0-%E7%AE%97%E6%B3%95-%E5%9B%9E%E6%BA%AF%E6%B3%95/"><img class="prev-cover" src="/images/bg.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">面试复习-算法-回溯法</div></div></a></div><div class="next-post pull-right"><a href="/2024/09/04/OpenstackTrove%E6%A6%82%E8%A6%81/"><img class="next-cover" src="/images/bg.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Openstack Trove概要</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2014/03/24/%E4%B8%BA%E8%99%9A%E6%8B%9F%E6%9C%BAvCPU%E7%BB%91%E5%AE%9A%E7%89%A9%E7%90%86CPU/" title="为虚拟机vCPU绑定物理CPU"><img class="cover" src="/images/bg.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2014-03-24</div><div class="title">为虚拟机vCPU绑定物理CPU</div></div></a></div><div><a href="/2017/09/05/LinuxMint%E5%90%AF%E7%94%A8VNC/" title="[转]Linux Mint启用VNC"><img class="cover" src="/images/bg3.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2017-09-05</div><div class="title">[转]Linux Mint启用VNC</div></div></a></div><div><a href="/2014/07/30/%E5%8F%91%E8%A1%8C%E7%89%88%E5%88%B6%E4%BD%9C%E5%8F%8AAnaconda%E5%9F%BA%E7%A1%80/" title="发行版制作及Anaconda基础"><img class="cover" src="/images/bg1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2014-07-30</div><div class="title">发行版制作及Anaconda基础</div></div></a></div><div><a href="/2014/04/24/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E4%BF%A1%E5%8F%B7%E9%87%8F%E6%9C%BA%E5%88%B6/" title="Linux系统中的信号量机制"><img class="cover" src="/images/bg3.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2014-04-24</div><div class="title">Linux系统中的信号量机制</div></div></a></div><div><a href="/2014/04/24/%E5%9F%BA%E4%BA%8ELinux%E4%B8%8Elpc3250%E5%BC%80%E5%8F%91%E6%9D%BF%E7%9A%84%E4%BA%A4%E5%8F%89%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="基于Linux与lpc3250开发板的交叉开发环境搭建"><img class="cover" src="/images/bg4.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2014-04-24</div><div class="title">基于Linux与lpc3250开发板的交叉开发环境搭建</div></div></a></div><div><a href="/2014/04/24/%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/" title="内核源码编译"><img class="cover" src="/images/bg1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2014-04-24</div><div class="title">内核源码编译</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">三木</div><div class="author-info__description">Honesty and diligence should be your eternal mates.</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">134</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">80</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sanmuny"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/sanmuny" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:kelvin.xupt@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎访问我的技术博客，如果您觉得我的文章对您有所帮助，欢迎打赏和分享！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#CPU%E8%99%9A%E6%8B%9F%E5%8C%96%E6%98%AF%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0%E7%9A%84%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">CPU虚拟化是怎么实现的？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96%E6%98%AF%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0%E7%9A%84%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">内存虚拟化是怎么实现的？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD%E7%9A%84%E5%A4%84%E7%90%86"><span class="toc-number">3.</span> <span class="toc-text">中断的处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%BF%E9%97%AE%E4%B8%80%E5%9D%97%E5%86%85%E5%AD%98%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8C%E6%80%8E%E4%B9%88%E6%A0%B7%E4%BC%98%E5%8C%96%E5%85%B6%E6%80%A7%E8%83%BD"><span class="toc-number">4.</span> <span class="toc-text">多线程访问一块内存的时候，怎么样优化其性能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8BVirtio"><span class="toc-number">5.</span> <span class="toc-text">介绍一下Virtio</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8BNUMA"><span class="toc-number">6.</span> <span class="toc-text">介绍一下NUMA</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kubevirt%E6%98%AF%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%AE%A1%E7%90%86%E7%9A%84"><span class="toc-number">7.</span> <span class="toc-text">Kubevirt是怎么实现虚拟机管理的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux%E6%98%AF%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86%E5%86%85%E5%AD%98%E7%9A%84"><span class="toc-number">8.</span> <span class="toc-text">Linux是如何管理内存的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFSR-IOV"><span class="toc-number">9.</span> <span class="toc-text">什么是SR-IOV</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux%E7%9A%84%E8%BF%9B%E7%A8%8B%E6%98%AF%E6%80%8E%E4%B9%88%E5%88%9B%E5%BB%BA%E7%9A%84"><span class="toc-number">10.</span> <span class="toc-text">Linux的进程是怎么创建的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux%E7%9A%84%E8%BF%9B%E7%A8%8B%E6%98%AF%E6%80%8E%E4%B9%88%E8%B0%83%E5%BA%A6%E7%9A%84"><span class="toc-number">11.</span> <span class="toc-text">Linux的进程是怎么调度的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E6%9E%9C%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%87%BA%E7%8E%B0%E4%BA%86%E6%95%85%E9%9A%9C%EF%BC%8C%E5%8F%AF%E4%BB%A5%E7%94%A8%E5%93%AA%E4%BA%9BLinux%E5%91%BD%E4%BB%A4%E5%8E%BB%E8%A7%A3%E5%86%B3"><span class="toc-number">12.</span> <span class="toc-text">如果虚拟机出现了故障，可以用哪些Linux命令去解决</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8Openstack%E7%8E%AF%E5%A2%83%E4%B8%AD%EF%BC%8C%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9A%84%E6%97%B6%E5%80%99%E6%98%AF%E6%80%8E%E4%B9%88%E9%85%8D%E7%BD%AEssh-key%E7%9A%84"><span class="toc-number">13.</span> <span class="toc-text">在Openstack环境中，虚拟机初始化的时候是怎么配置ssh key的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP%E7%9A%84%E8%BF%9E%E6%8E%A5%E6%98%AF%E6%80%8E%E4%B9%88%E5%BB%BA%E7%AB%8B%E7%9A%84"><span class="toc-number">14.</span> <span class="toc-text">TCP的连接是怎么建立的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E8%BD%AF%E4%BB%B6"><span class="toc-number">15.</span> <span class="toc-text">如何设计一个软件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E9%AB%98%E6%80%A7%E8%83%BD%E7%9A%84%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F"><span class="toc-number">16.</span> <span class="toc-text">设计一个高性能的存储系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E6%9E%84%E7%9A%84%E6%97%B6%E6%9C%BA%EF%BC%8C%E9%87%8D%E6%9E%84%E7%9A%84%E4%BB%A3%E7%A0%81%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%EF%BC%8C%E5%A6%82%E4%BD%95%E5%92%8C%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%BB%93%E5%90%88"><span class="toc-number">17.</span> <span class="toc-text">重构的时机，重构的代码如何保证，如何和设计模式结合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%B2%E7%9F%A5%E6%9C%89%E5%BF%AB%E7%85%A7%E7%AD%89%E7%89%B9%E6%80%A7%EF%BC%8C%E8%AE%BE%E8%AE%A1%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F%E5%AE%B9%E7%81%BE%E6%9E%B6%E6%9E%84%E3%80%81%E5%8F%8A%E5%85%B3%E9%94%AE%E7%BB%84%E4%BB%B6"><span class="toc-number">18.</span> <span class="toc-text">已知有快照等特性，设计存储系统容灾架构、及关键组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">19.</span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%93%E5%89%8D%E9%A1%B9%E7%9B%AE%E4%BB%A3%E7%A0%81%E8%A1%8C%E6%95%B0%E5%A4%A7%E6%A6%82%E5%A4%9A%E5%B0%91"><span class="toc-number">20.</span> <span class="toc-text">当前项目代码行数大概多少</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/03/14/%E4%BC%81%E4%B8%9A%E7%BA%A7Kubernetes%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/" title="企业级Kubernetes离线部署指南"><img src="/images/k8s.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="企业级Kubernetes离线部署指南"/></a><div class="content"><a class="title" href="/2025/03/14/%E4%BC%81%E4%B8%9A%E7%BA%A7Kubernetes%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/" title="企业级Kubernetes离线部署指南">企业级Kubernetes离线部署指南</a><time datetime="2025-03-14T14:44:12.000Z" title="发表于 2025-03-14 22:44:12">2025-03-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/14/Kubernetes%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Kubernetes复习笔记"><img src="/images/k8s.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Kubernetes复习笔记"/></a><div class="content"><a class="title" href="/2025/03/14/Kubernetes%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Kubernetes复习笔记">Kubernetes复习笔记</a><time datetime="2025-03-14T14:36:52.629Z" title="发表于 2025-03-14 22:36:52">2025-03-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/27/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" title="快速排序"><img src="/images/bg3.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="快速排序"/></a><div class="content"><a class="title" href="/2024/12/27/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" title="快速排序">快速排序</a><time datetime="2024-12-27T13:16:56.000Z" title="发表于 2024-12-27 21:16:56">2024-12-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/13/Argo-v-s-Tekton/" title="Argo workflow v.s. Tekton"><img src="/images/devops.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Argo workflow v.s. Tekton"/></a><div class="content"><a class="title" href="/2024/12/13/Argo-v-s-Tekton/" title="Argo workflow v.s. Tekton">Argo workflow v.s. Tekton</a><time datetime="2024-12-13T11:27:34.000Z" title="发表于 2024-12-13 19:27:34">2024-12-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/04/%E5%A6%82%E4%BD%95%E7%BB%99%E4%BA%91%E8%AE%A1%E7%AE%97%E7%94%A8%E6%88%B7%E6%8F%90%E4%BE%9B%E5%AE%89%E5%85%A8%E5%8F%AF%E9%9D%A0%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F/" title="如何给云计算用户提供安全可靠的操作系统镜像"><img src="/images/bg4.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="如何给云计算用户提供安全可靠的操作系统镜像"/></a><div class="content"><a class="title" href="/2024/12/04/%E5%A6%82%E4%BD%95%E7%BB%99%E4%BA%91%E8%AE%A1%E7%AE%97%E7%94%A8%E6%88%B7%E6%8F%90%E4%BE%9B%E5%AE%89%E5%85%A8%E5%8F%AF%E9%9D%A0%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F/" title="如何给云计算用户提供安全可靠的操作系统镜像">如何给云计算用户提供安全可靠的操作系统镜像</a><time datetime="2024-12-04T06:36:24.000Z" title="发表于 2024-12-04 14:36:24">2024-12-04</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2013 - 2025 By 三木</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.2
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container:not\([display]\)').forEach(node => {
+            const target = node.parentNode
+            if (target.nodeName.toLowerCase() === 'li') {
+              target.parentNode.classList.add('has-jax')
+            } else {
+              target.classList.add('has-jax')
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'Pbdwq7jL0Ag8SyVhveiTbaTA-gzGzoHsz',
+      appKey: '5z7cJ4LjydIGAt5kVlcKl6rG',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

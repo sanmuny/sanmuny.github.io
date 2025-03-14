@@ -1,0 +1,440 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>云原生概要 | 三木的技术博客</title><meta name="keywords" content="云计算,云原生"><meta name="author" content="三木"><meta name="copyright" content="三木"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="什么是云原生设计目的云原生软件的设计目的是预测故障，并且即使当它所依赖的基础设施出现故障，或者发生其他变化时，它也依然能够保持稳定运行。 将变化或者失败视为正常规律，让面向失败的设计成为它们构建、交付和管理软件过程中的一个组成部分。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="云原生概要">
+<meta property="og:url" content="https://wangsen.site/2021/08/12/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%A6%82%E8%A6%81/index.html">
+<meta property="og:site_name" content="三木的技术博客">
+<meta property="og:description" content="什么是云原生设计目的云原生软件的设计目的是预测故障，并且即使当它所依赖的基础设施出现故障，或者发生其他变化时，它也依然能够保持稳定运行。 将变化或者失败视为正常规律，让面向失败的设计成为它们构建、交付和管理软件过程中的一个组成部分。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangsen.site/images/bg2.jpg">
+<meta property="article:published_time" content="2021-08-12T08:15:37.000Z">
+<meta property="article:modified_time" content="2025-03-14T14:36:52.631Z">
+<meta property="article:author" content="三木">
+<meta property="article:tag" content="云计算">
+<meta property="article:tag" content="云原生">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangsen.site/images/bg2.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://wangsen.site/2021/08/12/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%A6%82%E8%A6%81/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '云原生概要',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-03-14 22:36:52'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">134</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">80</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-tie"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">三木的技术博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-tie"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">云原生概要</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-08-12T08:15:37.000Z" title="发表于 2021-08-12 16:15:37">2021-08-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-03-14T14:36:52.631Z" title="更新于 2025-03-14 22:36:52">2025-03-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%BA%91%E8%AE%A1%E7%AE%97/">云计算</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">5.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>16分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="云原生概要"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2021/08/12/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%A6%82%E8%A6%81/#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/2021/08/12/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%A6%82%E8%A6%81/" itemprop="commentCount"></span></a></span></div></div></div><article class="post-content" id="article-container"><h1 id="什么是云原生"><a href="#什么是云原生" class="headerlink" title="什么是云原生"></a>什么是云原生</h1><h2 id="设计目的"><a href="#设计目的" class="headerlink" title="设计目的"></a>设计目的</h2><p>云原生软件的设计目的是预测故障，并且即使当它所依赖的基础设施出现故障，或者发生其他变化时，它也依然能够保持稳定运行。</p>
+<p>将变化或者失败视为正常规律，让面向失败的设计成为它们构建、交付和管理软件过程中的一个组成部分。</p>
+<span id="more"></span>
+
+
+<h2 id="云计算时代应用需求"><a href="#云计算时代应用需求" class="headerlink" title="云计算时代应用需求"></a>云计算时代应用需求</h2><ol>
+<li><p>零停机时间<br>软件开发人员或者架构师对设计和开发一个松耦合、组件化的系统同样负有责任，应该通过部署冗余组件来应对不可避免的故障，并设置隔离机制来防止故障在整个系统中引起连锁反应。而且，还必须把软件设计成能够在不停机的情况下完成计划事件（例如，升级）。</p>
+</li>
+<li><p>缩短反馈周期<br>频道的软件发布可以缩短反馈周期，降低风险</p>
+</li>
+<li><p>多设备支持<br>用户越来越希望他们的应用体验随时可以从一个设备无缝切换到另一个设备上。</p>
+</li>
+<li><p>互联设备（物联网）<br>数据量和基础架构之间的差异，需要新的软件设计和实践来解决。</p>
+</li>
+<li><p>数据驱动<br>数据量正在不断增加，数据源分布得更加广泛，而软件的交付周期正在缩短<br>这些应用程序需要的不是单一的共享数据库，而是一个由更小的、本地化数据库组成的网络，以及能够在多个数据库管理系统之间管理数据关系的软件。</p>
+</li>
+</ol>
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>云原生软件是高度<strong>分布式</strong>的，必须在一个不断变化的环境中运行，而且自身也在不断地发生<strong>变化</strong></p>
+<h2 id="不适合使用云原生架构的情形"><a href="#不适合使用云原生架构的情形" class="headerlink" title="不适合使用云原生架构的情形"></a>不适合使用云原生架构的情形</h2><ol>
+<li>不需要云计算的软件，例如嵌入到家电中的软件。</li>
+<li>云原生提供的是最终一致性，但如果需要数据强一致性的话，云原生架构就不适用了。</li>
+<li>用云原生架构重写软件时并没有提供新的价值</li>
+</ol>
+<h2 id="云原生的价值"><a href="#云原生的价值" class="headerlink" title="云原生的价值"></a>云原生的价值</h2><p>云原生的绝妙之处在于它最终是由许多不同组件组成的，即使其中一些组件的模式不是最新的，云原生组件也可以与他们进行交互。即使你的软件使用了旧的模式，应用云原生模式依然可以带来立竿见影的效果。</p>
+<h1 id="云原生与持续交付"><a href="#云原生与持续交付" class="headerlink" title="云原生与持续交付"></a>云原生与持续交付</h1><h2 id="生产环境运维面临的困难"><a href="#生产环境运维面临的困难" class="headerlink" title="生产环境运维面临的困难"></a>生产环境运维面临的困难</h2><p><strong>1. 碎片化的变化</strong></p>
+<ul>
+<li>环境发生变化</li>
+<li>部署的构件发生变化</li>
+</ul>
+<p><strong>2. 部署是有风险的</strong><br>部署通常充满危险。在升级期间需要停机或者部署时引起意外停机都是很正常的，而停机的代价是昂贵的。</p>
+<p><strong>3. 传统运维认为变化是例外</strong><br>开发人员通常会在初次部署之后退出，然后由运维人员接管。运维团队手里只有一本运维手册。虽然运维手册详细描述了可能的失败场景及其解决方案，但是更加深入思考一下不难了解，手册设定了一个假设，就是失败场景是已知的。但是，绝大多数情况不是这样的！</p>
+<p><strong>4. 生产环境的不稳定性</strong></p>
+<h2 id="云原生架构运维的解决办法"><a href="#云原生架构运维的解决办法" class="headerlink" title="云原生架构运维的解决办法"></a>云原生架构运维的解决办法</h2><p><strong>目标</strong></p>
+<ul>
+<li>简单且可以频繁地在生产环境中进行发布。</li>
+<li>运维具有稳定性和可预测性。</li>
+</ul>
+<h3 id="持续交付（Continuous-delivery，CD）"><a href="#持续交付（Continuous-delivery，CD）" class="headerlink" title="持续交付（Continuous delivery，CD）"></a>持续交付（Continuous delivery，CD）</h3><p><strong>1. 什么是持续交付</strong><br>持续交付的每个开发/测试流程都不会进行部署，但每个流程都会生成可以交付的软件。之后，是否部署就看商业决策了，而传统的软件交付则是在创建可以发布到生产环境中的构件之前，会提前进行大量的开发工作和一个长时间的测试流程</p>
+<p><strong>2. 持续交付的优势</strong></p>
+<ul>
+<li>何时进行下一次软件发布依赖于商业决策，而不是由一个复杂、不可预测的软件开发过程决定的</li>
+<li>有机会收集反馈，并用来改进产品的后续版本</li>
+</ul>
+<h3 id="可重复部署"><a href="#可重复部署" class="headerlink" title="可重复部署"></a>可重复部署</h3><p>部署可重复有助于系统部署和保证系统的稳定性，并且通过在每次开发/测试的迭代过程中控制变化风险，可以缩短整个新功能的交付时间。</p>
+<p>达到部署可重复手段包括：</p>
+<p><strong>1. 控制环境</strong></p>
+<p>你必须从标准化的机器镜像开始。例如，从一个基础Ubuntu镜像开始，并且软件需要Java开发工具包（JDK），那么可以通过脚本将JDK安装到基础镜像中。此模式也经常被称为基础设施即代码（Infrastructure as Code）。当需要一个环境的新实例时，可以从基础镜像开始并执行脚本，这样就可以保证每次都拥有相同的环境。</p>
+<p><strong>2. 控制可部署构建</strong><br>一旦你为软件开发生命周期的不同阶段构建了不同的构件，可重复性就可能受到影响。为了实现高效、安全和可重复的生产环境运维，不要把环境相关的配置包含到代码中。</p>
+<p><strong>3. 控制流程</strong><br>将各个部分组合起来并确保一致性的唯一方法就是自动化。</p>
+<h3 id="安全部署"><a href="#安全部署" class="headerlink" title="安全部署"></a>安全部署</h3><ol>
+<li>并行部署和版本化的服务<br>安全部署的核心是并行部署。与用新版本完全替换一个正在运行的软件版本不同，你可以在部署新版本的同时让已有的版本继续运行。一开始，只有一小部分流量被路由到新的版本，然后你可以观察会发生什么。你可以根据各种条件来控制哪些流量被路由到新的版本，例如请求来自何处（例如，来自某个地理位置或者引用页）或者用户是谁。</li>
+<li>进行必要的远程监控</li>
+<li>灵活的路由</li>
+</ol>
+<ul>
+<li>软件构件必须实现版本控制，并且版本必须对路由可见，以便恰当地切分流量</li>
+<li>用于分析新版本工作情况的数据可以有多种形式</li>
+<li>路由是并行部署的一个关键因素，而路由算法属于软件的一部分</li>
+<li>创建更小的部署单元</li>
+</ul>
+<h3 id="变化是一定的"><a href="#变化是一定的" class="headerlink" title="变化是一定的"></a>变化是一定的</h3><p>在不断变化的情况下保持系统功能的完整性，是我们设计软件的最终目标，而变化对系统稳定性和可靠性的影响也是显而易见的。一个能够自我修复的系统，其正常运行的时间比每次出故障都需要人工干预的系统要长得多。将部署作为一种新的期望状态，可以极大地简化部署过程并降低风险。坚持“变化是一定的”的思维模式，可以从根本上改变在生产环境中管理软件的方式。</p>
+<h1 id="云原生平台"><a href="#云原生平台" class="headerlink" title="云原生平台"></a>云原生平台</h1><h3 id="云原生平台的发展"><a href="#云原生平台的发展" class="headerlink" title="云原生平台的发展"></a>云原生平台的发展</h3><ul>
+<li>AWS：软件架构、开发和运维并没有太多的改变。优势是成本降低，但故障率偏高，API中引入了AZ的概念，继而影响软件架构</li>
+<li>GAE以及Azure：限制了用户代码直接对计算、存储、网络资源的访问，提供了安全性及弹性的保证</li>
+<li>云原生平台：IaaS平台是一个提供访问基础设施（例如，主机、存储和网络）的接口，而云原生平台则是一个让应用程序成为开发人员或运维人员最主要的交互对象的接口</li>
+</ul>
+<h3 id="云原生平台的核心原则"><a href="#云原生平台的核心原则" class="headerlink" title="云原生平台的核心原则"></a>云原生平台的核心原则</h3><ul>
+<li>使用比虚拟机更加轻量级的容器技术</li>
+<li>支持不断变化<br>系统管理是通过不断监控系统的实际状态（不断变化的），将其与期望状态进行比较，并在必要时进行调整来实现预期的。</li>
+<li>支持高度分布式<br>应用程序自己的环境中运行多个微服务，同时支持独立开发并降低级联失败的影响。它们的确能带来这些好处，但是随之产生的是一个由分布式组件组成的系统，而非原来单个组件或者单个进程的架构，因此要面临的复杂性也是之前不存在的（或者很少存在）。<br>支持分布式的平台需要提供如下功能：</li>
+</ul>
+<ol>
+<li>服务发现：单独的服务运行在不同的容器和不同的主机上，为了让一个服务能够调用另一个服务，它必须首先能够找到另一个服务</li>
+<li>服务配置</li>
+<li>分布式跟踪机制，允许自动将跟踪器嵌入请求中，以诊断多个微服务调用之间的问题。</li>
+<li>断路器，防止意外产生的内部DDoS攻击，例如，网络中断时可能产生的重试风暴。</li>
+</ol>
+<h1 id="事件驱动模式"><a href="#事件驱动模式" class="headerlink" title="事件驱动模式"></a>事件驱动模式</h1><p>顺序式的编程模型会促使你以请求/响应的方式进行思考。<br>如果请求只有在犹如树状的所有级联请求都成功的情况下才能成功，那么微服务的可用性会降低很多。</p>
+<ul>
+<li>“请求/响应”微服务：接收到请求时执行的代码，会直接决定向请求者提供某种响应。</li>
+<li>事件驱动的微服务：代码执行的结果与触发它的事件没有直接关系。</li>
+</ul>
+<p>事件驱动的核心思想在于，因为事件导致代码被执行，然后可能会产生更多的事件。</p>
+<p>对于请求/响应的方式，聚合发生在用户发出请求的时候。而对于事件驱动的方式，聚合发生在系统中数据发生变化的时候，并且这是异步的。</p>
+<p>在请求/响应的微服务架构中，重试是补偿网络分区的一个关键模式。在事件驱动的系统中，事件存储是对网络不稳定性的一个关键补充</p>
+<h3 id="命令查询责任分离（CQRS）模式"><a href="#命令查询责任分离（CQRS）模式" class="headerlink" title="命令查询责任分离（CQRS）模式"></a>命令查询责任分离（CQRS）模式</h3><p>将写逻辑（命令）与读逻辑（查询）分离开来。这就是命令查询责任分离（CQRS）模式的核心思想。CQRS的核心就是将这两个关注点分离开来。其优点在于，</p>
+<ol>
+<li>写少量的数据，读取时可以通过计算得到更多的数据</li>
+<li>读取可以采用请求与响应模式，但更新数据可以采用事件驱动模式</li>
+</ol>
+<h1 id="水平伸缩与无状态"><a href="#水平伸缩与无状态" class="headerlink" title="水平伸缩与无状态"></a>水平伸缩与无状态</h1><h3 id="水平伸缩"><a href="#水平伸缩" class="headerlink" title="水平伸缩"></a>水平伸缩</h3><p>灵活的伸缩性并不是采用多个实例的唯一动机，高可用、可靠性和运维效率也同样是考虑因素，例如避免单点故障、在线升级等</p>
+<h3 id="无状态"><a href="#无状态" class="headerlink" title="无状态"></a>无状态</h3><p>对于云原生应用，相同的输入应该产生相同的结果，无论有多少实例，也无论请求被路由到哪个实例。</p>
+<p>云原生不能继续使用黏性会话来处理有状态的服务，因为黏性会话指定的实例可能已经消失，或者由于网络异常而无法访问</p>
+<p>云原生应用程序有存在状态的地方，同样重要的是，也有不存在状态的地方。应用程序应该是无状态的，状态应该存在于数据服务中。</p>
+<p><strong>无状态的优势</strong></p>
+<ol>
+<li>当你的应用程序处于无状态时，云原生应用程序平台可以在旧的实例丢失的时候，轻松创建新的实例</li>
+<li>可以有效地管理一个应用程序的多个版本，所有这些版本都可以同时部署和运行</li>
+</ol>
+<h1 id="应用程序配置"><a href="#应用程序配置" class="headerlink" title="应用程序配置"></a>应用程序配置</h1><ul>
+<li>创建合适的抽象，将应用程序的部署参数化，从而在正确的时间、以合理的方式将不同环境中的参数值注入应用程序</li>
+<li>比环境变量更好的方法是在应用程序中使用一个特定的配置层，可以在这里查看某个应用程序的所有配置选项。</li>
+<li>可以将环境变量映射到配置文件中</li>
+<li>也可以利用应用程序框架将配置注入到配置文件中</li>
+</ul>
+<h3 id="使用配置层的优点"><a href="#使用配置层的优点" class="headerlink" title="使用配置层的优点"></a>使用配置层的优点</h3><ol>
+<li>所有配置参数都定义在同一个地方，开发人员或者运维人员可以轻松地查看和理解应用程序的配置参数。</li>
+<li>属性文件会被编译成一个单独的可部署构件，并且可以被实例化到任何环境中。</li>
+</ol>
+<h1 id="应用程序升级"><a href="#应用程序升级" class="headerlink" title="应用程序升级"></a>应用程序升级</h1><ul>
+<li>蓝绿升级：建立另一组实例，所有这些实例都拥有新的配置，然后将所有流量从第一组实例切换到第二组实例。运行中的版本称为“蓝色”版本，希望部署的新版本称为“绿色”版本。</li>
+<li>滚动升级：滚动部署应用程序的实例，用一组新实例替换一组旧实例的子集，然后继续下一个子集。</li>
+</ul>
+<ol>
+<li><p>蓝/绿升级比滚动升级需要更多的资源。</p>
+</li>
+<li><p>如果你构建的应用程序可以同时运行多个版本，那么你可以让一些消费者仍然使用旧的版本，而让另一些消费者使用新的版本。我们称之为并行部署。</p>
+</li>
+<li><p>除了支持滚动升级，并行部署的另一个用途是支持灰度发布。</p>
+</li>
+<li><p>密码更新策略：服务端同时支持新旧密码以保证零停机更新</p>
+</li>
+</ol>
+<h1 id="服务发现"><a href="#服务发现" class="headerlink" title="服务发现"></a>服务发现</h1><h3 id="服务"><a href="#服务" class="headerlink" title="服务"></a>服务</h3><ul>
+<li>单个服务代表了多个应用程序实例。</li>
+<li>在云原生软件中，应用程序被部署为多个实例。为了让软件可以正常运行，你会希望每一组实例都作为一个单独的逻辑实体来运行</li>
+<li>软件被定义为多个服务的组合。每个服务都是由一组服务实例来实现的</li>
+</ul>
+<h3 id="动态路由"><a href="#动态路由" class="headerlink" title="动态路由"></a>动态路由</h3><p>服务如何与它们所代表的应用程序实例关联</p>
+<ol>
+<li><p>更新实例列表</p>
+</li>
+<li><p>负载均衡</p>
+</li>
+</ol>
+<ul>
+<li>禁止使用粘性会话</li>
+<li>使用集中式的负载均衡器而不是分布式的</li>
+</ul>
+<p>集中式负载均衡器的优势：</p>
+<ul>
+<li>技术成熟</li>
+<li>实现易于理解</li>
+<li>配置容易</li>
+<li>为避免单点故障应该部署多个实例</li>
+</ul>
+<p>客户端负载均衡是在客户端配置负载均衡器，这样http请求就会直接发送给服务的某个实例，减少了一次网络跳转，性能更好</p>
+<h3 id="服务发现-1"><a href="#服务发现-1" class="headerlink" title="服务发现"></a>服务发现</h3><p>服务的客户端如何发现和找到服务</p>
+<ol>
+<li>Kubernetes集群会提供一个名为CoreDNS的DNS服务。</li>
+<li>在启动时，Kubernetes会将服务的名称和地址添加到CoreDNS服务中。</li>
+<li>在Kubernetes环境中运行的所有pod（应用程序），都会配置CoreDNS服务的地址。</li>
+<li>任何访问DNS的操作，例如，对包含某个名称的URL发出HTTP请求，都需要访问CoreDNS服务来解析地址。</li>
+</ol>
+<h1 id="交互冗余"><a href="#交互冗余" class="headerlink" title="交互冗余"></a>交互冗余</h1><h3 id="重试"><a href="#重试" class="headerlink" title="重试"></a>重试</h3><p>应用程序向远程服务发出请求，如果在合理的时间内没有接收到响应，将再次尝试。</p>
+<p>重试风暴：使用重试时，系统需要15分钟才能从3分钟的网络中断中恢复。如果不使用重试，则可以立即从3分钟的网络中断中恢复。</p>
+<p>重试既会造成灾难性的影响，但是又有巨大的好处，尤其是在调用只是间歇性失败的情况下。</p>
+<p>友好的客户端会：</p>
+<ol>
+<li>限制重试的次数</li>
+<li>降低重试的频率</li>
+</ol>
+<p>安全的方法：一个安全的方法是指可以被调用零次或者多次，而且效果相同。该方法不应该有其他任何副作用。如GET、HEAD、OPTIONS和TRACE</p>
+<p>幂等的方法：一个幂等的方法是指可以被调用一次或者多次，而且效果相同。它可以有副作用，但是所有重复调用的副作用必须与第一次相同。如，PUT</p>
+<p>重试安全的方法，而不是重试幂等的方法</p>
+<h3 id="回退逻辑"><a href="#回退逻辑" class="headerlink" title="回退逻辑"></a>回退逻辑</h3><p>面向失败设计最基本的模式之一，是实现回退的方法，即当主逻辑失败时执行的代码。</p>
+<h3 id="控制循环"><a href="#控制循环" class="headerlink" title="控制循环"></a>控制循环</h3><p>控制循环永远不会期望达到完成的状态。它的目的就是不断地寻找不可避免的变化，并做出适当的响应。</p>
+<h1 id="断路器和API网关"><a href="#断路器和API网关" class="headerlink" title="断路器和API网关"></a>断路器和API网关</h1><h3 id="断路器"><a href="#断路器" class="headerlink" title="断路器"></a>断路器</h3><p>如果服务开始出现故障但是次数不多，先停止该服务的所有流量一段时间，希望给它一段时间，让它能够从故障中恢复。过一段时间后，让单个请求通过，查看其运行情况。如果请求失败，则继续维持保护措施，不允许后续的流量通过。如果请求成功，看看则视为服务恢复正常，并允许流量通过。</p>
+<p>断路器状态：打开、关闭、半开</p>
+<h3 id="API网关-服务网格实现"><a href="#API网关-服务网格实现" class="headerlink" title="API网关 服务网格实现"></a>API网关 服务网格实现</h3><p>API网关始终位于实现的最前面，并且提供了大量的服务。这些服务可能包括以下内容。</p>
+<ol>
+<li>身份验证和授权</li>
+<li>加密解密</li>
+<li>限流</li>
+<li>访问日志</li>
+</ol>
+<p>API网关模式的目标之一是将服务开发人员的关注问题与运维的关注问题分开。希望让后者能够统一控制正在运行的服务，并且为他们提供一个易于管理的控制平面。</p>
+<h1 id="服务网格"><a href="#服务网格" class="headerlink" title="服务网格"></a>服务网格</h1><h3 id="挎斗Sidecar"><a href="#挎斗Sidecar" class="headerlink" title="挎斗Sidecar"></a>挎斗Sidecar</h3><p>简单来看，挎斗是一个与主服务一起运行的进程，或者是与主服务容器运行于同一个pod中的容器。</p>
+<p>Kubernetes pod中运行的所有服务都可以托管在相同的IP地址上，这意味着它们可以通过localhost互相寻址，因此网络开销将变得很小。</p>
+<h1 id="打破数据单体"><a href="#打破数据单体" class="headerlink" title="打破数据单体"></a>打破数据单体</h1><h3 id="微服务需要缓存"><a href="#微服务需要缓存" class="headerlink" title="微服务需要缓存"></a>微服务需要缓存</h3><ol>
+<li>提升性能</li>
+<li>当下游服务出现故障时，由于缓存的存在，请求也有可能成功</li>
+</ol>
+<h3 id="数据一致性"><a href="#数据一致性" class="headerlink" title="数据一致性"></a>数据一致性</h3><p>请求/响应模式 转变为 事件驱动的方式</p>
+<p>问题在于事件通知机制失败时，缓存中的数据可能是损坏的，而且可能会无限期的保持下去。解决方法为：</p>
+<p>使用异步的消息传递系统，而不是直接发送消息给需要的微服务</p>
+<ol>
+<li>事件载荷的规则1 一个被发布到事件日志中的事件，应该完整地进行描述。</li>
+<li>事件载荷的规则2 对于事件日志来说没有标准的事件模型。生产者可以控制所传递事件的数据格式，而消费者应该适配该格式。</li>
+<li>事件载荷的规则3 所有发布到事件日志的事件都必须有一个相关的结构（schema），供所有相关方访问，并且必须对该结构进行版本控制。</li>
+</ol>
+<p>事件消费者，规则1 尽可能让事件消费者的操作是幂等的。</p>
+<p>Envoy在这些交互的边缘实现了许多模式，包括重试、断路器、限速、负载均衡、服务发现、可观察性等。</p>
+<p>Istio的口号是“连接、安全、控制和观测服务”，支持自动注入挎斗并提供Envoy代理配置、证书处理和策略执行的组件。控制平面API提供了与此管理控制平面相关的接口。</p>
+<h1 id="日志、监控与跟踪"><a href="#日志、监控与跟踪" class="headerlink" title="日志、监控与跟踪"></a>日志、监控与跟踪</h1><h3 id="应用程序日志"><a href="#应用程序日志" class="headerlink" title="应用程序日志"></a>应用程序日志</h3><p>3日志出现的位置应该完全由应用程序部署来控制，而不是由应用程序本身来决定。日志消息是出现在指定文件中还是出现在控制台中，或者出现在其他地方，都应该在部署时确定。</p>
+<p>对云原生应用程序来说，该部署配置应该将日志行发送到stdout和stderr。这是因为：</p>
+<ol>
+<li>禁止将日志直接写入文件。本地文件系统与容器的生命周期是一致的。</li>
+<li>stdout和stderr与供应商无关</li>
+<li>stdout和stderr与操作系统无关</li>
+<li>stdout和stderr是流式API，日志本身也是流。</li>
+</ol>
+<p>日志需要进行大规模提取和存储，并且接口必须支持对这些海量数据的搜索和分析。ELK技术栈（详情参见链接46）汇集了三个开源项目—Elasticsearch、Logstash和Kibana—来满足这些要求。</p>
+<h3 id="应用程序监控"><a href="#应用程序监控" class="headerlink" title="应用程序监控"></a>应用程序监控</h3><p>在基于拉的方法中，度量指标聚合器会作为一个收集器，从每个应用程序实例中收集请求指标数据，并将这些指标存储在时序数据库中。问题在于，<br>有多个经过负载均衡的应用程序实例，你只能从其中一个实例获取指标，并且不知道具体是哪个实例。这。</p>
+<p>基于推的模式，其中，每个应用实例负责按固定时间间隔将指标发给指标聚合器。一个挎斗代理不仅可以提供指标值，还可以代理应用程序发来的指标推送，因为即使应用程序没有安装代理（Agent），挎斗依然可以提供一定程度的可观察性。因为它代理了进出应用程序的流量，所以可以代替应用程序来生成许多指标</p>
+<h3 id="应用程序跟踪"><a href="#应用程序跟踪" class="headerlink" title="应用程序跟踪"></a>应用程序跟踪</h3><p>分布式跟踪解决的是如何跨多个分布式组件来跟踪程序流的问题。</p>
+<p>Zipkin是当今使用的一种流行技术，核心包括以下几方面内容：</p>
+<ul>
+<li>使用跟踪器（tracer）在请求和响应中插入唯一标识符，以便找到相关的应用程序调用。</li>
+<li>一个控制平面（control plane）使用这些跟踪器将一组调用组装成调用图（或者是特意设计的独立调用）。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">三木</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://wangsen.site/2021/08/12/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%A6%82%E8%A6%81/">https://wangsen.site/2021/08/12/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%A6%82%E8%A6%81/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://wangsen.site" target="_blank">三木的技术博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E4%BA%91%E8%AE%A1%E7%AE%97/">云计算</a><a class="post-meta__tags" href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a></div><div class="post_share"><div class="social-share" data-image="/images/bg2.jpg" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/images/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/images/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/images/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/images/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/08/23/Reacthooks%E6%A6%82%E8%A6%81/"><img class="prev-cover" src="/images/bg4.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">React hooks 概要</div></div></a></div><div class="next-post pull-right"><a href="/2020/01/15/Javascript%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/"><img class="next-cover" src="/images/bg4.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Javascript中的异步编程</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2025/03/14/%E4%BC%81%E4%B8%9A%E7%BA%A7Kubernetes%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/" title="企业级Kubernetes离线部署指南"><img class="cover" src="/images/k8s.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-03-14</div><div class="title">企业级Kubernetes离线部署指南</div></div></a></div><div><a href="/2024/12/03/2024%E4%BA%91-AI-%E8%AE%A1%E7%AE%97%E5%9B%BD%E9%99%85%E5%90%88%E4%BD%9C%E8%AE%BA%E5%9D%9B%E5%B0%8F%E7%BB%93/" title="2024云-AI-计算国际合作论坛要点小结"><img class="cover" src="/images/bg3.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-03</div><div class="title">2024云-AI-计算国际合作论坛要点小结</div></div></a></div><div><a href="/2023/09/28/Docker%E7%AC%94%E8%AE%B0/" title="Docker笔记"><img class="cover" src="/images/bg4.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-28</div><div class="title">Docker笔记</div></div></a></div><div><a href="/2024/12/04/%E5%A6%82%E4%BD%95%E7%BB%99%E4%BA%91%E8%AE%A1%E7%AE%97%E7%94%A8%E6%88%B7%E6%8F%90%E4%BE%9B%E5%AE%89%E5%85%A8%E5%8F%AF%E9%9D%A0%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F/" title="如何给云计算用户提供安全可靠的操作系统镜像"><img class="cover" src="/images/bg4.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-04</div><div class="title">如何给云计算用户提供安全可靠的操作系统镜像</div></div></a></div><div><a href="/2018/01/05/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BA%A7%E8%99%9A%E6%8B%9F%E5%8C%96%E6%A6%82%E8%BF%B0/" title="操作系统级虚拟化概述"><img class="cover" src="/images/bg.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-01-05</div><div class="title">操作系统级虚拟化概述</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">三木</div><div class="author-info__description">Honesty and diligence should be your eternal mates.</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">134</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">80</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sanmuny"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/sanmuny" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:kelvin.xupt@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎访问我的技术博客，如果您觉得我的文章对您有所帮助，欢迎打赏和分享！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E4%BA%91%E5%8E%9F%E7%94%9F"><span class="toc-number">1.</span> <span class="toc-text">什么是云原生</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E7%9B%AE%E7%9A%84"><span class="toc-number">1.1.</span> <span class="toc-text">设计目的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%91%E8%AE%A1%E7%AE%97%E6%97%B6%E4%BB%A3%E5%BA%94%E7%94%A8%E9%9C%80%E6%B1%82"><span class="toc-number">1.2.</span> <span class="toc-text">云计算时代应用需求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89"><span class="toc-number">1.3.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E9%80%82%E5%90%88%E4%BD%BF%E7%94%A8%E4%BA%91%E5%8E%9F%E7%94%9F%E6%9E%B6%E6%9E%84%E7%9A%84%E6%83%85%E5%BD%A2"><span class="toc-number">1.4.</span> <span class="toc-text">不适合使用云原生架构的情形</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%91%E5%8E%9F%E7%94%9F%E7%9A%84%E4%BB%B7%E5%80%BC"><span class="toc-number">1.5.</span> <span class="toc-text">云原生的价值</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%91%E5%8E%9F%E7%94%9F%E4%B8%8E%E6%8C%81%E7%BB%AD%E4%BA%A4%E4%BB%98"><span class="toc-number">2.</span> <span class="toc-text">云原生与持续交付</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E8%BF%90%E7%BB%B4%E9%9D%A2%E4%B8%B4%E7%9A%84%E5%9B%B0%E9%9A%BE"><span class="toc-number">2.1.</span> <span class="toc-text">生产环境运维面临的困难</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%91%E5%8E%9F%E7%94%9F%E6%9E%B6%E6%9E%84%E8%BF%90%E7%BB%B4%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95"><span class="toc-number">2.2.</span> <span class="toc-text">云原生架构运维的解决办法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%81%E7%BB%AD%E4%BA%A4%E4%BB%98%EF%BC%88Continuous-delivery%EF%BC%8CCD%EF%BC%89"><span class="toc-number">2.2.1.</span> <span class="toc-text">持续交付（Continuous delivery，CD）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E9%87%8D%E5%A4%8D%E9%83%A8%E7%BD%B2"><span class="toc-number">2.2.2.</span> <span class="toc-text">可重复部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E9%83%A8%E7%BD%B2"><span class="toc-number">2.2.3.</span> <span class="toc-text">安全部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%98%E5%8C%96%E6%98%AF%E4%B8%80%E5%AE%9A%E7%9A%84"><span class="toc-number">2.2.4.</span> <span class="toc-text">变化是一定的</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%91%E5%8E%9F%E7%94%9F%E5%B9%B3%E5%8F%B0"><span class="toc-number">3.</span> <span class="toc-text">云原生平台</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%91%E5%8E%9F%E7%94%9F%E5%B9%B3%E5%8F%B0%E7%9A%84%E5%8F%91%E5%B1%95"><span class="toc-number">3.0.1.</span> <span class="toc-text">云原生平台的发展</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%91%E5%8E%9F%E7%94%9F%E5%B9%B3%E5%8F%B0%E7%9A%84%E6%A0%B8%E5%BF%83%E5%8E%9F%E5%88%99"><span class="toc-number">3.0.2.</span> <span class="toc-text">云原生平台的核心原则</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%E6%A8%A1%E5%BC%8F"><span class="toc-number">4.</span> <span class="toc-text">事件驱动模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E6%9F%A5%E8%AF%A2%E8%B4%A3%E4%BB%BB%E5%88%86%E7%A6%BB%EF%BC%88CQRS%EF%BC%89%E6%A8%A1%E5%BC%8F"><span class="toc-number">4.0.1.</span> <span class="toc-text">命令查询责任分离（CQRS）模式</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B0%B4%E5%B9%B3%E4%BC%B8%E7%BC%A9%E4%B8%8E%E6%97%A0%E7%8A%B6%E6%80%81"><span class="toc-number">5.</span> <span class="toc-text">水平伸缩与无状态</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B0%B4%E5%B9%B3%E4%BC%B8%E7%BC%A9"><span class="toc-number">5.0.1.</span> <span class="toc-text">水平伸缩</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0%E7%8A%B6%E6%80%81"><span class="toc-number">5.0.2.</span> <span class="toc-text">无状态</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E9%85%8D%E7%BD%AE"><span class="toc-number">6.</span> <span class="toc-text">应用程序配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E9%85%8D%E7%BD%AE%E5%B1%82%E7%9A%84%E4%BC%98%E7%82%B9"><span class="toc-number">6.0.1.</span> <span class="toc-text">使用配置层的优点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E5%8D%87%E7%BA%A7"><span class="toc-number">7.</span> <span class="toc-text">应用程序升级</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0"><span class="toc-number">8.</span> <span class="toc-text">服务发现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1"><span class="toc-number">8.0.1.</span> <span class="toc-text">服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1"><span class="toc-number">8.0.2.</span> <span class="toc-text">动态路由</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0-1"><span class="toc-number">8.0.3.</span> <span class="toc-text">服务发现</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%A4%E4%BA%92%E5%86%97%E4%BD%99"><span class="toc-number">9.</span> <span class="toc-text">交互冗余</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E8%AF%95"><span class="toc-number">9.0.1.</span> <span class="toc-text">重试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9E%E9%80%80%E9%80%BB%E8%BE%91"><span class="toc-number">9.0.2.</span> <span class="toc-text">回退逻辑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E5%BE%AA%E7%8E%AF"><span class="toc-number">9.0.3.</span> <span class="toc-text">控制循环</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%AD%E8%B7%AF%E5%99%A8%E5%92%8CAPI%E7%BD%91%E5%85%B3"><span class="toc-number">10.</span> <span class="toc-text">断路器和API网关</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%AD%E8%B7%AF%E5%99%A8"><span class="toc-number">10.0.1.</span> <span class="toc-text">断路器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#API%E7%BD%91%E5%85%B3-%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC%E5%AE%9E%E7%8E%B0"><span class="toc-number">10.0.2.</span> <span class="toc-text">API网关 服务网格实现</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC"><span class="toc-number">11.</span> <span class="toc-text">服务网格</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%8E%E6%96%97Sidecar"><span class="toc-number">11.0.1.</span> <span class="toc-text">挎斗Sidecar</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%89%93%E7%A0%B4%E6%95%B0%E6%8D%AE%E5%8D%95%E4%BD%93"><span class="toc-number">12.</span> <span class="toc-text">打破数据单体</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%9C%80%E8%A6%81%E7%BC%93%E5%AD%98"><span class="toc-number">12.0.1.</span> <span class="toc-text">微服务需要缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-number">12.0.2.</span> <span class="toc-text">数据一致性</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%97%A5%E5%BF%97%E3%80%81%E7%9B%91%E6%8E%A7%E4%B8%8E%E8%B7%9F%E8%B8%AA"><span class="toc-number">13.</span> <span class="toc-text">日志、监控与跟踪</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E6%97%A5%E5%BF%97"><span class="toc-number">13.0.1.</span> <span class="toc-text">应用程序日志</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E7%9B%91%E6%8E%A7"><span class="toc-number">13.0.2.</span> <span class="toc-text">应用程序监控</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E8%B7%9F%E8%B8%AA"><span class="toc-number">13.0.3.</span> <span class="toc-text">应用程序跟踪</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/03/14/%E4%BC%81%E4%B8%9A%E7%BA%A7Kubernetes%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/" title="企业级Kubernetes离线部署指南"><img src="/images/k8s.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="企业级Kubernetes离线部署指南"/></a><div class="content"><a class="title" href="/2025/03/14/%E4%BC%81%E4%B8%9A%E7%BA%A7Kubernetes%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/" title="企业级Kubernetes离线部署指南">企业级Kubernetes离线部署指南</a><time datetime="2025-03-14T14:44:12.000Z" title="发表于 2025-03-14 22:44:12">2025-03-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/14/Kubernetes%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Kubernetes复习笔记"><img src="/images/k8s.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Kubernetes复习笔记"/></a><div class="content"><a class="title" href="/2025/03/14/Kubernetes%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Kubernetes复习笔记">Kubernetes复习笔记</a><time datetime="2025-03-14T14:36:52.629Z" title="发表于 2025-03-14 22:36:52">2025-03-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/27/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" title="快速排序"><img src="/images/bg3.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="快速排序"/></a><div class="content"><a class="title" href="/2024/12/27/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" title="快速排序">快速排序</a><time datetime="2024-12-27T13:16:56.000Z" title="发表于 2024-12-27 21:16:56">2024-12-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/13/Argo-v-s-Tekton/" title="Argo workflow v.s. Tekton"><img src="/images/devops.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Argo workflow v.s. Tekton"/></a><div class="content"><a class="title" href="/2024/12/13/Argo-v-s-Tekton/" title="Argo workflow v.s. Tekton">Argo workflow v.s. Tekton</a><time datetime="2024-12-13T11:27:34.000Z" title="发表于 2024-12-13 19:27:34">2024-12-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/04/%E5%A6%82%E4%BD%95%E7%BB%99%E4%BA%91%E8%AE%A1%E7%AE%97%E7%94%A8%E6%88%B7%E6%8F%90%E4%BE%9B%E5%AE%89%E5%85%A8%E5%8F%AF%E9%9D%A0%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F/" title="如何给云计算用户提供安全可靠的操作系统镜像"><img src="/images/bg4.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="如何给云计算用户提供安全可靠的操作系统镜像"/></a><div class="content"><a class="title" href="/2024/12/04/%E5%A6%82%E4%BD%95%E7%BB%99%E4%BA%91%E8%AE%A1%E7%AE%97%E7%94%A8%E6%88%B7%E6%8F%90%E4%BE%9B%E5%AE%89%E5%85%A8%E5%8F%AF%E9%9D%A0%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F/" title="如何给云计算用户提供安全可靠的操作系统镜像">如何给云计算用户提供安全可靠的操作系统镜像</a><time datetime="2024-12-04T06:36:24.000Z" title="发表于 2024-12-04 14:36:24">2024-12-04</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2013 - 2025 By 三木</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.2
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container:not\([display]\)').forEach(node => {
+            const target = node.parentNode
+            if (target.nodeName.toLowerCase() === 'li') {
+              target.parentNode.classList.add('has-jax')
+            } else {
+              target.classList.add('has-jax')
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'Pbdwq7jL0Ag8SyVhveiTbaTA-gzGzoHsz',
+      appKey: '5z7cJ4LjydIGAt5kVlcKl6rG',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

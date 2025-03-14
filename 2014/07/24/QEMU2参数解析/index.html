@@ -1,0 +1,470 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>QEMU 2: 参数解析 | 三木的技术博客</title><meta name="keywords" content="qemu,virtualization"><meta name="author" content="三木"><meta name="copyright" content="三木"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="#一、使用gdb分析QEMU代码# 使用gdb不仅可以很好地调试代码，也可以利用它来动态地分析代码。使用gdb调试QEMU需要做一些准备工作： 1, 编译QEMU时需要在执行configure脚本时的参数中加入–enable-debug。 2, 从QEMU官方网站上下载一个精简的镜像——linux-0.2.img。linux-0.2.img只有8MB大小，启动后包含一些常用的shell命令，用于Q">
+<meta property="og:type" content="article">
+<meta property="og:title" content="QEMU 2: 参数解析">
+<meta property="og:url" content="https://wangsen.site/2014/07/24/QEMU2%E5%8F%82%E6%95%B0%E8%A7%A3%E6%9E%90/index.html">
+<meta property="og:site_name" content="三木的技术博客">
+<meta property="og:description" content="#一、使用gdb分析QEMU代码# 使用gdb不仅可以很好地调试代码，也可以利用它来动态地分析代码。使用gdb调试QEMU需要做一些准备工作： 1, 编译QEMU时需要在执行configure脚本时的参数中加入–enable-debug。 2, 从QEMU官方网站上下载一个精简的镜像——linux-0.2.img。linux-0.2.img只有8MB大小，启动后包含一些常用的shell命令，用于Q">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangsen.site/images/bg.jpg">
+<meta property="article:published_time" content="2014-07-24T03:23:49.000Z">
+<meta property="article:modified_time" content="2025-03-14T14:36:52.630Z">
+<meta property="article:author" content="三木">
+<meta property="article:tag" content="qemu">
+<meta property="article:tag" content="virtualization">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangsen.site/images/bg.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://wangsen.site/2014/07/24/QEMU2%E5%8F%82%E6%95%B0%E8%A7%A3%E6%9E%90/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'QEMU 2: 参数解析',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2025-03-14 22:36:52'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">134</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">80</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-tie"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">三木的技术博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-tie"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">QEMU 2: 参数解析</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2014-07-24T03:23:49.000Z" title="发表于 2014-07-24 11:23:49">2014-07-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-03-14T14:36:52.630Z" title="更新于 2025-03-14 22:36:52">2025-03-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%BA%91%E8%AE%A1%E7%AE%97/">云计算</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>11分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="QEMU 2: 参数解析"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2014/07/24/QEMU2%E5%8F%82%E6%95%B0%E8%A7%A3%E6%9E%90/#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/2014/07/24/QEMU2%E5%8F%82%E6%95%B0%E8%A7%A3%E6%9E%90/" itemprop="commentCount"></span></a></span></div></div></div><article class="post-content" id="article-container"><p>#<strong>一、使用gdb分析QEMU代码</strong>#</p>
+<p>使用gdb不仅可以很好地调试代码，也可以利用它来动态地分析代码。使用gdb调试QEMU需要做一些准备工作：</p>
+<p>1, 编译QEMU时需要在执行configure脚本时的参数中加入–enable-debug。</p>
+<p>2, 从QEMU官方网站上下载一个精简的镜像——linux-0.2.img。linux-0.2.img只有8MB大小，启动后包含一些常用的shell命令，用于QEMU的测试。</p>
+<pre><code>$wget http://wiki.qemu.org/download/linux-0.2.img.bz2
+$bzip2 -d ./linux-0.2.img.bz2
+</code></pre>
+<p>3, 启动gdb调试QEMU：</p>
+<p><code>gdb --args qemu-system-x86_64 -enable-kvm -m 4096 -smp 4 linux-0.2.img</code></p>
+<p>-smp指定处理器个数。</p>
+<p>#<strong>二、参数解析用到的数据结构</strong>#</p>
+<p>QEMU系统模拟的主函数位于vl.c文件，无论是qemu-system-x86_64还是qemu-system-ppc64，都是从vl.c中的main函数开始执行。下面先介绍main函数涉及到的一些数据结构。</p>
+<p>###<strong>QEMU链表</strong></p>
+<p>QEMU的链表在include/qemu/queue.h文件中定义，分为四种类型：</p>
+<ul>
+<li>  单链表(singly-linked list)：单链表适用于大的数据集，并且很少有删除节点或者移动节点的操作，也适用于实现后进先出的队列。</li>
+<li>  链表(list)：即双向链表，除了头节点之外每个节点都会同时指向前一个节点和后一个节点。</li>
+<li>  简单队列(simple queue)：简单队列类似于单链表，只是多了一个指向链表尾的一个表头，插入节点的时候不仅可以像单链表那样将其插入表头或者某节点之后，还可以插入到链表尾。</li>
+<li>  尾队列(tail queue)：类似于简单队列，但节点之间是双向指向的。</li>
+</ul>
+<p>这里不一一介绍各种链表的用法，只通过NotifierList的定义来说明QEMU链表(list)的用法。在main函数的开头定义的DisplayState结构体使用到了NotifiereList，NotifierList就用到了链表。</p>
+<p><strong>a. 表头及节点的定义</strong></p>
+<p>定义表头需要用到QLIST_HEAD，定义如下：</p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">86 </span>#define QLIST_HEAD(<span class="keyword">name</span>, type)                                          \</span><br><span class="line"><span class="symbol">87 </span>struct <span class="keyword">name</span> &#123;                                                           \</span><br><span class="line"><span class="symbol">88 </span>        struct type *lh_first;  /* first element */                     \</span><br><span class="line"><span class="symbol">89 </span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>NotifierList就采用了QLIST_HEAD来定义表头：</p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">    <span class="number"> 27 </span>typedef struct NotifierList</span><br><span class="line">    <span class="number"> 28 </span>&#123;</span><br><span class="line">    <span class="number"> 29 </span>    QLIST_HEAD(, Notifier) notifiers;</span><br><span class="line">    <span class="number"> 30 </span>&#125; NotifierList;</span><br><span class="line">  ```  </span><br><span class="line"></span><br><span class="line">定义节点需要用到QLIST_ENTRY，定义如下：</span><br></pre></td></tr></table></figure>
+<pre><code> 94 #define QLIST_ENTRY(type)                                               \
+ 95 struct &#123;                                                                \
+ 96         struct type *le_next;   /* next element */                      \
+ 97         struct type **le_prev;  /* address of previous next element */  \
+ 98 &#125;
+</code></pre>
+ <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Notifier的节点定义如下：</span><br></pre></td></tr></table></figure>
+<pre><code> 21 struct Notifier
+ 22 &#123;
+ 23     void (*notify)(Notifier *notifier, void *data);
+ 24     QLIST_ENTRY(Notifier) node;
+ 25 &#125;;
+</code></pre>
+ <figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="strong">**b. 初始化表头**</span></span><br><span class="line"></span><br><span class="line">初始化表头用到QLIST_INIT：</span><br></pre></td></tr></table></figure>
+<pre><code>103 #define QLIST_INIT(head) do &#123;                                           \
+104         (head)-&gt;lh_first = NULL;                                        \
+105 &#125; while (/*CONSTCOND*/0)
+</code></pre>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">初始化NotifierList就可以这样进行：</span><br></pre></td></tr></table></figure>
+<pre><code> 19 void notifier_list_init(NotifierList *list)
+ 20 &#123;
+ 21     QLIST_INIT(&amp;list-&gt;notifiers);
+ 22 &#125;
+</code></pre>
+ <figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="strong">**c. 在表头插入节点**</span></span><br><span class="line"></span><br><span class="line">将节点插入到表头使用QLIST\_INSERT\_HEAD：</span><br></pre></td></tr></table></figure>
+<pre><code>122 #define QLIST_INSERT_HEAD(head, elm, field) do &#123;                        \
+123         if (((elm)-&gt;field.le_next = (head)-&gt;lh_first) != NULL)          \
+124                 (head)-&gt;lh_first-&gt;field.le_prev = &amp;(elm)-&gt;field.le_next;\
+125         (head)-&gt;lh_first = (elm);                                       \
+126         (elm)-&gt;field.le_prev = &amp;(head)-&gt;lh_first;                       \
+127 &#125; while (/*CONSTCOND*/0)
+</code></pre>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">插入Notifier到NotifierList：</span><br></pre></td></tr></table></figure>
+<pre><code> 24 void notifier_list_add(NotifierList *list, Notifier *notifier)
+ 25 &#123;
+ 26     QLIST_INSERT_HEAD(&amp;list-&gt;notifiers, notifier, node);
+ 27 &#125;
+</code></pre>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="strong">**d. 遍历节点**</span></span><br><span class="line"></span><br><span class="line">遍历节点使用QLIST\_FOREACH或者QLIST\_FOREACH\_SAFE，QLIST\_FOREACH\_SAFE是为了防止遍历过程中删除了节点，从而导致le\_next被释放掉，中断了遍历。</span><br></pre></td></tr></table></figure>
+<pre><code>147 #define QLIST_FOREACH(var, head, field)                                 \
+148         for ((var) = ((head)-&gt;lh_first);                                \
+149                 (var);                                                  \
+150                 (var) = ((var)-&gt;field.le_next))
+151 
+152 #define QLIST_FOREACH_SAFE(var, head, field, next_var)                  \
+153         for ((var) = ((head)-&gt;lh_first);                                \
+154                 (var) &amp;&amp; ((next_var) = ((var)-&gt;field.le_next), 1);      \
+155                 (var) = (next_var))
+</code></pre>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">NotifierList在执行所有的回调函数时就用到了QLIST\_FOREACH\_SAFE：</span><br></pre></td></tr></table></figure>
+<pre><code> 34 void notifier_list_notify(NotifierList *list, void *data)
+ 35 &#123;
+ 36     Notifier *notifier, *next;
+ 37 
+ 38     QLIST_FOREACH_SAFE(notifier, &amp;list-&gt;notifiers, node, next) &#123;
+ 39         notifier-&gt;notify(notifier, data);
+ 40     &#125;
+ 41 &#125;
+</code></pre>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">###**Error和QError**</span><br><span class="line"></span><br><span class="line">为了方便的处理错误信息，QEMU定义了Error和QError两个数据结构。Error在qobject/qerror.c中定义：</span><br></pre></td></tr></table></figure>
+<pre><code>101 struct Error
+102 &#123;
+103     char *msg;
+104     ErrorClass err_class;
+105 &#125;;
+</code></pre>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">包含了错误消息字符串和枚举类型的错误类别。错误类别有下面几个：</span><br></pre></td></tr></table></figure>
+<pre><code> 139 typedef enum ErrorClass
+ 140 &#123;
+ 141     ERROR_CLASS_GENERIC_ERROR = 0,
+ 142     ERROR_CLASS_COMMAND_NOT_FOUND = 1,
+ 143     ERROR_CLASS_DEVICE_ENCRYPTED = 2,
+ 144     ERROR_CLASS_DEVICE_NOT_ACTIVE = 3,
+ 145     ERROR_CLASS_DEVICE_NOT_FOUND = 4,
+ 146     ERROR_CLASS_K_V_M_MISSING_CAP = 5,
+ 147     ERROR_CLASS_MAX = 6,
+ 148 &#125; ErrorClass;
+</code></pre>
+ <figure class="highlight monkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">QEMU在util/<span class="built_in">error</span>.c中定义了几个函数来对<span class="built_in">Error</span>进行操作：</span><br></pre></td></tr></table></figure>
+<pre><code>error_set  //根据给定的ErrorClass以及格式化字符串来给Error分配空间并赋值
+error_set_errno  //除了error_set的功能外，将指定errno的错误信息追加到格式化字符串的后面
+error_copy  //复制Error           
+error_is_set   //判断Error是否已经分配并设置
+error_get_class  //获取Error的ErrorClass      
+error_get_pretty  //获取Error的msg
+error_free  //释放Error及msg的空间
+</code></pre>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">另外，QEMU定义了QError来处理更为细致的错误信息：</span><br></pre></td></tr></table></figure>
+<pre><code> 22 typedef struct QError &#123; 
+ 23     QObject_HEAD;
+ 24     Location loc;
+ 25     char *err_msg;
+ 26     ErrorClass err_class;
+ 27 &#125; QError;
+</code></pre>
+ <figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">QError可以通过一系列的宏来给err\_msg及err\_class赋值：</span><br></pre></td></tr></table></figure>
+<pre><code> 39 #define QERR_ADD_CLIENT_FAILED \
+ 40     ERROR_CLASS_GENERIC_ERROR, &quot;Could not add client&quot;
+ 41 
+ 42 #define QERR_AMBIGUOUS_PATH \
+ 43     ERROR_CLASS_GENERIC_ERROR, &quot;Path &#39;%s&#39; does not uniquely identify an object&quot;
+ 44 
+ 45 #define QERR_BAD_BUS_FOR_DEVICE \
+ 46     ERROR_CLASS_GENERIC_ERROR, &quot;Device &#39;%s&#39; can&#39;t go on a %s bus&quot;
+ 47 
+ 48 #define QERR_BASE_NOT_FOUND \
+ 49     ERROR_CLASS_GENERIC_ERROR, &quot;Base &#39;%s&#39; not found&quot;
+...
+</code></pre>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">Location</span>记录了出错的位置，定义如下：</span><br></pre></td></tr></table></figure>
+<pre><code> 20 typedef struct Location &#123;
+ 21     /* all members are private to qemu-error.c */
+ 22     enum &#123; LOC_NONE, LOC_CMDLINE, LOC_FILE &#125; kind;
+ 23     int num;
+ 24     const void *ptr;
+ 25     struct Location *prev;
+ 26 &#125; Location;
+</code></pre>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">###**GMainLoop**</span></span><br><span class="line"></span><br><span class="line">QEMU使用glib中的GMainLoop来实现IO多路复用，关于GMainLoop可以参考博客[GMainLoop的实现原理和代码模型](http:<span class="regexp">//</span>blog.csdn.net<span class="regexp">/jack0106/</span>article<span class="regexp">/details/</span><span class="number">6258422</span>)。由于GMainLoop并非QEMU本身的代码，本文就不重复赘述。</span><br><span class="line"></span><br><span class="line"><span class="comment">#**三、QEMUOption、QemuOpt及QEMU参数解析**</span></span><br><span class="line"></span><br><span class="line">QEMU定义了QEMUOption来表示执行qemu-system-x86_64等命令时用到的选项。在vl.c中定义如下：</span><br></pre></td></tr></table></figure>
+<pre><code>2123 typedef struct QEMUOption &#123;
+2124     const char *name;   //选项名，如 -device, name的值就是device
+2125     int flags;  //标志位，表示选项是否带参数，可以是0，或者HAS_ARG(值为0x0001)
+2126     int index;  //枚举类型的值，如-device，该值就是QEMU_OPTION_device
+2127     uint32_t arch_mask;  //  选项支持架构的掩码
+2128 &#125; QEMUOption;
+</code></pre>
+ <figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">vl.c中维护了一个QEMUOption数组qemu_options来存储所有可用的选项，并利用qemu-<span class="keyword">options</span>-<span class="keyword">wrapper</span>.h和qemu-<span class="keyword">options</span>.def来给该数组赋值。赋值语句如下：</span><br></pre></td></tr></table></figure>
+<pre><code>2130 static const QEMUOption qemu_options[] = &#123;
+2131     &#123; &quot;h&quot;, 0, QEMU_OPTION_h, QEMU_ARCH_ALL &#125;,
+2132 #define QEMU_OPTIONS_GENERATE_OPTIONS
+2133 #include &quot;qemu-options-wrapper.h&quot;
+2134     &#123; NULL &#125;,
+2135 &#125;;
+</code></pre>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">`#define QEMU\_OPTIONS\_GENERATE_OPTIONS`选择qemu-<span class="keyword">options</span>-<span class="keyword">wrapper</span>.h的操作，qemu-<span class="keyword">options</span>-<span class="keyword">wrapper</span>.h可以进行三种操作：</span><br><span class="line"></span><br><span class="line">    QEMU_OPTIONS_GENERATE_ENUM: 利用qemu-<span class="keyword">options</span>.def生成一个枚举值列表，就是上面提到的QEMU_OPTION_device等</span><br><span class="line">    QEMU_OPTIONS_GENERATE_HELP: 利用qemu-<span class="keyword">options</span>.def生成帮助信息并输出到标准输出</span><br><span class="line">    QEMU_OPTIONS_GENERATE_OPTIONS: 利用qemu-<span class="keyword">options</span>.def生成一组选项列表</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">可以通过下面的方法来展开qemu-<span class="keyword">options</span>-<span class="keyword">wrapper</span>.h来查看上述操作的结果，以生成选项为例。</span><br><span class="line"></span><br><span class="line"><span class="number">1.</span>  在qemu-<span class="keyword">options</span>-<span class="keyword">wrapper</span>.h第一行写入#define QEMU\_OPTIONS\_GENERATE_OPTIONS.</span><br><span class="line"><span class="number">2.</span>  执行命令`gcc -E -o <span class="keyword">options</span>.txt qemu-<span class="keyword">options</span>-<span class="keyword">wrapper</span>.h`</span><br><span class="line"><span class="number">3.</span>  查看文件<span class="keyword">options</span>.txt即可</span><br><span class="line"></span><br><span class="line">给qemu_options数组赋值后，QEMU就有了一个所有可用选项的集合。之后在vl.c中main函数的一个<span class="keyword">for</span>循环根据这个集合开始解析命令行。<span class="keyword">for</span>循环的框架大致如下：</span><br></pre></td></tr></table></figure>
+<pre><code>  1     for(;;) &#123;
+  2         if (optind &gt;= argc)
+  3             break;
+  4         if (argv[optind][0] != &#39;-&#39;) &#123;
+  5         hda_opts = drive_add(IF_DEFAULT, 0, argv[optind++], HD_OPTS);
+  6         &#125; else &#123;
+  7             const QEMUOption *popt;
+  8 
+  9             popt = lookup_opt(argc, argv, &amp;optarg, &amp;optind);
+ 10             if (!(popt-&gt;arch_mask &amp; arch_type)) &#123;
+ 11                 printf(&quot;Option %s not supported for this target\n&quot;, popt-&gt;name);
+ 12                 exit(1);
+ 13             &#125;
+ 14             switch(popt-&gt;index) &#123;
+ 15             case QEMU_OPTION_M:
+ 16             ......
+ 17             case QEMU_OPTION_hda:
+ 18             ......  
+ 19             case QEMU_OPTION_watchdog:
+ 20             ......
+ 21             default:
+ 22                 os_parse_cmd_args(popt-&gt;index, optarg);
+ 23             &#125;   
+ 24         &#125;
+ 25     &#125;
+</code></pre>
+ <figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">QEMU会把argv中以<span class="string">&#x27;-&#x27;</span>开头的字符串当作选项，然后调用lookup\_opt函数到qemu\_options数组中查找该选项，如果查找到的选项中flags的值是HAS\_ARG，lookup\_opt也会将参数字符串赋值给optarg。找到选项和参数之后，QEMU便根据选项中的index枚举值来执行不同的分支。</span><br><span class="line"></span><br><span class="line">对于一些开关性质的选项，分支执行时仅仅是把相关的标志位赋值而已，如：</span><br><span class="line"></span><br><span class="line">    <span class="number">3712</span>             case QEMU_OPTION_old_param:</span><br><span class="line">    <span class="number">3713</span>                 old_param = <span class="number">1</span>;</span><br><span class="line">    <span class="number">3714</span>                 <span class="keyword">break</span>;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">也有一些选项没有子选项，分支执行时就直接把optarg的值交给相关变量：</span><br><span class="line"></span><br><span class="line">    <span class="number">3822</span>             case QEMU_OPTION_qtest:</span><br><span class="line">    <span class="number">3823</span>                 qtest_chrdev = optarg;</span><br><span class="line">    <span class="number">3824</span>                 <span class="keyword">break</span>;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">对于那些拥有子选项的选项，如<span class="string">&quot;-drive if=none,id=DRIVE-ID&quot;</span>，QEMU的处理会更为复杂一些。它会调用qemu\_opts\_parse来解析子选项，如realtime选项的解析：</span><br><span class="line"></span><br><span class="line">    <span class="number">3852</span>             case QEMU_OPTION_realtime:</span><br><span class="line">    <span class="number">3853</span>                 opts = qemu_opts_parse(qemu_find_opts(<span class="string">&quot;realtime&quot;</span>), optarg, <span class="number">0</span>);</span><br><span class="line">    <span class="number">3854</span>                 <span class="keyword">if</span> (!opts) &#123;</span><br><span class="line">    <span class="number">3855</span>                     <span class="keyword">exit</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="number">3856</span>                 &#125;</span><br><span class="line">    <span class="number">3857</span>                 configure_realtime(opts);</span><br><span class="line">    <span class="number">3858</span>                 <span class="keyword">break</span>;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">对子选项的解析涉及到<span class="number">4</span>个数据结构：QemuOpt, QemuDesc, QemuOpts, QemuOptsList. 它们的关系如下图所示：</span><br><span class="line"></span><br><span class="line">QemuOpt存储子选项，每个QemuOpt有一个QemuOptDesc来描述该子选项名字、类型、及帮助信息。两个结构体定义如下：</span><br></pre></td></tr></table></figure>
+<pre><code> 32 struct QemuOpt &#123;
+ 33     const char   *name;  //子选项的名字
+ 34     const char   *str;  //字符串值
+ 35 
+ 36     const QemuOptDesc *desc;  
+ 37     union &#123;
+ 38         bool boolean;  //布尔值
+ 39         uint64_t uint;  //数字或者大小
+ 40     &#125; value; 
+ 41 
+ 42     QemuOpts     *opts;  
+ 43     QTAILQ_ENTRY(QemuOpt) next;
+ 44 &#125;;
+
+ 95 typedef struct QemuOptDesc &#123;
+ 96     const char *name;
+ 97     enum QemuOptType type;
+ 98     const char *help;
+ 99 &#125; QemuOptDesc;
+</code></pre>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">子选项的类型可以是：</span><br></pre></td></tr></table></figure>
+<pre><code> 88 enum QemuOptType &#123;
+ 89     QEMU_OPT_STRING = 0,   // 字符串
+ 90     QEMU_OPT_BOOL,       // 取值可以是on或者off
+ 91     QEMU_OPT_NUMBER,     // 数字
+ 92     QEMU_OPT_SIZE,       // 大小，可以有K, M, G, T等后缀
+ 93 &#125;;
+</code></pre>
+ <figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">QEMU维护了一个QemuOptsList*的数组，在util/qemu-config.c中定义：</span><br><span class="line"></span><br><span class="line">    <span class="number">10</span> static QemuOptsList *vm_config_groups<span class="literal">[<span class="number">32</span>]</span>;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">在main函数中由qemu\_add\_opts将各种QemuOptsList写入到数组中：</span><br><span class="line"></span><br><span class="line">    <span class="number">2944</span>     qemu<span class="constructor">_add_opts(&amp;<span class="params">qemu_drive_opts</span>)</span>;</span><br><span class="line">    <span class="number">2945</span>     qemu<span class="constructor">_add_opts(&amp;<span class="params">qemu_chardev_opts</span>)</span>;</span><br><span class="line">    <span class="number">2946</span>     qemu<span class="constructor">_add_opts(&amp;<span class="params">qemu_device_opts</span>)</span>; </span><br><span class="line">    <span class="number">2947</span>     qemu<span class="constructor">_add_opts(&amp;<span class="params">qemu_netdev_opts</span>)</span>;</span><br><span class="line">    <span class="number">2948</span>     qemu<span class="constructor">_add_opts(&amp;<span class="params">qemu_net_opts</span>)</span>;</span><br><span class="line">    <span class="number">2949</span>     qemu<span class="constructor">_add_opts(&amp;<span class="params">qemu_rtc_opts</span>)</span>;</span><br><span class="line">    <span class="number">2950</span>     qemu<span class="constructor">_add_opts(&amp;<span class="params">qemu_global_opts</span>)</span>;</span><br><span class="line">    <span class="number">2951</span>     qemu<span class="constructor">_add_opts(&amp;<span class="params">qemu_mon_opts</span>)</span>;</span><br><span class="line">    <span class="number">2952</span>     qemu<span class="constructor">_add_opts(&amp;<span class="params">qemu_trace_opts</span>)</span>;</span><br><span class="line">    <span class="number">2953</span>     qemu<span class="constructor">_add_opts(&amp;<span class="params">qemu_option_rom_opts</span>)</span>;</span><br><span class="line">    <span class="number">2954</span>     qemu<span class="constructor">_add_opts(&amp;<span class="params">qemu_machine_opts</span>)</span>;</span><br><span class="line">    <span class="number">2955</span>     qemu<span class="constructor">_add_opts(&amp;<span class="params">qemu_smp_opts</span>)</span>;</span><br><span class="line">    <span class="number">2956</span>     qemu<span class="constructor">_add_opts(&amp;<span class="params">qemu_boot_opts</span>)</span>;</span><br><span class="line">    <span class="number">2957</span>     qemu<span class="constructor">_add_opts(&amp;<span class="params">qemu_sandbox_opts</span>)</span>;</span><br><span class="line">    <span class="number">2958</span>     qemu<span class="constructor">_add_opts(&amp;<span class="params">qemu_add_fd_opts</span>)</span>;</span><br><span class="line">    <span class="number">2959</span>     qemu<span class="constructor">_add_opts(&amp;<span class="params">qemu_object_opts</span>)</span>;</span><br><span class="line">    <span class="number">2960</span>     qemu<span class="constructor">_add_opts(&amp;<span class="params">qemu_tpmdev_opts</span>)</span>;</span><br><span class="line">    <span class="number">2961</span>     qemu<span class="constructor">_add_opts(&amp;<span class="params">qemu_realtime_opts</span>)</span>;</span><br><span class="line">    <span class="number">2962</span>     qemu<span class="constructor">_add_opts(&amp;<span class="params">qemu_msg_opts</span>)</span>;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">每个QemuOptsList存储了大选项所支持的所有小选项，如-realtime大选项QemuOptsList的定义：</span><br></pre></td></tr></table></figure>
+<pre><code> 507 static QemuOptsList qemu_realtime_opts = &#123;
+ 508     .name = &quot;realtime&quot;,
+ 509     .head = QTAILQ_HEAD_INITIALIZER(qemu_realtime_opts.head),
+ 510     .desc = &#123;
+ 511         &#123;
+ 512             .name = &quot;mlock&quot;,
+ 513             .type = QEMU_OPT_BOOL,
+ 514         &#125;,
+ 515         &#123; /* end of list */ &#125;
+ 516     &#125;,
+ 517 &#125;;
+</code></pre>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">-<span class="strong">**realtime只支持1个子选项**</span>，且值为bool类型，即只能是on或者off。</span><br><span class="line"></span><br><span class="line">在调用qemu\_opts\_parse解析子选项之前，QEMU会调用qemu\_find\_opts(&quot;realtime&quot;)，把QemuOptsList *从qemu\_add\_opts中找出来，和optarg一起传递给qemu\_opts\_parse去解析。QEMU可能会多次使用同一个大选项来指定多个相同的设备，在这种情况下，需要用id来区分。QemuOpts结构体就表示同一id下所有的子选项，定义如下：</span><br></pre></td></tr></table></figure>
+<pre><code> 46 struct QemuOpts &#123;
+ 47     char *id;
+ 48     QemuOptsList *list;
+ 49     Location loc;
+ 50     QTAILQ_HEAD(QemuOptHead, QemuOpt) head;
+ 51     QTAILQ_ENTRY(QemuOpts) next;
+ 52 &#125;;
+</code></pre>
+<p>```</p>
+<p>其中list是同一个大选项下不同id的QemuOpts链表。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">三木</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://wangsen.site/2014/07/24/QEMU2%E5%8F%82%E6%95%B0%E8%A7%A3%E6%9E%90/">https://wangsen.site/2014/07/24/QEMU2%E5%8F%82%E6%95%B0%E8%A7%A3%E6%9E%90/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://wangsen.site" target="_blank">三木的技术博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/qemu/">qemu</a><a class="post-meta__tags" href="/tags/virtualization/">virtualization</a></div><div class="post_share"><div class="social-share" data-image="/images/bg.jpg" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/images/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/images/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/images/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/images/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2014/07/30/%E5%8F%91%E8%A1%8C%E7%89%88%E5%88%B6%E4%BD%9C%E5%8F%8AAnaconda%E5%9F%BA%E7%A1%80/"><img class="prev-cover" src="/images/bg1.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">发行版制作及Anaconda基础</div></div></a></div><div class="next-post pull-right"><a href="/2014/05/15/QEMU1%E4%BD%BF%E7%94%A8QEMU%E5%88%9B%E5%BB%BA%E8%99%9A%E6%8B%9F%E6%9C%BA/"><img class="next-cover" src="/images/bg3.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">QEMU 1: 使用QEMU创建虚拟机</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2016/09/30/QEMU3%E4%BD%BF%E7%94%A8ceph%E6%9D%A5%E5%AD%98%E5%82%A8QEMU%E9%95%9C%E5%83%8F/" title="QEMU3 - 使用ceph来存储QEMU镜像"><img class="cover" src="/images/bg4.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2016-09-30</div><div class="title">QEMU3 - 使用ceph来存储QEMU镜像</div></div></a></div><div><a href="/2014/05/15/QEMU1%E4%BD%BF%E7%94%A8QEMU%E5%88%9B%E5%BB%BA%E8%99%9A%E6%8B%9F%E6%9C%BA/" title="QEMU 1: 使用QEMU创建虚拟机"><img class="cover" src="/images/bg3.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2014-05-15</div><div class="title">QEMU 1: 使用QEMU创建虚拟机</div></div></a></div><div><a href="/2024/09/04/Linux%E8%99%9A%E6%8B%9F%E5%8C%96%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB/" title="Linux虚拟化面试题汇总"><img class="cover" src="/images/bg1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-09-04</div><div class="title">Linux虚拟化面试题汇总</div></div></a></div><div><a href="/2014/03/24/%E4%B8%BA%E8%99%9A%E6%8B%9F%E6%9C%BAvCPU%E7%BB%91%E5%AE%9A%E7%89%A9%E7%90%86CPU/" title="为虚拟机vCPU绑定物理CPU"><img class="cover" src="/images/bg.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2014-03-24</div><div class="title">为虚拟机vCPU绑定物理CPU</div></div></a></div><div><a href="/2016/11/17/%E5%9F%BA%E4%BA%8Eweb%E6%8A%80%E6%9C%AF%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/" title="基于web技术的操作系统安装器的设计"><img class="cover" src="/images/bg.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2016-11-17</div><div class="title">基于web技术的操作系统安装器的设计</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">三木</div><div class="author-info__description">Honesty and diligence should be your eternal mates.</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">134</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">80</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sanmuny"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/sanmuny" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:kelvin.xupt@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎访问我的技术博客，如果您觉得我的文章对您有所帮助，欢迎打赏和分享！</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/03/14/%E4%BC%81%E4%B8%9A%E7%BA%A7Kubernetes%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/" title="企业级Kubernetes离线部署指南"><img src="/images/k8s.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="企业级Kubernetes离线部署指南"/></a><div class="content"><a class="title" href="/2025/03/14/%E4%BC%81%E4%B8%9A%E7%BA%A7Kubernetes%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/" title="企业级Kubernetes离线部署指南">企业级Kubernetes离线部署指南</a><time datetime="2025-03-14T14:44:12.000Z" title="发表于 2025-03-14 22:44:12">2025-03-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/14/Kubernetes%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Kubernetes复习笔记"><img src="/images/k8s.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Kubernetes复习笔记"/></a><div class="content"><a class="title" href="/2025/03/14/Kubernetes%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Kubernetes复习笔记">Kubernetes复习笔记</a><time datetime="2025-03-14T14:36:52.629Z" title="发表于 2025-03-14 22:36:52">2025-03-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/27/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" title="快速排序"><img src="/images/bg3.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="快速排序"/></a><div class="content"><a class="title" href="/2024/12/27/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" title="快速排序">快速排序</a><time datetime="2024-12-27T13:16:56.000Z" title="发表于 2024-12-27 21:16:56">2024-12-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/13/Argo-v-s-Tekton/" title="Argo workflow v.s. Tekton"><img src="/images/devops.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Argo workflow v.s. Tekton"/></a><div class="content"><a class="title" href="/2024/12/13/Argo-v-s-Tekton/" title="Argo workflow v.s. Tekton">Argo workflow v.s. Tekton</a><time datetime="2024-12-13T11:27:34.000Z" title="发表于 2024-12-13 19:27:34">2024-12-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/04/%E5%A6%82%E4%BD%95%E7%BB%99%E4%BA%91%E8%AE%A1%E7%AE%97%E7%94%A8%E6%88%B7%E6%8F%90%E4%BE%9B%E5%AE%89%E5%85%A8%E5%8F%AF%E9%9D%A0%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F/" title="如何给云计算用户提供安全可靠的操作系统镜像"><img src="/images/bg4.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="如何给云计算用户提供安全可靠的操作系统镜像"/></a><div class="content"><a class="title" href="/2024/12/04/%E5%A6%82%E4%BD%95%E7%BB%99%E4%BA%91%E8%AE%A1%E7%AE%97%E7%94%A8%E6%88%B7%E6%8F%90%E4%BE%9B%E5%AE%89%E5%85%A8%E5%8F%AF%E9%9D%A0%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F/" title="如何给云计算用户提供安全可靠的操作系统镜像">如何给云计算用户提供安全可靠的操作系统镜像</a><time datetime="2024-12-04T06:36:24.000Z" title="发表于 2024-12-04 14:36:24">2024-12-04</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2013 - 2025 By 三木</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.2
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container:not\([display]\)').forEach(node => {
+            const target = node.parentNode
+            if (target.nodeName.toLowerCase() === 'li') {
+              target.parentNode.classList.add('has-jax')
+            } else {
+              target.classList.add('has-jax')
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'Pbdwq7jL0Ag8SyVhveiTbaTA-gzGzoHsz',
+      appKey: '5z7cJ4LjydIGAt5kVlcKl6rG',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
