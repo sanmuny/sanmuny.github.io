@@ -53,7 +53,7 @@ Angular Git提交信息规范要求开发者遵循结构化格式以确保代码
   - 分支策略：默认仅对`main`分支触发发布，支持预发布通道（如beta分支）。
 
 - 版本更新规则说明：
-  - PR(Pull Request)中的Git commit，消息体中包含"BREAKING CHANGE:`，则主版本号+1，次版本号和修订号归零
+  - PR(Pull Request)中的Git commit，消息体中包含`BREAKING CHANGE:`，则主版本号+1，次版本号和修订号归零
   - 包含类型为`feat`的消息则主版本号不变，次版本号+1，修订号清零
   - 包含类型为`fix`的消息则修订号+1，主次版本号保持不变
 
