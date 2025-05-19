@@ -2,7 +2,7 @@
 title: GPU虚拟化技术系列一：设备虚拟化基础
 date: 2025-03-29 21:10:57
 tags: [云原生,云计算,AIInfra,GPU]
-published: true
+published: false
 hideInList: false
 feature: 
 isTop: false
